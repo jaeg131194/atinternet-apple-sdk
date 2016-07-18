@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  SmartTracker
+
+  Created by Théo Damaville on 02/03/2016.
+  Copyright © 2016 AT Internet. All rights reserved.
+*/
+
+DISCONNECTED = "Déconnecté";
+CONNECTED = "Connecté";
+PENDING = "En attente...";
+
+ASK_PAIRING_TEXT = "Voulez-vous démarrer une session de marquage ?";
+ASK_PAIRING_TITLE = "DEMANDE D'APPAIRAGE";
+INFO_PAIRING_CANCELED_TITLE = "DECONNEXION";
+INFO_PAIRING_CANCELED_TEXT = "La demande d'appairage à été annulée";
+INFO_PAIRING_STOPPED_TITLE = "Live terminé";
+INFO_PAIRING_STOPPED_TEXT = "L'interface s'est déconnectée";
+CONFIRM = "OK";
+CANCEL = "REFUSER";
