@@ -161,8 +161,19 @@ extension UIApplication {
                     else if isScroll(xDelta, yDelta: yDelta) {
                         appContext.eventType = Gesture.GestureEventType.Scroll
                     }
+                    else if isTap(xDelta, yDelta: yDelta) {
+                       appContext.eventType = Gesture.GestureEventType.Tap
+                    }
                     else {
-                        appContext.eventType = Gesture.GestureEventType.Unknown
+                        if #available(iOS 9.0, *) {
+                            if touch.force/touch.maximumPossibleForce > 0.5 {
+                                appContext.eventType = Gesture.GestureEventType.Tap
+                                print("P33K")
+                            }
+                        } else {
+                            print("[warning] unknown gesture")
+                            appContext.eventType = Gesture.GestureEventType.Unknown
+                        }
                     }
                 } else if touches.count == 2 {
                     if isRotation(touches) {
@@ -177,13 +188,13 @@ extension UIApplication {
                 
                 // sometimes we have unwanted taps or double taps moves after pinch/rotation
                 if((appContext.previousEventType == Gesture.GestureEventType.Pinch || appContext.previousEventType == Gesture.GestureEventType.Rotate) && appContext.initalTouchTime! - appContext.previousTouchTime! < 0.1) {
-                    clearContext()
+                    //clearContext()
                     return nil
                 }
                 
                 // Remove noise from the toolbar or any SmartTracker events (pairing...)
                 if shouldIgnoreView(appContext.currentTouchedView!) {
-                    clearContext()
+                    //clearContext()
                     return nil
                 }
                 
@@ -207,7 +218,7 @@ extension UIApplication {
                             methodName = UIApplicationContext.sharedInstance.getDefaultViewMethod(appContext.currentTouchedView)
                             // the object does not respond to anything
                             if methodName == nil {
-                                clearContext()
+                                //clearContext()
                                 return nil
                             }
                         }
@@ -217,6 +228,11 @@ extension UIApplication {
                 if let segmentedControl = appContext.currentTouchedView as? UISegmentedControl {
                     let segs = segmentedControl.valueForKey("segments") as! [UIView]
                     appContext.currentTouchedView = segs[position!]
+                }
+                
+                if UIViewControllerContext.sharedInstance.isPeekAndPoped {
+                    methodName = "peekAndPop"
+                    UIViewControllerContext.sharedInstance.isPeekAndPoped = false
                 }
                 
                 switch eventType {
@@ -256,7 +272,7 @@ extension UIApplication {
                 return gestureEvent
             }
         }
-        clearContext()
+        //clearContext()
         return nil
     }
     
@@ -310,6 +326,10 @@ extension UIApplication {
                 }
         }
         return false
+    }
+    
+    func isTap(xDelta: CGFloat, yDelta: CGFloat) -> Bool {
+        return (xDelta == 0 && yDelta == 0)
     }
     
     /**

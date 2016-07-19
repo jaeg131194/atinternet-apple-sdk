@@ -10,6 +10,7 @@ import Foundation
 
 /// class to store scroll events
 class ScrollEvent : GestureEvent {
+    
     /**
      Scroll direction
      
@@ -29,10 +30,10 @@ class ScrollEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? "handleScroll:",
+                "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
                 "isDefaultMethod": self.methodName == nil,
-                "title": self.title ?? "handleScroll:"
+                "title": self.title ?? defaultMethodName
             ]
         ]
         let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
@@ -56,5 +57,6 @@ class ScrollEvent : GestureEvent {
      */
     init(view: View, direction: ScrollDirection, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Scroll, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        self.defaultMethodName = "handleScroll:"
     }
 }

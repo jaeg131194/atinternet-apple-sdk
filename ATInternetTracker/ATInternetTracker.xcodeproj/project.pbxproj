@@ -385,7 +385,9 @@
 		4F47A6B71D3CD75600702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
 		4F47A6B81D3CD75600702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
 		4F47A6B91D3CD75700702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
+		4F47A6C11D3D0A3000702747 /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6C01D3D0A3000702747 /* TrackerTests.swift */; };
 		4F47A6C31D3D0A3000702747 /* Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A3DE1D351E8100702747 /* Tracker.framework */; };
+		8EDC3CF61D3E225100A14458 /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
 		4F47A6E11D3D10E000702747 /* Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A3F91D351EA700702747 /* Tracker.framework */; };
 		4F47A7E71D3D134F00702747 /* AisleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6EB1D3D126500702747 /* AisleTests.swift */; };
 		4F47A7E81D3D134F00702747 /* BufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6EC1D3D126500702747 /* BufferTests.swift */; };
@@ -851,6 +853,9 @@
 		4F47A64C1D36264300702747 /* SmartToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartToolbar.swift; sourceTree = "<group>"; };
 		4F47A64D1D36264300702747 /* ToolbarImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ToolbarImages.xcassets; sourceTree = "<group>"; };
 		4F47A6BE1D3D0A3000702747 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F47A6C01D3D0A3000702747 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
+		4F47A6C21D3D0A3000702747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8EDC3CF51D3E225100A14458 /* ApiS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiS3.swift; sourceTree = "<group>"; };
 		4F47A6DC1D3D10E000702747 /* tvOSTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tvOSTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F47A6E81D3D11B400702747 /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-tvOS.plist"; path = "Tests/Info-tvOS.plist"; sourceTree = "<group>"; };
 		4F47A6E91D3D11B400702747 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-iOS.plist"; path = "Tests/Info-iOS.plist"; sourceTree = "<group>"; };
@@ -983,6 +988,7 @@
 			children = (
 				4F47A4441D353F5C00702747 /* Dependencies */,
 				4F47A4021D351F2800702747 /* Sources */,
+				4F47A6BF1D3D0A3000702747 /* TrackerTests */,
 				4F47A3DF1D351E8100702747 /* Products */,
 				4F47A6E71D3D119A00702747 /* Tests */,
 			);
@@ -1214,6 +1220,7 @@
 		4F47A5D31D36227900702747 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				8EDC3CF51D3E225100A14458 /* ApiS3.swift */,
 				4F47A5F61D3623B100702747 /* ConnectedState.swift */,
 				4F47A5F71D3623B100702747 /* DisconnectedState.swift */,
 				4F47A5F81D3623B100702747 /* LiveManager.swift */,
@@ -1996,6 +2003,7 @@
 				4F47A5F01D36230D00702747 /* Rotator.swift in Sources */,
 				4F47A6201D36244400702747 /* ScreenEvent.swift in Sources */,
 				4F47A5981D36210700702747 /* Order.swift in Sources */,
+				8EDC3CF61D3E225100A14458 /* ApiS3.swift in Sources */,
 				4F47A59B1D36210700702747 /* RichMedia.swift in Sources */,
 				4F47A6231D36244400702747 /* ScreenRotationOperation.swift in Sources */,
 				4F47A5891D36210700702747 /* Cart.swift in Sources */,
@@ -3281,7 +3289,6 @@
 				4F47A3E61D351E8100702747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		4F47A3FE1D351EA700702747 /* Build configuration list for PBXNativeTarget "Tracker tvOS" */ = {
 			isa = XCConfigurationList;
@@ -3290,7 +3297,6 @@
 				4F47A4001D351EA700702747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		4F47A40D1D351F9C00702747 /* Build configuration list for PBXNativeTarget "Tracker watchOS" */ = {
 			isa = XCConfigurationList;
@@ -3299,7 +3305,6 @@
 				4F47A40F1D351F9C00702747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		4F47A4371D3532A900702747 /* Build configuration list for PBXNativeTarget "Tracker iOS Extension" */ = {
 			isa = XCConfigurationList;
@@ -3308,7 +3313,6 @@
 				4F47A4391D3532A900702747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		4F47A5551D35465200702747 /* Build configuration list for PBXNativeTarget "SmartTracker iOS" */ = {
 			isa = XCConfigurationList;
@@ -3317,7 +3321,6 @@
 				4F47A5571D35465200702747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		4F47A6C61D3D0A3000702747 /* Build configuration list for PBXNativeTarget "TrackerTests" */ = {
 			isa = XCConfigurationList;

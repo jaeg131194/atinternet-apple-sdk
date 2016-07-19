@@ -30,75 +30,96 @@ class ScreenOperation: NSOperation {
         self.screenEvent = screenEvent
     }
     
-    func delay(delay:Double, closure:()->()) {
+    /*func delay(delay:Double, closure:()->()) {
         dispatch_after(
             dispatch_time(
                 DISPATCH_TIME_NOW,
                 Int64(delay * Double(NSEC_PER_SEC))
             ),
             dispatch_get_main_queue(), closure)
-    }
+    }*/
     
-    func sendScreen(screen: Screen) {
+    func handleTimer(screen: Screen) {
+        NSThread.sleepForTimeInterval(timerDuration)
         timerTotalDuration = timerTotalDuration + timerDuration
         
-        if timerTotalDuration > 5 || screen.isReady {
+        if timerTotalDuration > 5 {
             screen.isReady = true
-            screen.sendView()
         }
     }
-    
+
     /**
      function called when the operation runs
      */
     override func main() {
         autoreleasepool {
-            
             let tracker = ATInternet.sharedInstance.defaultTracker
-            
-            var hasDelegate = false
-            
-            if let viewController = screenEvent.viewController {
-                if viewController.conformsToProtocol(IAutoTracker) {
-                    if viewController.respondsToSelector(#selector(IAutoTracker.screenWasDetected(_:))) {
-                        hasDelegate = true
-                    }
-                }
-            }
             
             //TODO: sendBuffer
             screenEvent.triggeredBy = UIApplicationContext.sharedInstance.previousEventSent
             
+            // Wait a little in order to make this operation cancellable
+            NSThread.sleepForTimeInterval(0.2)
+            
+            if self.cancelled {
+                return
+            }
+            
             if(tracker.enableLiveTagging) {
-                // Wait a little in order to make this operation cancellable
-                NSThread.sleepForTimeInterval(0.2)
-                if !self.cancelled {
-                    ATInternet.sharedInstance.defaultTracker.socketSender!.sendMessage(screenEvent.description)
-                }
+                tracker.socketSender!.sendMessage(screenEvent.description)
+            }
+            if (tracker.enableAutoTracking) {
+                sendScreenHit(tracker)
+            }
+        }
+    }
+    
+    func sendScreenHit(tracker: AutoTracker) {
+        let screen = tracker.screens.add(screenEvent.screen)
+        mapConfiguration(screen)
+        handleDelegate(screen)
+        screen.sendView()
+    }
+    
+    func mapConfiguration(screen: Screen) {
+        waitForConfigurationLoaded()
+        
+        if let mapping = Configuration.smartSDKMapping {
+            if let mappedName = mapping["configuration"]["screens"][screen.className]["title"].string {
+                screen.name = mappedName
+            }
+        }
+    }
+    
+    func waitForConfigurationLoaded() {
+        while(!AutoTracker.isConfigurationLoaded) {
+            NSThread.sleepForTimeInterval(0.2)
+        }
+    }
+    
+    func handleDelegate(screen: Screen) {
+        if hasDelegate() {
+            screenEvent.viewController!.performSelector(#selector(IAutoTracker.screenWasDetected(_:)), withObject: screen)
+            if screen.isReady {
+                return
             } else {
-                NSThread.sleepForTimeInterval(0.2)
-                if !self.cancelled {
-                    
-                    let screen = tracker.screens.add(screenEvent.screen)
-                    
-                    if  hasDelegate {
-                        screenEvent.viewController!.performSelector(#selector(IAutoTracker.screenWasDetected(_:)), withObject: screen)
-
-                        if screen.isReady {
-                            screen.sendView()
-                        } else {
-                            while(!screen.isReady) {
-                                NSThread.sleepForTimeInterval(timerDuration)
-                                
-                                sendScreen(screen)
-                            }
-                        }
-                    } else {
-                        // User didn't implement delegate, no other data will be appended to screen, we send it
-                        screen.sendView()
-                    }
+                while(!screen.isReady) {
+                    handleTimer(screen)
                 }
             }
         }
     }
+    
+    func hasDelegate() -> Bool {
+        var hasDelegate = false
+        if let viewController = screenEvent.viewController {
+            if viewController.conformsToProtocol(IAutoTracker) {
+                if viewController.respondsToSelector(#selector(IAutoTracker.screenWasDetected(_:))) {
+                    hasDelegate = true
+                }
+            }
+        }
+        return hasDelegate
+    }
+    
 }

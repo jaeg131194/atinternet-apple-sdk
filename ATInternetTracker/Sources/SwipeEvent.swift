@@ -11,6 +11,7 @@ import Foundation
 /// class used for manage swipe events 
 class SwipeEvent : GestureEvent {
     
+    
     /**
      Swipe direction
      
@@ -30,10 +31,10 @@ class SwipeEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? "handleSwipe:",
+                "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
                 "isDefaultMethod": self.methodName == nil,
-                "title": self.title ?? "handleSwipe:"
+                "title": self.title ?? defaultMethodName
             ]
         ]
         let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
@@ -57,5 +58,6 @@ class SwipeEvent : GestureEvent {
      */
     init(view: View, direction: SwipeDirection, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Swipe, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        self.defaultMethodName = "handleSwipe:"
     }
 }

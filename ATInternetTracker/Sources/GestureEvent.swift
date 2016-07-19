@@ -15,6 +15,8 @@ class GestureEvent {
     /// View contains the gesture
     lazy var view: View = View()
     
+    var defaultMethodName: String
+    
     /// Method called by the touched UIView
     var methodName: String? {
         didSet {
@@ -54,6 +56,7 @@ class GestureEvent {
      - returns: a gesture event
      */
     init(type: Gesture.GestureEventType, methodName: String?, view: View, direction: String, currentScreen: Screen) {
+        self.defaultMethodName = ""
         self.methodName = methodName
         self.direction = direction
         self.currentScreen = currentScreen

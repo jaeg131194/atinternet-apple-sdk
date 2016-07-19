@@ -626,24 +626,30 @@ class SmartToolBarController {
         if pan.state == .Ended {
             var Y = toolbar.windowConstraintTop?.constant
             var X = toolbar.windowConstraintLeft?.constant
+            var shoudMove = false // true if bar is moved outside the screen
             if Y <= 10 {
                 Y = 20
-                moveAbs(X!, y: Y!)
+                shoudMove = true
             }
             if Y >= (toolbar.refWindow?.frame.height)!-toolbar.frame.height {
                 let windowHeight = toolbar.refWindow!.frame.height
                 let selfHeight   = CGFloat(toolbar.frame.height)
                 let margin = CGFloat(20)
-                moveAbs(X!, y: windowHeight - selfHeight - margin)
+                Y = windowHeight - selfHeight - margin
+                shoudMove = true
             }
             if X <= 0 {
                 X = 10
-                moveAbs(X!, y: Y!)
+                shoudMove = true
             }
-            if X > (toolbar.refWindow?.frame.width)! - toolbar.frame.width/2 {
+            if X > (toolbar.refWindow?.frame.width)! - toolbar.frame.width {
                 let windowWidth = toolbar.refWindow!.frame.width
                 let selfWidth   = CGFloat(toolbar.frame.width)
-                moveAbs(windowWidth-selfWidth/2, y: Y!)
+                X = windowWidth-selfWidth
+                shoudMove = true
+            }
+            if shoudMove {
+                moveAbs(X!, y: Y!)
             }
         }
     }

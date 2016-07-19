@@ -19,6 +19,10 @@ class UIViewControllerContext {
         return activeViewControllers.last
     }
     
+    var isPeekAndPoped: Bool = false
+    var isPeek: Bool = false
+        
+    
     /// A timestamp representing the time where the last view was loaded
     lazy var viewAppearedTime = NSDate().timeIntervalSinceNow
     

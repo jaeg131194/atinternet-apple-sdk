@@ -152,6 +152,8 @@ public class AutoTracker: Tracker {
     /// Checks whether swizzling has already been activated
     private static var eventDetectionEnabled = false
     
+    static var isConfigurationLoaded = false
+
     /// Screen orientation
     private var orientation: UIDeviceOrientation?
     
@@ -178,6 +180,7 @@ public class AutoTracker: Tracker {
     /// Enable the socket connexion to send events
     public var enableLiveTagging = false {
         didSet {
+            assert(token != nil && token != "", "you must provide a token before enabling live tagging")
             enableEventDetection(enableLiveTagging)
             enableLiveTagging == true ? socketSender?.open() : socketSender?.close()
         }
@@ -186,10 +189,28 @@ public class AutoTracker: Tracker {
     /// Enables Auto Tracking
     public var enableAutoTracking = false {
         didSet {
+            if enableAutoTracking && token != nil && token != "" {
+                fetchMappingConfig()
+            }
             enableEventDetection(enableAutoTracking)
         }
     }
     
+    private func fetchMappingConfig() {
+        let siteID = self.configuration.parameters["site"]
+        //let version = TechnicalContext.applicationVersion
+        let version = App.version
+        let s3Client = ApiS3Client(siteID: siteID!, token: token!, version: version!, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
+        s3Client.fetchMapping { (mapping: JSON?) in
+            print("config: \(mapping)")
+            if let _ = mapping {
+                Configuration.smartSDKMapping = mapping!
+                s3Client.saveSmartSDKMapping(mapping!)
+            }
+            AutoTracker.isConfigurationLoaded = true
+        }
+    }
+
     private func enableEventDetection(enabled: Bool) {
         if enabled == true {
             if AutoTracker.eventDetectionEnabled == false {
@@ -200,9 +221,15 @@ public class AutoTracker: Tracker {
                 addNotifications()
                 
                 UIApplication.at_swizzle()
+                UIViewController.at_unswizzle_instances()
                 UIViewController.at_swizzle()
                 UIRefreshControl.at_swizzle()
                 UISwitch.at_swizzle()
+
+            }
+            // time consuming, so last call of the init
+            if enableLiveTagging {
+                self.performSelectorOnMainThread(#selector(addToolbar), withObject: nil, waitUntilDone: false)
             }
         } else {
             if AutoTracker.eventDetectionEnabled == true && self.enableAutoTracking == false && self.enableLiveTagging == false {
@@ -211,10 +238,12 @@ public class AutoTracker: Tracker {
                 
                 removeNotifications()
                 
-                UIViewController.at_unswizzle()
-                UIApplication.at_unswizzle()
-                UIRefreshControl.at_unswizzle()
-                UISwitch.at_unswizzle()
+                UIViewController.at_swizzle()
+                UIViewController.at_unswizzle_instances()
+                UIApplication.at_swizzle()
+                UIRefreshControl.at_swizzle()
+                UISwitch.at_swizzle()
+                self.toolbar?.toolbar.removeFromSuperview()
             }
         }
     }
@@ -243,11 +272,21 @@ public class AutoTracker: Tracker {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
         notificationCenter.addObserver(self, selector: #selector(AutoTracker.deviceOrientationDidChange(_:)), name: UIDeviceOrientationDidChangeNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.windowBecomeVisible(_:)), name: UIWindowDidBecomeKeyNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AutoTracker.UIApplicationWillTerminate(_:)), name: UIApplicationWillTerminateNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(AutoTracker.appWillGoBg(_:)), name: UIApplicationWillResignActiveNotification, object: nil)
     }
     
+    func windowBecomeVisible(notification: NSNotification) {
+        if let delegate = UIApplication.sharedApplication().keyWindow {
+            if let win = delegate.window {
+                print(win)
+                addToolbar("keyWindow")
+            }
+        }
+    }
+
     /**
      Removes listeners
      */
@@ -287,8 +326,8 @@ public class AutoTracker: Tracker {
     }
     
     @objc func applicationDidBecomeActive(application: UIApplication) {
-        if self.enableLiveTagging == true {
-            ATInternet.sharedInstance.defaultTracker.addToolbar()
+        if enableAutoTracking && token != nil && token != "" {
+            fetchMappingConfig()
         }
     }
     
@@ -298,9 +337,9 @@ public class AutoTracker: Tracker {
         }
     }
     
-    func addToolbar() {
-        if toolbar == nil {
-            toolbar = SmartToolBarController(socket:socketSender!, networkManager: self.liveManager!)
+    func addToolbar(age: String) {
+        if toolbar == nil && socketSender != nil && liveManager != nil && UIApplication.sharedApplication().keyWindow != nil{
+            toolbar = SmartToolBarController(socket:self.socketSender!, networkManager: self.liveManager!)
             self.liveManager!.toolbar = toolbar
         }
     }
