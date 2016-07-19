@@ -16,7 +16,7 @@ act as the Model considering MVC : M:SocketSender V:SmartToolBar C:SmartTracker
 
 import Foundation
 
-class SocketSender {
+public class SocketSender {
     
     var socket: SRWebSocket?
     var timer: NSTimer?

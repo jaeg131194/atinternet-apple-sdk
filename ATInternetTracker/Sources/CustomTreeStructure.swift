@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class CustomTreeStructure: ScreenInfo {
     /// Custom tree structure first category label
     public var category1: Int = 0

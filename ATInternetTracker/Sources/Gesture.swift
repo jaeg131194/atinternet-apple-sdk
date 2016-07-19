@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class Gesture: BusinessObject {
     lazy var _customObjects: [String: CustomObject] = [String: CustomObject]()
     

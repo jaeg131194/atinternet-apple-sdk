@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class SocketEventFactory {
     class func create(eventName: String, liveManager: LiveNetworkManager) -> SocketEvent {

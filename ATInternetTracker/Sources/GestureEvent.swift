@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// Class that represent a gesture event. concrete subclass should be used to represent specific events
 class GestureEvent {

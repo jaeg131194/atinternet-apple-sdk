@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class Aisle: ScreenInfo {
     
     /// Aisle level1 label

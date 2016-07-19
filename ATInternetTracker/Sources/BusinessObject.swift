@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class BusinessObject: NSObject {
     /// Tracker instance
     var tracker: Tracker!

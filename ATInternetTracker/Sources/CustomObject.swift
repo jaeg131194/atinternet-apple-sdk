@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class CustomObject: BusinessObject {
     /// JSON 
     public var json: String = "{}"

@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public enum OfflineModeKey: String {
     case Always = "always"
     case Never = "never"

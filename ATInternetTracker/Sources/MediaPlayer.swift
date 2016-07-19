@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class MediaPlayer: NSObject {
     /// Tracker instance
     var tracker: Tracker

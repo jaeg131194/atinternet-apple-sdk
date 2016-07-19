@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 /// Buffer that stores hit parameters
 public class Buffer: NSObject {
     /// Tracker instance

@@ -36,6 +36,8 @@ SOFTWARE.
 //import Tracker
 //#endif
 
+import Foundation
+
 class Dispatcher: NSObject {
     
     /// Tracker instance

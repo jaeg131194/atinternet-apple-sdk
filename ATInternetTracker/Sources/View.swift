@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// Class representing the view that was touched by a user
 public class View: NSObject {

@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class Order: BusinessObject {
     private var _status: Int?
     private var _isNewCustomer: Bool?

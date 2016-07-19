@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class Publisher : OnAppAd {
     lazy var _customObjects: [String: CustomObject] = [String: CustomObject]()
     

@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class CustomVar: ScreenInfo {
     
     /// Custom var types

@@ -30,7 +30,14 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
 import CoreData
+
+#if !os(watchOS)
+import UIKit
+#else
+import WatchKit
+#endif
 
 /// Build or send status of the hit
 @objc public enum HitStatus: Int {
@@ -280,7 +287,6 @@ public class AutoTracker: Tracker {
     }
     
     @objc func applicationDidBecomeActive(application: UIApplication) {
-        print("active")
         if self.enableLiveTagging == true {
             ATInternet.sharedInstance.defaultTracker.addToolbar()
         }

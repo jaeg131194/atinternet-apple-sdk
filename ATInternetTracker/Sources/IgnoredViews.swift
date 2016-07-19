@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+
 /// Those classes are meant to be ignored by the SDK
 class SmartButtonIgnored: UIButton{}
 class SmartImageViewIgnored: UIImageView{}

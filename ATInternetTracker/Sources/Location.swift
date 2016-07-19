@@ -29,6 +29,9 @@ SOFTWARE.
 //  GPS.swift
 //  Tracker
 //
+
+import Foundation
+
 public class Location: ScreenInfo {
     /// latitude
     public var latitude: Double = 0.0

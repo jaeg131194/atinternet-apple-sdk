@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class LiveAudio: RichMedia {
    
     /// Media type

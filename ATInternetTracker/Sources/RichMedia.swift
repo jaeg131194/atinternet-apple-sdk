@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class RichMedia : BusinessObject {
     
     private var _isBuffering: Bool?

@@ -29,6 +29,9 @@ SOFTWARE.
 //  Product.swift
 //  Tracker
 //
+
+import Foundation
+
 public class Product : BusinessObject {
     lazy var _customObjects: [String: CustomObject] = [String: CustomObject]()
     

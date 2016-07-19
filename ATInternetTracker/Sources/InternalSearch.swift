@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class InternalSearch: BusinessObject {
     /// Searched keywords
     public var keyword: String = ""

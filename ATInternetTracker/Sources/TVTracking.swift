@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class TVTracking: NSObject {
     /// Tracker instance
     var tracker: Tracker

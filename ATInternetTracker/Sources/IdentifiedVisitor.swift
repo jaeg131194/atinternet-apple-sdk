@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 /// NSUserDefaults and configuration keys for persistent identified visitor data
 enum IdentifiedVisitorHelperKey: String {
     case Configuration = "persistIdentifiedVisitor"

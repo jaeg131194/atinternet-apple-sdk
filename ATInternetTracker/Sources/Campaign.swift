@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class Campaign: ScreenInfo {
     /// Campaign id (XTO)
     public var campaignId: String = ""

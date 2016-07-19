@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 class Event: NSObject {
     /// Tracker instance
     var tracker: Tracker

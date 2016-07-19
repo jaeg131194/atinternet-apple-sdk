@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class NuggAd: BusinessObject {
     let key = "nuggad"
     lazy public var data: [String: AnyObject] = [String: AnyObject]()
