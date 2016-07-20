@@ -22,6 +22,7 @@ class PinchEvent : GestureEvent {
         case Out = "out"
     }
     
+    
     /// JSON description
     override var description: String {
         let jsonObj: NSMutableDictionary = [
@@ -30,10 +31,10 @@ class PinchEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? "handlePinch:",
+                "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
                 "isDefaultMethod": self.methodName == nil,
-                "title": self.title ?? "handlePinch:"
+                "title": self.title ?? defaultMethodName
             ]
         ]
         let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
@@ -57,5 +58,6 @@ class PinchEvent : GestureEvent {
      */
     init(view: View, direction: PinchDirection, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Pinch, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        self.defaultMethodName = "handlePinch:"
     }
 }

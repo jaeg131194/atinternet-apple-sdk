@@ -11,6 +11,7 @@ import Foundation
 /// class used for manage swipe events
 class RefreshEvent : GestureEvent {
     
+    
     /// JSON description
     override var description: String {
         let jsonObj: NSMutableDictionary = [
@@ -19,10 +20,10 @@ class RefreshEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? "handleRefresh:",
+                "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
                 "isDefaultMethod": self.methodName == nil,
-                "title": self.title ?? "handleRefresh:"
+                "title": self.title ?? defaultMethodName
             ]
         ]
         let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
@@ -43,5 +44,6 @@ class RefreshEvent : GestureEvent {
      */
     init(method: String?, view: View, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Refresh, methodName: method, view: view, direction: "down", currentScreen: currentScreen)
+        self.defaultMethodName = "handleRefresh:"
     }
 }

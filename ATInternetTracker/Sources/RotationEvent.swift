@@ -38,10 +38,10 @@ class RotationEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? "handleRotation:",
+                "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
                 "isDefaultMethod": self.methodName == nil,
-                "title": self.title ?? "handleRotation:"
+                "title": self.title ?? defaultMethodName
             ]
         ]
         let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
@@ -65,5 +65,6 @@ class RotationEvent : GestureEvent {
      */
     init(view: View, direction: RotationDirection, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Rotate, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        self.defaultMethodName = "handleRotation:"
     }
 }

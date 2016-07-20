@@ -30,8 +30,6 @@ SOFTWARE.
 //  Tracker
 //
 
-import Foundation
-
 public enum OfflineModeKey: String {
     case Always = "always"
     case Never = "never"
@@ -78,6 +76,8 @@ class Configuration: NSObject {
     /// Dictionary of configuration parameters
     var parameters = [String: String]()
     
+    static var smartSDKMapping: JSON?
+
     /// Read only configuration
     class ReadOnlyConfiguration {
         /// Set of all configuration which value cannot be updated

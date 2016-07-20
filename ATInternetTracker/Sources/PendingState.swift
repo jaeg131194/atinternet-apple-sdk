@@ -64,6 +64,7 @@ class PendingState: LiveNetworkState {
         liveManager.networkStatus = .Disconnected
         liveManager.current = liveManager.disconnected
         liveManager.sender?.stopAskingForLive()
+        liveManager.showRefusedPopup()
     }
     
     func deviceStoppedLive() { }

@@ -9,15 +9,22 @@
 import Foundation
 import UIKit
 
+class Swizzler {
+    var _class: AnyClass
+    var _sel1: Selector
+    var _sel2: Selector
+    
+    init(_class: AnyClass, _sel1: Selector, _sel2: Selector){
+        self._class = _class
+        self._sel1 = _sel1
+        self._sel2 = _sel2
+    }
+}
+
 // MARK: - extension of UIViewController: used for detecting screen apparitions
 extension UIViewController {
     
-    /**
-     *  Singleton
-     */
-    struct Static {
-        static var token:dispatch_once_t = 0
-    }
+    static var swizzlers = [Swizzler]()
     
     /// Return a title for the screen based on the navBar title, uivc title...
     var screenTitle:String {
@@ -50,31 +57,66 @@ extension UIViewController {
             return
         }
         
-        dispatch_once(&Static.token) { () -> Void in
-            do {
-                try self.jr_swizzleMethod(#selector(UIViewController.viewDidAppear(_:)), withMethod: #selector(UIViewController.at_viewDidAppear(_:)))
-                try self.jr_swizzleMethod(#selector(UIViewController.viewDidDisappear(_:)), withMethod: #selector(UIViewController.at_viewDidDisappear(_:)))
-                try self.jr_swizzleMethod(#selector(UIViewController.viewWillDisappear(_:)), withMethod: #selector(UIViewController.at_viewWillDisappear(_:)))
-            } catch {
-                NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+        do {
+            try self.jr_swizzleMethod(#selector(UIViewController.viewDidAppear(_:)), withMethod: #selector(UIViewController.at_viewDidAppear(_:)))
+            try self.jr_swizzleMethod(#selector(UIViewController.viewDidDisappear(_:)), withMethod: #selector(UIViewController.at_viewDidDisappear(_:)))
+            try self.jr_swizzleMethod(#selector(UIViewController.viewWillDisappear(_:)), withMethod: #selector(UIViewController.at_viewWillDisappear(_:)))
+            try self.jr_swizzleMethod(#selector(UIViewController.viewDidLoad), withMethod: #selector(UIViewController.at_viewDidLoad))
+        } catch {
+            NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+        }
+        
+    }
+    
+    func at_swizzle_instance(name: Selector, name2: Selector, selfClass: AnyClass) {
+        if UIViewController.swizzlers.contains({$0._class == selfClass && name.description == $0._sel1.description}) {
+            return
+        }
+        let swizzle = Swizzler(_class: selfClass, _sel1: name, _sel2: name2)
+        UIViewController.swizzlers.append(swizzle)
+        
+        let orig = class_getInstanceMethod(selfClass, name)
+        let replace = class_getInstanceMethod(selfClass, name2)
+        method_exchangeImplementations(orig, replace)
+    }
+    
+    func at_previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        UIViewControllerContext.sharedInstance.isPeekAndPoped = true
+        self.at_previewingContext(previewingContext, commitViewController: viewControllerToCommit)
+    }
+    
+    func at_previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        UIViewControllerContext.sharedInstance.isPeek = true
+        return self.at_previewingContext(previewingContext, viewControllerForLocation: location)
+    }
+
+    func at_viewDidLoad() {
+        let selfClass = object_getClass(self)
+        if selfClass.conformsToProtocol(NSProtocolFromString("UIViewControllerPreviewingDelegate")!){
+            var mc:CUnsignedInt = 0
+            var mlist = class_copyMethodList(selfClass, &mc);
+            for _ in 0...mc {
+                let name = method_getName(mlist.memory)
+                mlist = mlist.successor()
+                if name == "previewingContext:commitViewController:" {
+                    let s = #selector(UIViewController.at_previewingContext(_:commitViewController:))
+                    at_swizzle_instance(name, name2: s, selfClass: selfClass)
+                }
+                if name == "previewingContext:viewControllerForLocation:" {
+                    let s = #selector(UIViewController.at_previewingContext(_:viewControllerForLocation:))
+                    at_swizzle_instance(name, name2: s, selfClass: selfClass)
+                }
             }
         }
     }
     
-    public class func at_unswizzle() {
-        if self !== UIViewController.self {
-            return
+    public class func at_unswizzle_instances () {
+        for s in swizzlers {
+            let orig = class_getInstanceMethod(s._class, s._sel1)
+            let replace = class_getInstanceMethod(s._class, s._sel2)
+            method_exchangeImplementations(orig, replace)
         }
-        
-        dispatch_once(&Static.token) { () -> Void in
-            do {
-                try self.jr_swizzleMethod(#selector(UIViewController.at_viewDidAppear(_:)), withMethod: #selector(UIViewController.viewDidAppear(_:)))
-                try self.jr_swizzleMethod(#selector(UIViewController.at_viewDidDisappear(_:)), withMethod: #selector(UIViewController.viewDidDisappear(_:)))
-                try self.jr_swizzleMethod(#selector(UIViewController.at_viewWillDisappear(_:)), withMethod: #selector(UIViewController.viewWillDisappear(_:)))
-            } catch {
-                NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
-            }
-        }
+        swizzlers.removeAll()
     }
     
     /**
@@ -143,6 +185,16 @@ extension UIViewController {
      */
     func at_viewWillDisappear(animated: Bool) {
         self.at_viewWillDisappear(animated)
+        
+        if UIViewControllerContext.sharedInstance.isPeek {
+            if let operation = EventManager.sharedInstance.lastEvent() as? GestureOperation {
+                let pendingEvent = operation.gestureEvent
+                EventManager.sharedInstance.cancelLastEvent()
+                pendingEvent.methodName = "Peek:"
+                EventManager.sharedInstance.addEvent(GestureOperation(gestureEvent: pendingEvent))
+            }
+            UIViewControllerContext.sharedInstance.isPeek = false
+        }
         
         // User did tap on back button ?
         if self.isMovingFromParentViewController() {

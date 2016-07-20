@@ -115,6 +115,8 @@ class LiveNetworkManager: LiveNetworkState {
         popup.show()
     }
     
+    
+    
     func showAbortedPopup() {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
@@ -147,6 +149,22 @@ class LiveNetworkManager: LiveNetworkState {
         popup.show()
     }
     
+    func showRefusedPopup() {
+        let texts = getTexts()
+        self.currentPopupDisplayed?.dismiss(true)
+        let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_REFUSED_TITLE"]!, message: texts["INFO_PAIRING_REFUSED_TEXT"]!, okTitle: texts["CONFIRM"]!)
+        let popup = KLCPopup(contentView: p,
+                             showType: KLCPopupShowType.BounceInFromTop,
+                             dismissType: KLCPopupDismissType.BounceOutToBottom,
+                             maskType: KLCPopupMaskType.Dimmed,
+                             dismissOnBackgroundTouch: false,
+                             dismissOnContentTouch: false)
+        p.addOkAction { () -> () in
+            popup.dismiss(true)
+        }
+        popup.show()
+    }
+    
     func getTexts() -> [String:String] {
         return [
             "ASK_PAIRING_TITLE": NSLocalizedString("ASK_PAIRING_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
@@ -157,6 +175,8 @@ class LiveNetworkManager: LiveNetworkState {
             "INFO_PAIRING_CANCELED_TITLE": NSLocalizedString("INFO_PAIRING_CANCELED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
             "INFO_PAIRING_STOPPED_TITLE": NSLocalizedString("INFO_PAIRING_STOPPED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
             "INFO_PAIRING_STOPPED_TEXT": NSLocalizedString("INFO_PAIRING_STOPPED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
+            "INFO_PAIRING_REFUSED_TEXT": NSLocalizedString("INFO_PAIRING_REFUSED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
+            "INFO_PAIRING_REFUSED_TITLE": NSLocalizedString("INFO_PAIRING_REFUSED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
         ]
     }
     

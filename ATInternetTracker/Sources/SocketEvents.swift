@@ -76,23 +76,31 @@ class SEScreenshot: SocketEvent {
                 controls = self.makeJSONArray(currentViewController.getControls())
             }
             
-            self.liveManager.setToolbarHidden(true)
-            let base64 = UIApplication.sharedApplication()
-                .keyWindow?.screenshot()?
-                .toBase64()!
-                .stringByReplacingOccurrencesOfString("\n", withString: "")
-                .stringByReplacingOccurrencesOfString("\r", withString: "")
+            UIView.animateWithDuration(0.01, animations: {
+                self.liveManager.toolbar?.toolbar.alpha = 0
+                }, completion: { (Bool) in
+                    //self.liveManager.setToolbarHidden(true)
+                    let base64 = UIApplication.sharedApplication()
+                        .keyWindow?.screenshot()?
+                        .toBase64()!
+                        .stringByReplacingOccurrencesOfString("\n", withString: "")
+                        .stringByReplacingOccurrencesOfString("\r", withString: "")
+                    
+                    assert(base64 != nil)
+                    UIView.animateWithDuration(0.01, animations: {
+                        //self.liveManager.setToolbarHidden(false)
+                        self.liveManager.toolbar?.toolbar.alpha = 1
+                        }, completion: { (Bool) in
+                            let screenshotEvent = ScreenshotEvent(screen: Screen(),
+                                                                  screenshot: base64,
+                                                                  suggestedEvents: controls)
+                            
+                            self.liveManager.sender?.sendMessage(screenshotEvent.description)
+                    })
+            })
             
-            assert(base64 != nil)
-            self.liveManager.setToolbarHidden(false)
+            //print(NSDate().timeIntervalSinceDate(start))
             
-            print(NSDate().timeIntervalSinceDate(start))
-            
-            let screenshotEvent = ScreenshotEvent(screen: Screen(),
-                                                  screenshot: base64,
-                                                  suggestedEvents: controls)
-            
-            self.liveManager.sender?.sendMessage(screenshotEvent.description)
         }
     }
 }

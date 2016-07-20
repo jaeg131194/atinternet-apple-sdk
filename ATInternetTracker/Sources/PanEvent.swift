@@ -26,10 +26,10 @@ class PanEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? "handlePan:",
+                "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
                 "isDefaultMethod": self.methodName == nil ,
-                "title": self.title ?? "handlePan:"
+                "title": self.title ?? defaultMethodName
             ]
         ]
         let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
@@ -53,5 +53,6 @@ class PanEvent : GestureEvent {
      */
     init(view: View, direction: PanDirection, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Pan, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        self.defaultMethodName = "handlePan:"
     }
 }
