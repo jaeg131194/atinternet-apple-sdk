@@ -61,7 +61,16 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
             return
         }
         
-        let socketEvent = SocketEventFactory.create(event, liveManager: self.liveManager)
+        guard let data = json["data"] else {
+            return
+        }
+        
+        var jsonData: JSON? = nil
+        if data != nil {
+            jsonData = JSON(data!)
+        }
+        
+        let socketEvent = SocketEventFactory.create(event, liveManager: self.liveManager, messageData: jsonData)
         socketEvent.process()
     }
     

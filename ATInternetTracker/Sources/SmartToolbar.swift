@@ -493,7 +493,7 @@ class SmartToolBarController {
         self.toolbar.onClickAnimation(toolbar.photo, onComplete:{})
         self.setToolbarHidden(true)
         let base64 = UIApplication.sharedApplication()
-            .keyWindow?.screenshot()?
+            .keyWindow?.screenshot([self.toolbar])?
             .toBase64()!
             .stringByReplacingOccurrencesOfString("\n", withString: "")
             .stringByReplacingOccurrencesOfString("\r", withString: "")
