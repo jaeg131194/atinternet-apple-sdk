@@ -9,7 +9,7 @@
 import Foundation
 
 import XCTest
-@testable import Tracker
+import Tracker
 
 class NSObjectExtensionTests: XCTestCase {
     

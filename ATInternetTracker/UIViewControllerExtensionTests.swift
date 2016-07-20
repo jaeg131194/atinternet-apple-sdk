@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Tracker
+import Tracker
 
 class UIViewControllerExtensionTests: XCTestCase {
     

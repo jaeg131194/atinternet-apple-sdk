@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Tracker
+import Tracker
 
 class ScreenEventTest: XCTestCase {
     

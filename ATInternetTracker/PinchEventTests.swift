@@ -31,6 +31,7 @@ class PinchEventTests: XCTestCase {
             "data":[
                 "type" : "pinch",
                 "methodName" : "handlePinch:",
+                "title": "handlePinch:",
                 "direction" : direction.rawValue,
                 "isDefaultMethod": true,
                 "x":-1,
@@ -64,6 +65,7 @@ class PinchEventTests: XCTestCase {
                 ]
             ]
         ]
+        
         XCTAssertEqual(pinch.description.toJSONObject() as? NSDictionary, expected)
     }
 }

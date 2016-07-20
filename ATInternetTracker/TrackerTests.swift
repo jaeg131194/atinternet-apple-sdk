@@ -32,7 +32,7 @@ SOFTWARE.
 
 import UIKit
 import XCTest
-@testable import Tracker
+import Tracker
 
 class TrackerTests: XCTestCase, TrackerDelegate {
     
@@ -159,7 +159,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
     func testsetParamIntWithOptions() {
         tracker.setParam("test", value: 2, options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
+        #if os(iOS)
         XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     func testsetParamFloat() {
@@ -173,8 +177,14 @@ class TrackerTests: XCTestCase, TrackerDelegate {
     func testsetParamFloatWithOptions() {
         let val: Float = 3.14
         tracker.setParam("test", value: val, options: opts)
+        
+        
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     func testsetParamDouble() {
@@ -189,7 +199,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
         let val: Double = 3.14
         tracker.setParam("test", value: val, options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     func testsetParamBool() {
@@ -201,7 +215,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
     func testsetParamBoolWithOptions() {
         tracker.setParam("test", value: true, options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     func testsetParamString() {
@@ -213,7 +231,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
     func testsetParamStringWithOptions() {
         tracker.setParam("test", value: "home", options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     func testsetParamArray() {
@@ -226,7 +248,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
     func testsetParamArrayWithOptions() {
         tracker.setParam("test", value: ["toto", true], options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
 //    
 //    func testsetParamDictionary() {
@@ -241,7 +267,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
     func testsetParamDictionaryWithOptions() {
         tracker.setParam("test", value: ["toto": true, "tata": "hello"], options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     func testsetParamClosure() {
@@ -259,7 +289,11 @@ class TrackerTests: XCTestCase, TrackerDelegate {
         }
         tracker.setParam("test", value: closure, options: opts)
         XCTAssertEqual(tracker.buffer.volatileParameters.count, 0, "La collection des paramètres volatiles doit être vide")
-        XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #if os(iOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters, "La collection des paramètres persitants doit contenir un objet")
+        #elseif os(tvOS)
+            XCTAssertEqual(tracker.buffer.persistentParameters.count, nbPersistentParameters - 1, "La collection des paramètres persitants doit contenir un objet")
+        #endif
     }
     
     

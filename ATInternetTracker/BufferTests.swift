@@ -33,8 +33,6 @@ SOFTWARE.
 import UIKit
 import XCTest
 
-import Tracker
-
 class BufferTests: XCTestCase {
     
     // On instancie deux objets de type Parameter
@@ -59,7 +57,11 @@ class BufferTests: XCTestCase {
     // On vérifie qu'il est possible d'ajouter un paramètre persistant dans le buffer
     func testAddParamPer() {
         buffer.persistentParameters.append(paramPer)
+        #if os(iOS)
         XCTAssertEqual(buffer.persistentParameters.count, 15, "persistentParameters doit contenir un élément")
+        #elseif os(tvOS)
+         XCTAssertEqual(buffer.persistentParameters.count, 14, "persistentParameters doit contenir un élément")
+        #endif
     }
     
     // On vérifie qu'il est possible d'ajouter un paramètre volatile dans le buffer

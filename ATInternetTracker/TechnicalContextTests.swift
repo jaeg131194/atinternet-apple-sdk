@@ -105,7 +105,11 @@ class TechnicalContextTests: XCTestCase {
     }
     
     func testCarrier() {
+        #if os(iOS)
         XCTAssertNotNil(TechnicalContext.carrier, "Carrier shall not be nil")
+        #else
+        XCTAssertNotNil("Carrier")
+        #endif
     }
     
     func testConnectionType() {
