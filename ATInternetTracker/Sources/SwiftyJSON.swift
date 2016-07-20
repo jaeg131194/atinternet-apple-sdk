@@ -25,22 +25,22 @@ import Foundation
 // MARK: - Error
 
 ///Error domain
-public let ErrorDomain: String! = "SwiftyJSONErrorDomain"
+public let ErrorDomain: String = "SwiftyJSONErrorDomain"
 
 ///Error code
-public let ErrorUnsupportedType: Int! = 999
-public let ErrorIndexOutOfBounds: Int! = 900
-public let ErrorWrongType: Int! = 901
-public let ErrorNotExist: Int! = 500
-public let ErrorInvalidJSON: Int! = 490
+public let ErrorUnsupportedType: Int = 999
+public let ErrorIndexOutOfBounds: Int = 900
+public let ErrorWrongType: Int = 901
+public let ErrorNotExist: Int = 500
+public let ErrorInvalidJSON: Int = 490
 
 // MARK: - JSON Type
 
 /**
-JSON's type definitions.
-
-See http://tools.ietf.org/html/rfc7231#section-4.3
-*/
+ JSON's type definitions.
+ 
+ See http://www.json.org
+ */
 public enum Type :Int{
     
     case Number
@@ -78,6 +78,17 @@ public struct JSON {
     }
     
     /**
+     Create a JSON from JSON string
+     - parameter string: Normal json string like '{"a":"b"}'
+     
+     - returns: The created JSON
+     */
+    public static func parse(string:String) -> JSON {
+        return string.dataUsingEncoding(NSUTF8StringEncoding)
+            .flatMap({JSON(data: $0)}) ?? JSON(NSNull())
+    }
+    
+    /**
      Creates a JSON using the object.
      
      - parameter object:  The object must have the following properties: All objects are NSString/String, NSNumber/Int/Float/Double/Bool, NSArray/Array, NSDictionary/Dictionary, or NSNull; All dictionary keys are NSStrings/String; NSNumbers are not NaN or infinity.
@@ -107,7 +118,7 @@ public struct JSON {
      - returns: The created JSON
      */
     public init(_ jsonDictionary:[String: JSON]) {
-        var dictionary = [String: AnyObject]()
+        var dictionary = [String: AnyObject](minimumCapacity: jsonDictionary.count)
         for (key, json) in jsonDictionary {
             dictionary[key] = json.object
         }
@@ -224,7 +235,7 @@ extension JSON : Swift.CollectionType, Swift.SequenceType, Swift.Indexable {
         }
     }
     
-    /// If `type` is `.Array` or `.Dictionary`, return `array.empty` or `dictonary.empty` otherwise return `false`.
+    /// If `type` is `.Array` or `.Dictionary`, return `array.isEmpty` or `dictonary.isEmpty` otherwise return `true`.
     public var isEmpty: Bool {
         get {
             switch self.type {
@@ -384,14 +395,15 @@ public struct JSONGenerator : GeneratorType {
     public mutating func next() -> JSONGenerator.Element? {
         switch self.type {
         case .Array:
-            if let o = self.arrayGenerate!.next() {
-                self.arrayIndex = self.arrayIndex + 1
-                return (String(self.arrayIndex), JSON(o))
+            if let o = self.arrayGenerate?.next() {
+                let i = self.arrayIndex
+                self.arrayIndex += 1
+                return (String(i), JSON(o))
             } else {
                 return nil
             }
         case .Dictionary:
-            if let (k, v): (String, AnyObject) = self.dictionayGenerate!.next() {
+            if let (k, v): (String, AnyObject) = self.dictionayGenerate?.next() {
                 return (k, JSON(v))
             } else {
                 return nil
@@ -405,17 +417,32 @@ public struct JSONGenerator : GeneratorType {
 // MARK: - Subscript
 
 /**
-*  To mark both String and Int can be used in subscript.
-*/
-public protocol JSONSubscriptType {}
+ *  To mark both String and Int can be used in subscript.
+ */
+public enum JSONKey {
+    case Index(Int)
+    case Key(String)
+}
 
-extension Int: JSONSubscriptType {}
+public protocol JSONSubscriptType {
+    var jsonKey:JSONKey { get }
+}
 
-extension String: JSONSubscriptType {}
+extension Int: JSONSubscriptType {
+    public var jsonKey:JSONKey {
+        return JSONKey.Index(self)
+    }
+}
+
+extension String: JSONSubscriptType {
+    public var jsonKey:JSONKey {
+        return JSONKey.Key(self)
+    }
+}
 
 extension JSON {
     
-    /// If `type` is `.Array`, return json which's object is `array[index]`, otherwise return null json with error.
+    /// If `type` is `.Array`, return json whose object is `array[index]`, otherwise return null json with error.
     private subscript(index index: Int) -> JSON {
         get {
             if self.type != .Array {
@@ -439,7 +466,7 @@ extension JSON {
         }
     }
     
-    /// If `type` is `.Dictionary`, return json which's object is `dictionary[key]` , otherwise return null json with error.
+    /// If `type` is `.Dictionary`, return json whose object is `dictionary[key]` , otherwise return null json with error.
     private subscript(key key: String) -> JSON {
         get {
             var r = JSON.null
@@ -464,17 +491,15 @@ extension JSON {
     /// If `sub` is `Int`, return `subscript(index:)`; If `sub` is `String`,  return `subscript(key:)`.
     private subscript(sub sub: JSONSubscriptType) -> JSON {
         get {
-            if sub is String {
-                return self[key:sub as! String]
-            } else {
-                return self[index:sub as! Int]
+            switch sub.jsonKey {
+            case .Index(let index): return self[index: index]
+            case .Key(let key): return self[key: key]
             }
         }
         set {
-            if sub is String {
-                self[key:sub as! String] = newValue
-            } else {
-                self[index:sub as! Int] = newValue
+            switch sub.jsonKey {
+            case .Index(let index): self[index: index] = newValue
+            case .Key(let key): self[key: key] = newValue
             }
         }
     }
@@ -512,7 +537,7 @@ extension JSON {
     }
     
     /**
-     Find a json in the complex data structuresby using the Int/String's array.
+     Find a json in the complex data structures by using the Int/String's array.
      
      - parameter path: The target json's path. Example:
      
@@ -573,7 +598,7 @@ extension JSON: Swift.FloatLiteralConvertible {
 extension JSON: Swift.DictionaryLiteralConvertible {
     
     public init(dictionaryLiteral elements: (String, AnyObject)...) {
-        self.init(elements.reduce([String : AnyObject]()){(dictionary: [String : AnyObject], element:(String, AnyObject)) -> [String : AnyObject] in
+        self.init(elements.reduce([String : AnyObject](minimumCapacity: elements.count)){(dictionary: [String : AnyObject], element:(String, AnyObject)) -> [String : AnyObject] in
             var d = dictionary
             d[element.0] = element.1
             return d
@@ -708,7 +733,7 @@ extension JSON {
     //Optional [String : JSON]
     public var dictionary: [String : JSON]? {
         if self.type == .Dictionary {
-            return self.rawDictionary.reduce([String : JSON]()) { (dictionary: [String : JSON], element: (String, AnyObject)) -> [String : JSON] in
+            return self.rawDictionary.reduce([String : JSON](minimumCapacity: count)) { (dictionary: [String : JSON], element: (String, AnyObject)) -> [String : JSON] in
                 var d = dictionary
                 d[element.0] = JSON(element.1)
                 return d
@@ -758,8 +783,8 @@ extension JSON: Swift.BooleanType {
             }
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(bool: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(bool: newValue)
             } else {
                 self.object = NSNull()
             }
@@ -797,8 +822,8 @@ extension JSON {
             }
         }
         set {
-            if newValue != nil {
-                self.object = NSString(string:newValue!)
+            if let newValue = newValue {
+                self.object = NSString(string:newValue)
             } else {
                 self.object = NSNull()
             }
@@ -810,11 +835,11 @@ extension JSON {
         get {
             switch self.type {
             case .String:
-                return self.object as! String
+                return self.object as? String ?? ""
             case .Number:
                 return self.object.stringValue
             case .Bool:
-                return (self.object as! Bool).description
+                return (self.object as? Bool).map { String($0) } ?? ""
             default:
                 return ""
             }
@@ -854,7 +879,7 @@ extension JSON {
                 }
                 return decimal
             case .Number, .Bool:
-                return self.object as! NSNumber
+                return self.object as? NSNumber ?? NSNumber(int: 0)
             default:
                 return NSNumber(double: 0.0)
             }
@@ -881,7 +906,7 @@ extension JSON {
             self.object = NSNull()
         }
     }
-    public func isExists() -> Bool{
+    public func exists() -> Bool{
         if let errorValue = error where errorValue.code == ErrorNotExist{
             return false
         }
@@ -921,8 +946,8 @@ extension JSON {
             return self.number?.doubleValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(double: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(double: newValue)
             } else {
                 self.object = NSNull()
             }
@@ -943,8 +968,8 @@ extension JSON {
             return self.number?.floatValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(float: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(float: newValue)
             } else {
                 self.object = NSNull()
             }
@@ -965,8 +990,8 @@ extension JSON {
             return self.number?.longValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(integer: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(integer: newValue)
             } else {
                 self.object = NSNull()
             }
@@ -987,8 +1012,8 @@ extension JSON {
             return self.number?.unsignedLongValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(unsignedLong: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(unsignedLong: newValue)
             } else {
                 self.object = NSNull()
             }
@@ -1009,8 +1034,8 @@ extension JSON {
             return self.number?.charValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(char: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(char: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1031,8 +1056,8 @@ extension JSON {
             return self.number?.unsignedCharValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(unsignedChar: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(unsignedChar: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1053,8 +1078,8 @@ extension JSON {
             return self.number?.shortValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(short: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(short: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1075,8 +1100,8 @@ extension JSON {
             return self.number?.unsignedShortValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(unsignedShort: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(unsignedShort: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1097,8 +1122,8 @@ extension JSON {
             return self.number?.intValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(int: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(int: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1119,8 +1144,8 @@ extension JSON {
             return self.number?.unsignedIntValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(unsignedInt: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(unsignedInt: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1141,8 +1166,8 @@ extension JSON {
             return self.number?.longLongValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(longLong: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(longLong: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1163,8 +1188,8 @@ extension JSON {
             return self.number?.unsignedLongLongValue
         }
         set {
-            if newValue != nil {
-                self.object = NSNumber(unsignedLongLong: newValue!)
+            if let newValue = newValue {
+                self.object = NSNumber(unsignedLongLong: newValue)
             } else {
                 self.object =  NSNull()
             }
@@ -1272,3 +1297,82 @@ private let trueNumber = NSNumber(bool: true)
 private let falseNumber = NSNumber(bool: false)
 private let trueObjCType = String.fromCString(trueNumber.objCType)
 private let falseObjCType = String.fromCString(falseNumber.objCType)
+
+// MARK: - NSNumber: Comparable
+
+extension NSNumber {
+    var isBool:Bool {
+        get {
+            let objCType = String.fromCString(self.objCType)
+            if (self.compare(trueNumber) == NSComparisonResult.OrderedSame && objCType == trueObjCType)
+                || (self.compare(falseNumber) == NSComparisonResult.OrderedSame && objCType == falseObjCType){
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+}
+
+func ==(lhs: NSNumber, rhs: NSNumber) -> Bool {
+    switch (lhs.isBool, rhs.isBool) {
+    case (false, true):
+        return false
+    case (true, false):
+        return false
+    default:
+        return lhs.compare(rhs) == NSComparisonResult.OrderedSame
+    }
+}
+
+func !=(lhs: NSNumber, rhs: NSNumber) -> Bool {
+    return !(lhs == rhs)
+}
+
+func <(lhs: NSNumber, rhs: NSNumber) -> Bool {
+    
+    switch (lhs.isBool, rhs.isBool) {
+    case (false, true):
+        return false
+    case (true, false):
+        return false
+    default:
+        return lhs.compare(rhs) == NSComparisonResult.OrderedAscending
+    }
+}
+
+func >(lhs: NSNumber, rhs: NSNumber) -> Bool {
+    
+    switch (lhs.isBool, rhs.isBool) {
+    case (false, true):
+        return false
+    case (true, false):
+        return false
+    default:
+        return lhs.compare(rhs) == NSComparisonResult.OrderedDescending
+    }
+}
+
+func <=(lhs: NSNumber, rhs: NSNumber) -> Bool {
+    
+    switch (lhs.isBool, rhs.isBool) {
+    case (false, true):
+        return false
+    case (true, false):
+        return false
+    default:
+        return lhs.compare(rhs) != NSComparisonResult.OrderedDescending
+    }
+}
+
+func >=(lhs: NSNumber, rhs: NSNumber) -> Bool {
+    
+    switch (lhs.isBool, rhs.isBool) {
+    case (false, true):
+        return false
+    case (true, false):
+        return false
+    default:
+        return lhs.compare(rhs) != NSComparisonResult.OrderedAscending
+    }
+}
