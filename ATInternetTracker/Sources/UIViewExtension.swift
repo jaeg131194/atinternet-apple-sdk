@@ -224,7 +224,12 @@ extension UIView {
      screenshot function: Take a screenshot
      - returns: the self UIImage representation
      */
-    func screenshot () -> UIImage? {
+    func screenshot (ignoreViews: [UIView]? = nil) -> UIImage? {
+        let visibleViews = ignoreViews?.filter({!$0.hidden})
+        visibleViews?.forEach({ (v: UIView) in
+            v.hidden = true
+        })
+        
         let optWindow = UIApplication.sharedApplication().keyWindow
         var optImage: UIImage?
         
@@ -233,7 +238,6 @@ extension UIView {
                 UIGraphicsBeginImageContextWithOptions(window.bounds.size, true, window.screen.scale)
                 if !window.drawViewHierarchyInRect(window.bounds, afterScreenUpdates: true) {
                     window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-                    
                 }
                 optImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
@@ -244,6 +248,10 @@ extension UIView {
         if self != optWindow {
             optImage = optImage?.crop(self.convertRect(self.bounds, toView: nil))
         }
+        
+        visibleViews?.forEach({ (v: UIView) in
+            v.hidden = false
+        })
         
         return optImage
     }

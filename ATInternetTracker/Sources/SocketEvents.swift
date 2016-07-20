@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 
 class SocketEventFactory {
-    class func create(eventName: String, liveManager: LiveNetworkManager) -> SocketEvent {
+    class func create(eventName: String, liveManager: LiveNetworkManager, messageData: JSON?) -> SocketEvent {
         switch eventName {
         // triggered after viewDidAppear
         case SmartSocketEvent.Screenshot.rawValue:
-            return SEScreenshot(liveManager: liveManager)
+            return SEScreenshot(liveManager: liveManager, messageData: messageData)
         // interface requesting a live session
         case SmartSocketEvent.InterfaceAskedForLive.rawValue:
             return SEInterfaceAskedForLive(liveManager: liveManager)
@@ -41,7 +41,7 @@ class SocketEventFactory {
 class SocketEvent {
     let liveManager: LiveNetworkManager
     
-    init(liveManager: LiveNetworkManager) {
+    init(liveManager: LiveNetworkManager, messageData: JSON? = nil) {
         self.liveManager = liveManager
     }
     
@@ -70,37 +70,34 @@ class SEScreenshot: SocketEvent {
     
     override func process() {
         delay(0.5) {
-            let start = NSDate()
             var controls: [AnyObject] = []
             if let currentViewController = UIViewControllerContext.sharedInstance.currentViewController {
                 controls = self.makeJSONArray(currentViewController.getControls())
             }
             
-            UIView.animateWithDuration(0.01, animations: {
-                self.liveManager.toolbar?.toolbar.alpha = 0
-                }, completion: { (Bool) in
-                    //self.liveManager.setToolbarHidden(true)
-                    let base64 = UIApplication.sharedApplication()
-                        .keyWindow?.screenshot()?
-                        .toBase64()!
-                        .stringByReplacingOccurrencesOfString("\n", withString: "")
-                        .stringByReplacingOccurrencesOfString("\r", withString: "")
-                    
-                    assert(base64 != nil)
-                    UIView.animateWithDuration(0.01, animations: {
-                        //self.liveManager.setToolbarHidden(false)
-                        self.liveManager.toolbar?.toolbar.alpha = 1
-                        }, completion: { (Bool) in
-                            let screenshotEvent = ScreenshotEvent(screen: Screen(),
-                                                                  screenshot: base64,
-                                                                  suggestedEvents: controls)
-                            
-                            self.liveManager.sender?.sendMessage(screenshotEvent.description)
-                    })
-            })
+            var toIgnore = [UIView]()
+            if let toolbar = self.liveManager.toolbar?.toolbar {
+                toIgnore.append(toolbar)
+            }
             
-            //print(NSDate().timeIntervalSinceDate(start))
+            var base64 = UIApplication.sharedApplication()
+                .keyWindow?.screenshot(toIgnore)?
+                .toBase64()!
+                .stringByReplacingOccurrencesOfString("\n", withString: "")
+                .stringByReplacingOccurrencesOfString("\r", withString: "")
             
+            assert(base64 != nil)
+            let screen = Screen()
+            if self.messageData != nil && self.messageData!["screen"]["className"].string != nil && self.messageData!["screen"]["className"].string! != screen.className {
+                base64 = "R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs="  // 1x1 white pixel
+                screen.className = self.messageData!["screen"]["className"].string!
+                controls = []
+            }
+            let screenshotEvent = ScreenshotEvent(screen: screen,
+                                                  screenshot: base64,
+                                                  suggestedEvents: controls)
+            
+            self.liveManager.sender?.sendMessage(screenshotEvent.description)
         }
     }
 }
@@ -130,13 +127,15 @@ class SEInterfaceAcceptedLive: SocketEvent {
 class SEInterfaceAskedForScreenshot: SocketEvent {
     override func process() {
         if self.liveManager.networkStatus == .Connected {
-            self.liveManager.setToolbarHidden(true)
+            var toIgnore = [UIView]()
+            if let toolbar = self.liveManager.toolbar?.toolbar {
+                toIgnore.append(toolbar)
+            }
             let base64 = UIApplication.sharedApplication()
-                .keyWindow?.screenshot()?
+                .keyWindow?.screenshot(toIgnore)?
                 .toBase64()!
                 .stringByReplacingOccurrencesOfString("\n", withString: "")
                 .stringByReplacingOccurrencesOfString("\r", withString: "")
-            self.liveManager.setToolbarHidden(false)
             let currentScreen = Screen()
             self.liveManager.sender?.sendMessage(ScreenshotUpdated(screenshot: base64, screen: currentScreen).description)
         }
