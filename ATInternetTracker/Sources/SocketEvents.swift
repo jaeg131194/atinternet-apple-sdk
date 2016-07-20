@@ -40,9 +40,11 @@ class SocketEventFactory {
 
 class SocketEvent {
     let liveManager: LiveNetworkManager
+    let messageData: JSON?
     
     init(liveManager: LiveNetworkManager, messageData: JSON? = nil) {
         self.liveManager = liveManager
+        self.messageData = messageData
     }
     
     func process() {
