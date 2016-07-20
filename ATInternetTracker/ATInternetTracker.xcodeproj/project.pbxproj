@@ -10,13 +10,10 @@
 		4F3EAB801D3E772600013032 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4591D3542A400702747 /* Tracker.swift */; };
 		4F3EAB811D3E789900013032 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5EC1D36230D00702747 /* App.swift */; };
 		4F47A3E21D351E8100702747 /* Tracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F47A3E11D351E8100702747 /* Tracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F47A41C1D3524DD00702747 /* Tracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F47A3E11D351E8100702747 /* Tracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4F47A41D1D3524DE00702747 /* Tracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F47A3E11D351E8100702747 /* Tracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F47A43D1D353F3000702747 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A43C1D353F3000702747 /* AVFoundation.framework */; };
 		4F47A43F1D353F3E00702747 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A43E1D353F3E00702747 /* Security.framework */; };
 		4F47A4411D353F4300702747 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A4401D353F4300702747 /* CFNetwork.framework */; };
 		4F47A4431D353F4A00702747 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A4421D353F4A00702747 /* libicucore.tbd */; };
-		4F47A4451D35401D00702747 /* Tracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F47A3E11D351E8100702747 /* Tracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F47A4471D3541C500702747 /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		4F47A4481D3541C500702747 /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		4F47A4491D3541C500702747 /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
@@ -216,7 +213,6 @@
 		4F47A5471D35458E00702747 /* DefaultTrackerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5451D35458E00702747 /* DefaultTrackerDelegate.swift */; };
 		4F47A5481D35458E00702747 /* DefaultTrackerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5451D35458E00702747 /* DefaultTrackerDelegate.swift */; };
 		4F47A5491D35458E00702747 /* DefaultTrackerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5451D35458E00702747 /* DefaultTrackerDelegate.swift */; };
-		4F47A5581D35466500702747 /* Tracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F47A3E11D351E8100702747 /* Tracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F47A55E1D3620E800702747 /* DefaultConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F47A55A1D3620E800702747 /* DefaultConfiguration.plist */; };
 		4F47A55F1D3620E800702747 /* DefaultConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F47A55A1D3620E800702747 /* DefaultConfiguration.plist */; };
 		4F47A5601D3620E800702747 /* DefaultConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F47A55A1D3620E800702747 /* DefaultConfiguration.plist */; };
@@ -381,7 +377,7 @@
 		4F47A6B81D3CD75600702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
 		4F47A6B91D3CD75700702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
 		4F47A6C31D3D0A3000702747 /* Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A3DE1D351E8100702747 /* Tracker.framework */; };
-		4F47A6E11D3D10E000702747 /* Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A3F91D351EA700702747 /* Tracker.framework */; };
+		4F47A6E11D3D10E000702747 /* tvOSTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F47A3F91D351EA700702747 /* tvOSTracker.framework */; };
 		4F47A7E71D3D134F00702747 /* AisleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6EB1D3D126500702747 /* AisleTests.swift */; };
 		4F47A7E81D3D134F00702747 /* BufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6EC1D3D126500702747 /* BufferTests.swift */; };
 		4F47A7E91D3D134F00702747 /* BuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6ED1D3D126500702747 /* BuilderTests.swift */; };
@@ -681,6 +677,15 @@
 		4FF594631D3F66C00004D336 /* TVTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4BB1D35446700702747 /* TVTracking.swift */; };
 		4FF594641D3F66C20004D336 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4BC1D35446700702747 /* Video.swift */; };
 		4FF594651D3F66C70004D336 /* TVTrackingPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5401D35456600702747 /* TVTrackingPlugin.swift */; };
+		4FF594661D3FB4500004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
+		4FF594671D3FB46B0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
+		4FF594681D3FB46B0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
+		4FF594691D3FB46D0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
+		4FF5946A1D3FB46F0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
+		4FF5946C1D3FB6360004D336 /* ExtensionTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946B1D3FB6360004D336 /* ExtensionTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FF5946E1D3FB6890004D336 /* SmartTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946D1D3FB6890004D336 /* SmartTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FF594701D3FB80A0004D336 /* tvOSTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FF594721D3FB8690004D336 /* watchOSTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF594711D3FB8690004D336 /* watchOSTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FFB609D1D3E7FD900586F9E /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		8E5339831D3F82A80081445B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		8E5339841D3F845F0081445B /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
@@ -714,12 +719,12 @@
 /* Begin PBXFileReference section */
 		4F47A3DE1D351E8100702747 /* Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F47A3E11D351E8100702747 /* Tracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
-		4F47A3F91D351EA700702747 /* Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F47A4081D351F9C00702747 /* Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F47A3F91D351EA700702747 /* tvOSTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = tvOSTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F47A4081D351F9C00702747 /* watchOSTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = watchOSTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F47A4161D35200D00702747 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
 		4F47A4171D35200D00702747 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		4F47A4181D35200D00702747 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
-		4F47A4321D3532A900702747 /* Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F47A4321D3532A900702747 /* ExtensionTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExtensionTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F47A43A1D3532FE00702747 /* Info-iOS-Extension.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS-Extension.plist"; sourceTree = "<group>"; };
 		4F47A43C1D353F3000702747 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		4F47A43E1D353F3E00702747 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
@@ -776,7 +781,7 @@
 		4F47A52E1D35451A00702747 /* Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hash.m; sourceTree = "<group>"; };
 		4F47A5401D35456600702747 /* TVTrackingPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVTrackingPlugin.swift; sourceTree = "<group>"; };
 		4F47A5451D35458E00702747 /* DefaultTrackerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTrackerDelegate.swift; sourceTree = "<group>"; };
-		4F47A5501D35465100702747 /* Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F47A5501D35465100702747 /* SmartTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SmartTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F47A5541D35465200702747 /* Info-iOS-SmartTracker.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS-SmartTracker.plist"; sourceTree = "<group>"; };
 		4F47A55A1D3620E800702747 /* DefaultConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultConfiguration.plist; sourceTree = "<group>"; };
 		4F47A55B1D3620E800702747 /* DefaultConfiguration~ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DefaultConfiguration~ipad.plist"; sourceTree = "<group>"; };
@@ -899,6 +904,10 @@
 		4F47A71C1D3D126500702747 /* ViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewTests.swift; path = Tests/ViewTests.swift; sourceTree = "<group>"; };
 		4F47A8601D3D230600702747 /* TrackerTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TrackerTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		4F47A97A1D3E2FE100702747 /* SmartTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FF5946B1D3FB6360004D336 /* ExtensionTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionTracker.h; sourceTree = "<group>"; };
+		4FF5946D1D3FB6890004D336 /* SmartTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTracker.h; sourceTree = "<group>"; };
+		4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tvOSTracker.h; sourceTree = "<group>"; };
+		4FF594711D3FB8690004D336 /* watchOSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watchOSTracker.h; sourceTree = "<group>"; };
 		8EDC3CF51D3E225100A14458 /* ApiS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiS3.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -958,7 +967,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F47A6E11D3D10E000702747 /* Tracker.framework in Frameworks */,
+				4F47A6E11D3D10E000702747 /* tvOSTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,10 +996,10 @@
 			isa = PBXGroup;
 			children = (
 				4F47A3DE1D351E8100702747 /* Tracker.framework */,
-				4F47A3F91D351EA700702747 /* Tracker.framework */,
-				4F47A4081D351F9C00702747 /* Tracker.framework */,
-				4F47A4321D3532A900702747 /* Tracker.framework */,
-				4F47A5501D35465100702747 /* Tracker.framework */,
+				4F47A3F91D351EA700702747 /* tvOSTracker.framework */,
+				4F47A4081D351F9C00702747 /* watchOSTracker.framework */,
+				4F47A4321D3532A900702747 /* ExtensionTracker.framework */,
+				4F47A5501D35465100702747 /* SmartTracker.framework */,
 				4F47A6BE1D3D0A3000702747 /* TrackerTests.xctest */,
 				4F47A6DC1D3D10E000702747 /* tvOSTrackerTests.xctest */,
 				4F47A97A1D3E2FE100702747 /* SmartTrackerTests.xctest */,
@@ -1001,14 +1010,13 @@
 		4F47A4021D351F2800702747 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				4F47A3E11D351E8100702747 /* Tracker.h */,
-				4F47A8601D3D230600702747 /* TrackerTests-Bridging-Header.h */,
 				4F47A4461D3541C500702747 /* ATInternet.swift */,
 				4F47A54A1D3545D000702747 /* AutoTracker */,
 				4F47A5591D36209900702747 /* Asset */,
 				4F47A4961D3542DF00702747 /* Core */,
 				4F47A4971D35433300702747 /* Debugger */,
 				4F47A5C41D3621F400702747 /* Extension */,
+				4FF594881D3FB92C0004D336 /* Header */,
 				4F47A4A21D3543BB00702747 /* Object */,
 				4F47A53F1D35452F00702747 /* Plugin */,
 				4F47A52A1D3544FA00702747 /* Tool */,
@@ -1311,6 +1319,19 @@
 			name = AutoTracker;
 			sourceTree = "<group>";
 		};
+		4FF594881D3FB92C0004D336 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				4F47A3E11D351E8100702747 /* Tracker.h */,
+				4FF5946B1D3FB6360004D336 /* ExtensionTracker.h */,
+				4FF5946D1D3FB6890004D336 /* SmartTracker.h */,
+				4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */,
+				4FF594711D3FB8690004D336 /* watchOSTracker.h */,
+				4F47A8601D3D230600702747 /* TrackerTests-Bridging-Header.h */,
+			);
+			name = Header;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1331,7 +1352,7 @@
 			files = (
 				4F47A5391D35451A00702747 /* Hash.h in Headers */,
 				4F47A5311D35451A00702747 /* Crash.h in Headers */,
-				4F47A41C1D3524DD00702747 /* Tracker.h in Headers */,
+				4FF594701D3FB80A0004D336 /* tvOSTracker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1339,9 +1360,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FF594721D3FB8690004D336 /* watchOSTracker.h in Headers */,
 				4F47A53A1D35451A00702747 /* Hash.h in Headers */,
 				4F47A5321D35451A00702747 /* Crash.h in Headers */,
-				4F47A41D1D3524DE00702747 /* Tracker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1350,8 +1371,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F47A5381D35451A00702747 /* Hash.h in Headers */,
+				4FF5946C1D3FB6360004D336 /* ExtensionTracker.h in Headers */,
 				4F47A5301D35451A00702747 /* Crash.h in Headers */,
-				4F47A4451D35401D00702747 /* Tracker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1364,9 +1385,9 @@
 				4F47A5DC1D3622B100702747 /* JRSwizzle.h in Headers */,
 				4F47A5F41D36236000702747 /* SRWebSocket.h in Headers */,
 				4F47A8621D3D230600702747 /* TrackerTests-Bridging-Header.h in Headers */,
+				4FF5946E1D3FB6890004D336 /* SmartTracker.h in Headers */,
 				4F47A5A11D36210E00702747 /* Crash.h in Headers */,
 				4F47A63F1D36256500702747 /* ATGestureRecognizer.h in Headers */,
-				4F47A5581D35466500702747 /* Tracker.h in Headers */,
 				4F47A6591D362C1F00702747 /* DefaultConfiguration.plist in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1407,7 +1428,7 @@
 			);
 			name = "Tracker tvOS";
 			productName = "Tracker tvOS";
-			productReference = 4F47A3F91D351EA700702747 /* Tracker.framework */;
+			productReference = 4F47A3F91D351EA700702747 /* tvOSTracker.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		4F47A4071D351F9C00702747 /* Tracker watchOS */ = {
@@ -1425,7 +1446,7 @@
 			);
 			name = "Tracker watchOS";
 			productName = "Tracker watchOS";
-			productReference = 4F47A4081D351F9C00702747 /* Tracker.framework */;
+			productReference = 4F47A4081D351F9C00702747 /* watchOSTracker.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		4F47A4311D3532A900702747 /* Tracker iOS Extension */ = {
@@ -1443,7 +1464,7 @@
 			);
 			name = "Tracker iOS Extension";
 			productName = "Tracker iOS Extension";
-			productReference = 4F47A4321D3532A900702747 /* Tracker.framework */;
+			productReference = 4F47A4321D3532A900702747 /* ExtensionTracker.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		4F47A54F1D35465100702747 /* SmartTracker iOS */ = {
@@ -1461,7 +1482,7 @@
 			);
 			name = "SmartTracker iOS";
 			productName = "SmartTracker iOS";
-			productReference = 4F47A5501D35465100702747 /* Tracker.framework */;
+			productReference = 4F47A5501D35465100702747 /* SmartTracker.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		4F47A6BD1D3D0A3000702747 /* TrackerTests */ = {
@@ -1707,6 +1728,7 @@
 				4F47A48E1D3542A400702747 /* Tool.swift in Sources */,
 				4F47A4921D3542A400702747 /* Tracker.swift in Sources */,
 				4F47A4761D3542A400702747 /* LifeCycle.swift in Sources */,
+				4FF594661D3FB4500004D336 /* SwiftyJSON.swift in Sources */,
 				4F47A5191D35446700702747 /* SelfPromotion.swift in Sources */,
 				4F47A4ED1D35446700702747 /* LiveVideo.swift in Sources */,
 				4F47A4C11D35446700702747 /* Audio.swift in Sources */,
@@ -1753,6 +1775,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F47A4C31D35446700702747 /* Audio.swift in Sources */,
+				4FF594681D3FB46B0004D336 /* SwiftyJSON.swift in Sources */,
 				4F47A4CF1D35446700702747 /* CustomObject.swift in Sources */,
 				4F47A45C1D3542A400702747 /* BackgroundTask.swift in Sources */,
 				4F47A6651D36425B00702747 /* DictionaryExtension.swift in Sources */,
@@ -1859,6 +1882,7 @@
 				4F47A4F01D35446700702747 /* LiveVideo.swift in Sources */,
 				4F47A4FC1D35446700702747 /* NuggAd.swift in Sources */,
 				4F47A5491D35458E00702747 /* DefaultTrackerDelegate.swift in Sources */,
+				4FF594691D3FB46D0004D336 /* SwiftyJSON.swift in Sources */,
 				4F47A4C01D35446700702747 /* Aisle.swift in Sources */,
 				4F47A4891D3542A400702747 /* Storage.swift in Sources */,
 			);
@@ -1883,6 +1907,7 @@
 				4F47A48F1D3542A400702747 /* Tool.swift in Sources */,
 				4F47A4931D3542A400702747 /* Tracker.swift in Sources */,
 				4F47A4771D3542A400702747 /* LifeCycle.swift in Sources */,
+				4FF594671D3FB46B0004D336 /* SwiftyJSON.swift in Sources */,
 				4F47A51A1D35446700702747 /* SelfPromotion.swift in Sources */,
 				4F47A4EE1D35446700702747 /* LiveVideo.swift in Sources */,
 				4F47A4C21D35446700702747 /* Audio.swift in Sources */,
@@ -2119,6 +2144,7 @@
 				4FF5942C1D3F63670004D336 /* OrderTests.swift in Sources */,
 				4FF594321D3F63800004D336 /* TechnicalContextTests.swift in Sources */,
 				4FF594331D3F63800004D336 /* TrackerTests.swift in Sources */,
+				4FF5946A1D3FB46F0004D336 /* SwiftyJSON.swift in Sources */,
 				4FF594451D3F66540004D336 /* Tool.swift in Sources */,
 				4FF5944A1D3F667E0004D336 /* Aisle.swift in Sources */,
 				4FF594311D3F63800004D336 /* SelfPromotionTests.swift in Sources */,
@@ -2545,7 +2571,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = tvOSTracker;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2598,7 +2624,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = tvOSTracker;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2658,7 +2684,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = watchOSTracker;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2711,7 +2737,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = watchOSTracker;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2773,7 +2799,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-DAT_EXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.TrackerExtension;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = ExtensionTracker;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2827,7 +2853,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_SWIFT_FLAGS = "-DAT_EXTENSION";
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.TrackerExtension;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = ExtensionTracker;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2890,7 +2916,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_SWIFT_FLAGS = "-DAT_SMART_TRACKER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.SmartTracker;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = SmartTracker;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2948,7 +2974,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_SWIFT_FLAGS = "-DAT_SMART_TRACKER";
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.SmartTracker;
-				PRODUCT_NAME = Tracker;
+				PRODUCT_NAME = SmartTracker;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

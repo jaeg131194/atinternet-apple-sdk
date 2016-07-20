@@ -32,6 +32,10 @@ SOFTWARE.
 
 import Foundation
 
+#if os(iOS) && AT_SMART_TRACKER
+import UIKit
+#endif
+
 public class ScreenInfo: BusinessObject {
     
 }

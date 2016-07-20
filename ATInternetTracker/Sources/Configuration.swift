@@ -22,13 +22,12 @@ SOFTWARE.
 */
 
 
-
-
-
 //
 //  Configuration.swift
 //  Tracker
 //
+
+import Foundation
 
 public enum OfflineModeKey: String {
     case Always = "always"

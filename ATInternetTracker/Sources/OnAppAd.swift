@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 public class OnAppAd: BusinessObject {
     
     /// Action types

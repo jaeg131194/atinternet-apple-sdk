@@ -30,6 +30,8 @@ SOFTWARE.
 //  Tracker
 //
 
+import Foundation
+
 /// Plugin management
 class Plugin: NSObject {
     

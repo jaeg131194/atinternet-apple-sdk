@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 protocol LiveNetworkState {
     func deviceAskedForLive()

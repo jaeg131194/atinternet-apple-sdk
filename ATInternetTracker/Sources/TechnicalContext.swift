@@ -35,7 +35,10 @@ import CoreTelephony
 
 #if os(watchOS)
 import WatchKit
+#else
+import UIKit
 #endif
+
     
 /// Contextual information from user device
 class TechnicalContext: NSObject {
