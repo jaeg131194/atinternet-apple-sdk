@@ -690,7 +690,7 @@ extension UIApplication {
                 }
                 
             } else if view.type == UIApplicationContext.ViewType.BackButton {
-                text = "Back"
+                text = "handleBack:"
                 method = "handleBack:"
             } else if view.type == UIApplicationContext.ViewType.NavigationBar {
                 text = view.textValue

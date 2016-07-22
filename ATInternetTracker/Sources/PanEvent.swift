@@ -11,6 +11,14 @@ import Foundation
 /// class to store Pan gesture Events
 class PanEvent : GestureEvent {
     
+    /**
+     Generic pan moves
+     
+     - Left:  left
+     - Right: right
+     - Up:    up
+     - Down:  down
+     */
     enum PanDirection: String {
         case Left  = "left"
         case Right = "right"
@@ -41,15 +49,13 @@ class PanEvent : GestureEvent {
     }
     
     /**
-     Override init pan event
+     Init a Pan Event
      
-     - parameter type:          UIApplicationContext.EventType
-     - parameter methodName:    String
-     - parameter viewClassName: String?
-     - parameter direction:     String
-     - parameter currentScreen: Screen
+     - parameter view:          a View where the pan was detected
+     - parameter direction:     the direction of the pan event
+     - parameter currentScreen: the screen where the pan occured
      
-     - returns: TapEvent
+     - returns: a PanEvent
      */
     init(view: View, direction: PanDirection, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.Pan, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)

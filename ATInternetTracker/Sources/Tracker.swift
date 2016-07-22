@@ -323,6 +323,8 @@ public class AutoTracker: Tracker {
         if currentOrientation != UIDeviceOrientation.FaceUp && currentOrientation != UIDeviceOrientation.FaceDown {
             orientation = currentOrientation
         }
+        
+        toolbar?.rotateIfNeeded()
     }
     
     @objc func applicationDidBecomeActive(application: UIApplication) {

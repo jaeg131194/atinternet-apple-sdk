@@ -14,9 +14,14 @@ class GestureOperation: NSOperation {
     
     var gestureEvent: GestureEvent
     
+    /// refresh the timer tick
     var timerDuration: NSTimeInterval = 0.2
     
+    /// timer to handle the timeout
     var timerTotalDuration: NSTimeInterval = 0
+    
+    /// after timeout, the hit is sent
+    let TIMEOUT_OPERATION: NSTimeInterval = 5
     
     /**
      GestureOperation init
@@ -53,8 +58,11 @@ class GestureOperation: NSOperation {
         }
     }
     
-    
-    
+    /**
+     Send a Gesture Hit
+     
+     - parameter tracker: AutoTracker
+     */
     func sendGestureHit(tracker: AutoTracker) {
         let gesture = tracker.gestures.add()
         if let method = gestureEvent.methodName {
@@ -81,6 +89,11 @@ class GestureOperation: NSOperation {
         tracker.dispatcher.dispatch([gesture])
     }
     
+    /**
+     Manage the delegate interaction: send the gesture to the uiviewcontroller or wait for timeout
+     
+     - parameter gesture: the gesture
+     */
     func handleDelegate(gesture: Gesture) {
         if hasDelegate() {
             gestureEvent.viewController!.performSelector(#selector(IAutoTracker.gestureWasDetected(_:)), withObject: gesture)
@@ -94,6 +107,11 @@ class GestureOperation: NSOperation {
         }
     }
     
+    /**
+     Check if the current viewcontroller has implemented the AutoTracker delegate
+     
+     - returns: true if delegate implemented
+     */
     func hasDelegate() -> Bool {
         var hasDelegate = false
         
@@ -107,14 +125,24 @@ class GestureOperation: NSOperation {
         return hasDelegate
     }
     
+    /**
+     Wait until the gesture is ready to be sent or TIMEOUT
+     
+     - parameter gesture: the gesture to be sent
+     */
     func handleTimer(gesture: Gesture) {
         NSThread.sleepForTimeInterval(timerDuration)
         timerTotalDuration = timerTotalDuration + timerDuration
-        if timerTotalDuration > 5 {
+        if timerTotalDuration > TIMEOUT_OPERATION {
             gesture.isReady = true
         }
     }
     
+    /**
+     Map the gesture attributes if a LiveTagging configuration is given
+     
+     - parameter gesture: the gesture to map
+     */
     func mapConfiguration(gesture: Gesture) {
         waitForConfigurationLoaded()
         
@@ -149,6 +177,9 @@ class GestureOperation: NSOperation {
         }
     }
     
+    /**
+     Wait for the configuration
+     */
     func waitForConfigurationLoaded() {
         while(!AutoTracker.isConfigurationLoaded) {
             NSThread.sleepForTimeInterval(0.2)

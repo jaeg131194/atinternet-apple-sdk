@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4F47A4071D351F9C00702747"
-               BuildableName = "Tracker.framework"
+               BuildableName = "watchOSTracker.framework"
                BlueprintName = "Tracker watchOS"
                ReferencedContainer = "container:ATInternetTracker.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F47A4071D351F9C00702747"
-            BuildableName = "Tracker.framework"
+            BuildableName = "watchOSTracker.framework"
             BlueprintName = "Tracker watchOS"
             ReferencedContainer = "container:ATInternetTracker.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F47A4071D351F9C00702747"
-            BuildableName = "Tracker.framework"
+            BuildableName = "watchOSTracker.framework"
             BlueprintName = "Tracker watchOS"
             ReferencedContainer = "container:ATInternetTracker.xcodeproj">
          </BuildableReference>

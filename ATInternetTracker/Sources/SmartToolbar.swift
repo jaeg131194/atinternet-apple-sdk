@@ -491,13 +491,11 @@ class SmartToolBarController {
     @objc func onClickScreenshot() {
         screenshotClickSound()
         self.toolbar.onClickAnimation(toolbar.photo, onComplete:{})
-        self.setToolbarHidden(true)
         let base64 = UIApplication.sharedApplication()
             .keyWindow?.screenshot([self.toolbar])?
             .toBase64()!
             .stringByReplacingOccurrencesOfString("\n", withString: "")
             .stringByReplacingOccurrencesOfString("\r", withString: "")
-        self.setToolbarHidden(false)
         socket.sendMessage(ScreenshotUpdated(screenshot: base64, screen: Screen()).description)
         screenshotAnimation()
     }
@@ -601,9 +599,23 @@ class SmartToolBarController {
         self.toolbar.recorder.layer.cornerRadius = self.toolbar.RECORDER_SIZE/2 + self.toolbar.RECORDER_SIZE_MODIFIER/2
     }
     
-    func setToolbarHidden(isHidden: Bool) {
-        self.toolbar.hidden = isHidden
+    func rotateIfNeeded() -> () {
+        guard let window = toolbar.refWindow else {
+            return
+        }
+        
+        if CGRectContainsRect(window.frame, toolbar.frame) {
+            return
+        }
+        
+        let (cx,cy) = (toolbar.center.x, toolbar.center.y)
+        let (old_width, old_height) = (window.frame.height, window.frame.width)
+        let (new_width, new_heigth) = (window.frame.width, window.frame.height)
+        let (new_cx, new_cy) = (new_width*cx/old_width, new_heigth*cy/old_height)
+        self.moveAbs(new_cx-toolbar.frame.width/2, y: new_cy-toolbar.frame.height/2)
     }
+    
+    
     
     /**
      Called when the toolbar is dragged - move it accordingly

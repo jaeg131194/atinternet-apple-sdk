@@ -15,6 +15,7 @@ class GestureEvent {
     /// View contains the gesture
     lazy var view: View = View()
     
+    /// Default method name in case we can't find the name of the method
     var defaultMethodName: String
     
     /// Method called by the touched UIView
