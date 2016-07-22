@@ -180,8 +180,4 @@ class LiveNetworkManager: LiveNetworkState {
             "INFO_PAIRING_REFUSED_TITLE": NSLocalizedString("INFO_PAIRING_REFUSED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
         ]
     }
-    
-    func setToolbarHidden(isHidden: Bool) {
-        self.toolbar?.setToolbarHidden(isHidden)
-    }
 }

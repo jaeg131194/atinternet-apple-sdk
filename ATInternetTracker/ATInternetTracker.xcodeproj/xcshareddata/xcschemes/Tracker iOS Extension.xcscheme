@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4F47A4311D3532A900702747"
-               BuildableName = "Tracker.framework"
+               BuildableName = "ExtensionTracker.framework"
                BlueprintName = "Tracker iOS Extension"
                ReferencedContainer = "container:ATInternetTracker.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F47A4311D3532A900702747"
-            BuildableName = "Tracker.framework"
+            BuildableName = "ExtensionTracker.framework"
             BlueprintName = "Tracker iOS Extension"
             ReferencedContainer = "container:ATInternetTracker.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F47A4311D3532A900702747"
-            BuildableName = "Tracker.framework"
+            BuildableName = "ExtensionTracker.framework"
             BlueprintName = "Tracker iOS Extension"
             ReferencedContainer = "container:ATInternetTracker.xcodeproj">
          </BuildableReference>

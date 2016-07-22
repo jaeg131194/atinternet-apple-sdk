@@ -91,18 +91,18 @@ extension UIViewController {
     }
 
     func at_viewDidLoad() {
-        let selfClass = object_getClass(self)
+        let selfClass: AnyClass = object_getClass(self)
         if selfClass.conformsToProtocol(NSProtocolFromString("UIViewControllerPreviewingDelegate")!){
             var mc:CUnsignedInt = 0
             var mlist = class_copyMethodList(selfClass, &mc);
             for _ in 0...mc {
                 let name = method_getName(mlist.memory)
                 mlist = mlist.successor()
-                if name == "previewingContext:commitViewController:" {
+                if name.description == "previewingContext:commitViewController:" {
                     let s = #selector(UIViewController.at_previewingContext(_:commitViewController:))
                     at_swizzle_instance(name, name2: s, selfClass: selfClass)
                 }
-                if name == "previewingContext:viewControllerForLocation:" {
+                if name.description == "previewingContext:viewControllerForLocation:" {
                     let s = #selector(UIViewController.at_previewingContext(_:viewControllerForLocation:))
                     at_swizzle_instance(name, name2: s, selfClass: selfClass)
                 }

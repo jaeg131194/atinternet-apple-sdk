@@ -9,14 +9,29 @@
 import Foundation
 
 /**
- *  Simple storage for the config interface
+ *  Simple storage protocol
  */
 protocol SimpleStorageProtocol {
+    /**
+     Get an object by his name
+     
+     - parameter name: the name of the object
+     
+     - returns: the object or nil
+     */
     func getByName(name: String) -> AnyObject?
+    /**
+     Save an object by his name
+     
+     - parameter config: the object
+     - parameter name:   the name of the object
+     
+     - returns: true if success
+     */
     func saveByName(config: AnyObject, name: String) -> Bool
 }
 
-/// Simple storage impl
+/// Simple storage impl with UserDefault
 class UserDefaultSimpleStorage: SimpleStorageProtocol {
     
     func getByName(name: String) -> AnyObject? {
@@ -35,12 +50,21 @@ class UserDefaultSimpleStorage: SimpleStorageProtocol {
  *  Light network service interface for JSON download
  */
 protocol SimpleNetworkService {
+    /**
+     Simple Network Service protocol
+     
+     - parameter url:        url of the ressource
+     - parameter onLoaded:   callback when loaded
+     - parameter onError:    callback if an error is detected
+     - parameter retryCount: retrycount if error
+     */
     func getURL(url: NSURL, onLoaded: (JSON?) -> (), onError: () -> (), retryCount: Int)
 }
 
 /// Light network service impl with error handling
 class S3NetworkService: SimpleNetworkService {
     
+    /// retry wrapper for getURL
     func retry( f: (NSURL, (JSON?) -> (), () -> (), Int) -> (), url: NSURL, onLoaded: (JSON?) -> (), onError: () -> (), retryCount: Int) -> () {
         if retryCount >= 0 {
             print("retrying... remaining:\(retryCount)")
@@ -75,10 +99,10 @@ class S3NetworkService: SimpleNetworkService {
     }
 }
 
+/// Class handling the  loading of the LiveTagging configuration file
 class ApiS3Client {
     let S3URL = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/siteID/{siteID}/token/{token}/version/{version}"
     let S3URLCheck = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/siteID/{siteID}/token/{token}/version/{version}/lastupdate"
-    //var config: JSON?
     let store: SimpleStorageProtocol
     let network: SimpleNetworkService
     let token: String

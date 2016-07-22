@@ -1140,7 +1140,7 @@
 				4F47A5D21D36226D00702747 /* Context */,
 				4F47A5D11D36224A00702747 /* Event */,
 				4F47A5D31D36227900702747 /* Network */,
-				4F47A6421D36259500702747 /* Toolbar */,
+				4F47A6421D36259500702747 /* UI */,
 			);
 			name = AutoTracker;
 			sourceTree = "<group>";
@@ -1230,7 +1230,7 @@
 			name = Network;
 			sourceTree = "<group>";
 		};
-		4F47A6421D36259500702747 /* Toolbar */ = {
+		4F47A6421D36259500702747 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				4F47A6431D36264300702747 /* camera-sound.mp3 */,
@@ -1241,7 +1241,7 @@
 				4F47A64C1D36264300702747 /* SmartToolbar.swift */,
 				4F47A64D1D36264300702747 /* ToolbarImages.xcassets */,
 			);
-			name = Toolbar;
+			name = UI;
 			sourceTree = "<group>";
 		};
 		4F47A65E1D363C1300702747 /* Font */ = {
