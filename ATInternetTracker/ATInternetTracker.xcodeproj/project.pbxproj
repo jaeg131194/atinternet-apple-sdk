@@ -682,7 +682,7 @@
 		4FF594681D3FB46B0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		4FF594691D3FB46D0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		4FF5946A1D3FB46F0004D336 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
-		4FF5946C1D3FB6360004D336 /* ExtensionTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946B1D3FB6360004D336 /* ExtensionTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FF5946C1D3FB6360004D336 /* TrackerExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946B1D3FB6360004D336 /* TrackerExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF5946E1D3FB6890004D336 /* SmartTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946D1D3FB6890004D336 /* SmartTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF594701D3FB80A0004D336 /* tvOSTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF594721D3FB8690004D336 /* watchOSTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF594711D3FB8690004D336 /* watchOSTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -724,7 +724,7 @@
 		4F47A4161D35200D00702747 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
 		4F47A4171D35200D00702747 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
 		4F47A4181D35200D00702747 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
-		4F47A4321D3532A900702747 /* ExtensionTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExtensionTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F47A4321D3532A900702747 /* TrackerExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TrackerExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F47A43A1D3532FE00702747 /* Info-iOS-Extension.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS-Extension.plist"; sourceTree = "<group>"; };
 		4F47A43C1D353F3000702747 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		4F47A43E1D353F3E00702747 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
@@ -904,7 +904,7 @@
 		4F47A71C1D3D126500702747 /* ViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewTests.swift; path = Tests/ViewTests.swift; sourceTree = "<group>"; };
 		4F47A8601D3D230600702747 /* TrackerTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TrackerTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		4F47A97A1D3E2FE100702747 /* SmartTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FF5946B1D3FB6360004D336 /* ExtensionTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionTracker.h; sourceTree = "<group>"; };
+		4FF5946B1D3FB6360004D336 /* TrackerExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackerExtension.h; sourceTree = "<group>"; };
 		4FF5946D1D3FB6890004D336 /* SmartTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTracker.h; sourceTree = "<group>"; };
 		4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tvOSTracker.h; sourceTree = "<group>"; };
 		4FF594711D3FB8690004D336 /* watchOSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watchOSTracker.h; sourceTree = "<group>"; };
@@ -998,7 +998,7 @@
 				4F47A3DE1D351E8100702747 /* Tracker.framework */,
 				4F47A3F91D351EA700702747 /* tvOSTracker.framework */,
 				4F47A4081D351F9C00702747 /* watchOSTracker.framework */,
-				4F47A4321D3532A900702747 /* ExtensionTracker.framework */,
+				4F47A4321D3532A900702747 /* TrackerExtension.framework */,
 				4F47A5501D35465100702747 /* SmartTracker.framework */,
 				4F47A6BE1D3D0A3000702747 /* TrackerTests.xctest */,
 				4F47A6DC1D3D10E000702747 /* tvOSTrackerTests.xctest */,
@@ -1323,7 +1323,7 @@
 			isa = PBXGroup;
 			children = (
 				4F47A3E11D351E8100702747 /* Tracker.h */,
-				4FF5946B1D3FB6360004D336 /* ExtensionTracker.h */,
+				4FF5946B1D3FB6360004D336 /* TrackerExtension.h */,
 				4FF5946D1D3FB6890004D336 /* SmartTracker.h */,
 				4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */,
 				4FF594711D3FB8690004D336 /* watchOSTracker.h */,
@@ -1371,7 +1371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F47A5381D35451A00702747 /* Hash.h in Headers */,
-				4FF5946C1D3FB6360004D336 /* ExtensionTracker.h in Headers */,
+				4FF5946C1D3FB6360004D336 /* TrackerExtension.h in Headers */,
 				4F47A5301D35451A00702747 /* Crash.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1464,7 +1464,7 @@
 			);
 			name = "Tracker iOS Extension";
 			productName = "Tracker iOS Extension";
-			productReference = 4F47A4321D3532A900702747 /* ExtensionTracker.framework */;
+			productReference = 4F47A4321D3532A900702747 /* TrackerExtension.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		4F47A54F1D35465100702747 /* SmartTracker iOS */ = {
@@ -1550,15 +1550,18 @@
 				TargetAttributes = {
 					4F47A3DD1D351E8100702747 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 3MH35DZSF5;
 					};
 					4F47A3F81D351EA700702747 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 3MH35DZSF5;
 					};
 					4F47A4071D351F9C00702747 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
 					4F47A4311D3532A900702747 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 3MH35DZSF5;
 					};
 					4F47A54F1D35465100702747 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -2398,14 +2401,43 @@
 		4F47A3D71D351E3C00702747 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				ENABLE_TESTABILITY = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				ONLY_ACTIVE_ARCH = YES;
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+				VERSIONING_SYSTEM = "apple-generic";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
 		4F47A3D81D351E3C00702747 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -2428,6 +2460,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2462,6 +2495,7 @@
 				PRODUCT_NAME = Tracker;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2488,6 +2522,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2515,6 +2550,7 @@
 				PRODUCT_NAME = Tracker;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2540,6 +2576,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2566,17 +2603,18 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Sources/Info-tvOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
 				PRODUCT_NAME = tvOSTracker;
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -2600,6 +2638,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2620,15 +2659,16 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Sources/Info-tvOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
 				PRODUCT_NAME = tvOSTracker;
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2639,6 +2679,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -2679,16 +2720,17 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Sources/Info-watchOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
 				PRODUCT_NAME = watchOSTracker;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 4;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -2699,6 +2741,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -2733,14 +2776,15 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Sources/Info-watchOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.Tracker;
 				PRODUCT_NAME = watchOSTracker;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2753,7 +2797,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NONNULL = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2767,6 +2811,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2793,15 +2838,21 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Sources/Info-iOS-Extension.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-fembed-bitcode",
+					"-Qunused-arguments",
+				);
 				OTHER_SWIFT_FLAGS = "-DAT_EXTENSION";
+				PLIST_FILE_OUTPUT_FORMAT = XML;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.TrackerExtension;
-				PRODUCT_NAME = ExtensionTracker;
+				PRODUCT_NAME = TrackerExtension;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2814,7 +2865,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
-				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NONNULL = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2828,6 +2879,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2848,14 +2900,20 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Sources/Info-iOS-Extension.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = (
+					"-fembed-bitcode",
+					"-Qunused-arguments",
+				);
 				OTHER_SWIFT_FLAGS = "-DAT_EXTENSION";
+				PLIST_FILE_OUTPUT_FORMAT = XML;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atinternet.TrackerExtension;
-				PRODUCT_NAME = ExtensionTracker;
+				PRODUCT_NAME = TrackerExtension;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2920,6 +2978,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2978,6 +3037,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";

@@ -29,6 +29,7 @@ SOFTWARE.
 //  ATInternet.swift
 //  Tracker
 //
+import Foundation
 
 #if os(watchOS)
 import WatchKit
