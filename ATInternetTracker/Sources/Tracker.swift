@@ -202,7 +202,7 @@ public class AutoTracker: Tracker {
         let version = TechnicalContext.applicationVersion
         let s3Client = ApiS3Client(siteID: siteID!, token: token!, version: version, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
         s3Client.fetchMapping { (mapping: JSON?) in
-            print("config: \(mapping)")
+            //print("config: \(mapping)")
             if let _ = mapping {
                 Configuration.smartSDKMapping = mapping!
                 s3Client.saveSmartSDKMapping(mapping!)
@@ -281,7 +281,7 @@ public class AutoTracker: Tracker {
     func windowBecomeVisible(notification: NSNotification) {
         if let delegate = UIApplication.sharedApplication().keyWindow {
             if let win = delegate.window {
-                print(win)
+                //print(win)
                 addToolbar("keyWindow")
             }
         }
@@ -391,13 +391,26 @@ public class Tracker: NSObject {
     lazy var dispatcher: Dispatcher = Dispatcher(tracker: self)
     
     #if os(iOS) && !AT_EXTENSION
-    /// Debugger
-    public var debugger: UIViewController? {
-        get {
-            return Debugger.sharedInstance.viewController;
-        }
-        set {
-            Debugger.sharedInstance.viewController = newValue
+    /// Sets Tracker in debug mode and display debugger window
+    public var enableDebugger: Bool = false {
+        didSet {
+            if enableDebugger == true {
+                
+                let q = dispatch_queue_create("com.atinternet.Tracker.debuggerQueue", DISPATCH_QUEUE_SERIAL)
+                
+                dispatch_async(q, {
+                    while(UIApplication.sharedApplication().windows.count == 0) {
+                         NSThread.sleepForTimeInterval(0.2)
+                    }
+                    
+                    self.performSelectorOnMainThread(#selector(self.displayDebugger), withObject: nil, waitUntilDone: false)
+                })
+                
+                
+                
+            } else {
+                Debugger.sharedInstance.deinitDebugger()
+            }
         }
     }
     #endif
@@ -545,6 +558,13 @@ public class Tracker: NSObject {
      */
     @objc func applicationActive() {
         LifeCycle.applicationActive(self.configuration.parameters)
+    }
+    
+    /**
+     Display the debugger window
+     */
+    func displayDebugger() {
+        Debugger.sharedInstance.initDebugger()
     }
     
     // MARK: - Configuration

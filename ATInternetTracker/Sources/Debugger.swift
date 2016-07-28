@@ -30,35 +30,8 @@
 import UIKit
 
 internal class Debugger: NSObject {
-    /// View controller where to display debugger
-    weak var _viewController: UIViewController?
-    
-    weak var viewController: UIViewController? {
-        get {
-            return _viewController
-        }
-        set {
-            if(newValue != nil) {
-                if(_viewController != nil) {
-                    if(newValue != _viewController) {
-                        _viewController = newValue
-                        
-                        deinitDebugger()
-                        initDebugger()
-                        updateEventList()
-                    }
-                } else {
-                    _viewController = newValue
-                    
-                    initDebugger()
-                }
-            } else {
-                deinitDebugger()
-                
-                _viewController = newValue
-            }
-        }
-    }
+    /// Application window
+    lazy var applicationWindow: UIWindow? = UIApplication.sharedApplication().keyWindow
     /// Debug button
     lazy var debugButton: UIButton = UIButton()
     /// Debug button position
@@ -85,6 +58,8 @@ internal class Debugger: NSObject {
     let dateHourFormatter = NSDateFormatter()
     /// Offline storage
     let storage = Storage.sharedInstance
+    /// Debugger is initialize
+    var initialized: Bool = false
     
     class var sharedInstance: Debugger {
         struct Static {
@@ -103,24 +78,30 @@ internal class Debugger: NSObject {
      Add debugger to view controller
      */
     func initDebugger() {
-        hourFormatter.dateFormat = "HH':'mm':'ss"
-        hourFormatter.locale = LifeCycle.locale
-        dateHourFormatter.dateFormat = "dd'/'MM'/'YYYY' 'HH':'mm':'ss"
-        dateHourFormatter.locale = LifeCycle.locale
         
-        createDebugButton()
-        createEventViewer()
-        
-        gestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(Debugger.debugButtonWasDragged(_:)))
-        debugButton.addGestureRecognizer(gestureRecogniser)
-        
-        viewController!.view.bringSubviewToFront(debugButton)
+        if !initialized {
+            hourFormatter.dateFormat = "HH':'mm':'ss"
+            hourFormatter.locale = LifeCycle.locale
+            dateHourFormatter.dateFormat = "dd'/'MM'/'YYYY' 'HH':'mm':'ss"
+            dateHourFormatter.locale = LifeCycle.locale
+            self.initialized = true
+            
+            createDebugButton()
+            createEventViewer()
+            
+            gestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(Debugger.debugButtonWasDragged(_:)))
+            debugButton.addGestureRecognizer(gestureRecogniser)
+            
+            
+            applicationWindow!.bringSubviewToFront(debugButton)
+        }
     }
     
     /**
      Remove debugger from view controller
      */
     func deinitDebugger() {
+        self.initialized = false
         debuggerShown = false
         debuggerAnimating = false
         
@@ -160,14 +141,14 @@ internal class Debugger: NSObject {
         debugButton.translatesAutoresizingMaskIntoConstraints = false
         debugButton.alpha = 0
         
-        self.viewController!.view.addSubview(debugButton)
+        applicationWindow!.addSubview(debugButton)
         
         // align atButton from the left
         if(debugButtonPosition == "Right") {
             debugButtonConstraint = NSLayoutConstraint(item: debugButton,
                                                        attribute: NSLayoutAttribute.Trailing,
                                                        relatedBy: NSLayoutRelation.Equal,
-                                                       toItem: self.viewController!.view,
+                                                       toItem: applicationWindow!,
                                                        attribute: NSLayoutAttribute.Trailing,
                                                        multiplier: 1.0,
                                                        constant: 0)
@@ -175,27 +156,21 @@ internal class Debugger: NSObject {
             debugButtonConstraint = NSLayoutConstraint(item: debugButton,
                                                        attribute: NSLayoutAttribute.Leading,
                                                        relatedBy: NSLayoutRelation.Equal,
-                                                       toItem: self.viewController!.view,
+                                                       toItem: applicationWindow!,
                                                        attribute: NSLayoutAttribute.Leading,
                                                        multiplier: 1.0,
                                                        constant: 0)
         }
         
-        self.viewController!.view.addConstraint(debugButtonConstraint)
+        applicationWindow!.addConstraint(debugButtonConstraint)
         
-        self.viewController!.view.addConstraint(NSLayoutConstraint(item: self.viewController!.bottomLayoutGuide,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: debugButton,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1.0,
-            constant: 10))
+        applicationWindow!.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[debugButton]-10-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": self.debugButton]))
         
         // width constraint
-        self.viewController!.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[debugButton(==94)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
+        applicationWindow!.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:[debugButton(==94)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
         
         // height constraint
-        self.viewController!.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[debugButton(==73)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
+        applicationWindow!.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[debugButton(==73)]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["debugButton": debugButton]))
         
         debugButton.addTarget(self, action: #selector(Debugger.debuggerTouched), forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -227,43 +202,43 @@ internal class Debugger: NSObject {
         {
             if(velocity.x < 0) {
                 UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-                    self.debugButtonConstraint.constant = (self.viewController!.view.frame.width - button.frame.width) * -1
-                    self.viewController!.view.layoutIfNeeded()
-                    self.viewController!.view.updateConstraints()
+                    self.debugButtonConstraint.constant = (self.applicationWindow!.frame.width - button.frame.width) * -1
+                    self.applicationWindow!.layoutIfNeeded()
+                    self.applicationWindow!.updateConstraints()
                     }, completion: {
                         finished in
                         self.debugButtonPosition = "Left"
-                        self.viewController!.view.removeConstraint(self.debugButtonConstraint)
+                        self.applicationWindow!.removeConstraint(self.debugButtonConstraint)
                         
                         self.debugButtonConstraint = NSLayoutConstraint(item: self.debugButton,
                             attribute: NSLayoutAttribute.Leading,
                             relatedBy: NSLayoutRelation.Equal,
-                            toItem: self.viewController!.view,
+                            toItem: self.applicationWindow!,
                             attribute: NSLayoutAttribute.Leading,
                             multiplier: 1.0,
                             constant: 0)
                         
-                        self.viewController!.view.addConstraint(self.debugButtonConstraint)
+                        self.applicationWindow!.addConstraint(self.debugButtonConstraint)
                 })
             } else {
                 UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-                    self.debugButtonConstraint.constant = (self.viewController!.view.frame.width - button.frame.width)
-                    self.viewController!.view.layoutIfNeeded()
-                    self.viewController!.view.updateConstraints()
+                    self.debugButtonConstraint.constant = (self.applicationWindow!.frame.width - button.frame.width)
+                    self.applicationWindow!.layoutIfNeeded()
+                    self.applicationWindow!.updateConstraints()
                     }, completion: {
                         finished in
                         self.debugButtonPosition = "Right"
-                        self.viewController!.view.removeConstraint(self.debugButtonConstraint)
+                        self.applicationWindow!.removeConstraint(self.debugButtonConstraint)
                         
                         self.debugButtonConstraint = NSLayoutConstraint(item: self.debugButton,
                             attribute: NSLayoutAttribute.Trailing,
                             relatedBy: NSLayoutRelation.Equal,
-                            toItem: self.viewController!.view,
+                            toItem: self.applicationWindow!,
                             attribute: NSLayoutAttribute.Trailing,
                             multiplier: 1.0,
                             constant: 0)
                         
-                        self.viewController!.view.addConstraint(self.debugButtonConstraint)
+                        self.applicationWindow!.addConstraint(self.debugButtonConstraint)
                 })
             }
         }
@@ -313,16 +288,17 @@ internal class Debugger: NSObject {
                 if(self.debuggerShown) {
                     if(self.debugButtonPosition == "Right") {
                         for w in self.windows {
-                            w.window.frame = CGRectMake(self.viewController!.view.frame.width - 47, self.viewController!.view.frame.height - (self.viewController!.bottomLayoutGuide.length + 93), 0, 0)
+                            w.window.frame = CGRectMake(self.applicationWindow!.frame.width - 47, self.applicationWindow!.frame.height - 93, 0, 0)
                         }
                     } else {
                         for w in self.windows {
-                            w.window.frame = CGRectMake(47, self.viewController!.view.frame.height - (self.viewController!.bottomLayoutGuide.length + 93), 0, 0)
+                            w.window.frame = CGRectMake(47, self.applicationWindow!.frame.height - 93, 0, 0)
                         }
                     }
                 } else {
                     for w in self.windows {
-                        w.window.frame = CGRectMake(10, (self.viewController!.topLayoutGuide.length + 10), self.viewController!.view.frame.width - 20, self.viewController!.view.frame.height - (self.viewController!.bottomLayoutGuide.length + 93) - (self.viewController!.topLayoutGuide.length + 10))
+                        
+                        w.window.frame = CGRectMake(10, 30, self.applicationWindow!.frame.width - 20, self.applicationWindow!.frame.height - 93 - 30)
                     }
                 }
             },
@@ -342,7 +318,7 @@ internal class Debugger: NSObject {
                         },
                         completion: nil)
                     
-                    self.viewController!.view.bringSubviewToFront(self.windows[self.windows.count - 1].window)
+                    self.applicationWindow!.bringSubviewToFront(self.windows[self.windows.count - 1].window)
                 } else {
                     for w in self.windows {
                         w.window.hidden = true
@@ -1539,7 +1515,7 @@ internal class Debugger: NSObject {
             window.backgroundColor = UIColor.clearColor()
         }
         
-        window.frame = CGRectMake(self.viewController!.view.frame.width - 47, self.viewController!.view.frame.height - (self.viewController!.bottomLayoutGuide.length + 93), 0, 0)
+        window.frame = CGRectMake(self.applicationWindow!.frame.width - 47, self.applicationWindow!.frame.height - 93, 0, 0)
         window.layer.borderColor = UIColor(red:211/255.0, green:215/255.0, blue:220/255.0, alpha:1.0).CGColor
         window.layer.borderWidth = 1.0
         window.layer.cornerRadius = 4.0
@@ -1549,18 +1525,18 @@ internal class Debugger: NSObject {
         
         let windowId = "window" + String(self.windows.count)
         
-        self.viewController!.view.addSubview(window)
+        self.applicationWindow!.addSubview(window)
         
         if(windows.count == 0) {
-            self.viewController!.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[" + windowId + "]-10-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
+            self.applicationWindow!.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[" + windowId + "]-10-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
             
-            self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
+            self.applicationWindow!.addConstraint(NSLayoutConstraint(item: window,
                 attribute: NSLayoutAttribute.Top,
                 relatedBy: NSLayoutRelation.Equal,
-                toItem: self.viewController!.topLayoutGuide,
-                attribute: NSLayoutAttribute.Bottom,
+                toItem: self.applicationWindow!,
+                attribute: NSLayoutAttribute.Top,
                 multiplier: 1.0,
-                constant: 10))
+                constant: 30))
             
             let popupVsButtonConstraint = NSLayoutConstraint(item: self.debugButton,
                                                              attribute: .Top,
@@ -1570,19 +1546,19 @@ internal class Debugger: NSObject {
                                                              multiplier: 1.0,
                                                              constant: 10.0)
             
-            self.viewController!.view.addConstraint(popupVsButtonConstraint)
+            self.applicationWindow!.addConstraint(popupVsButtonConstraint)
         } else {
-            self.viewController!.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[" + windowId + "]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
+            self.applicationWindow!.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-10-[" + windowId + "]", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:[windowId: window]))
             
-            self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
+            self.applicationWindow!.addConstraint(NSLayoutConstraint(item: window,
                 attribute: NSLayoutAttribute.Top,
                 relatedBy: NSLayoutRelation.Equal,
-                toItem: self.viewController!.topLayoutGuide,
-                attribute: NSLayoutAttribute.Bottom,
+                toItem: self.applicationWindow!,
+                attribute: NSLayoutAttribute.Top,
                 multiplier: 1.0,
-                constant: 10))
+                constant: 30))
             
-            self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
+            self.applicationWindow!.addConstraint(NSLayoutConstraint(item: window,
                 attribute: NSLayoutAttribute.Width,
                 relatedBy: .Equal,
                 toItem: windows[0].window,
@@ -1590,7 +1566,7 @@ internal class Debugger: NSObject {
                 multiplier: 1.0,
                 constant: 0.0))
             
-            self.viewController!.view.addConstraint(NSLayoutConstraint(item: window,
+            self.applicationWindow!.addConstraint(NSLayoutConstraint(item: window,
                 attribute: NSLayoutAttribute.Height,
                 relatedBy: .Equal,
                 toItem: windows[0].window,
