@@ -108,7 +108,7 @@ class Sender: NSOperation {
                         if(db.insert(&hit.url, mhOlt: self.mhOlt)) {
                             self.tracker.delegate?.saveDidEnd?(hit.url)
                             
-                            #if os(iOS)
+                            #if os(iOS) && !AT_EXTENSION
                             if(Debugger.sharedInstance.viewController != nil) {
                                 Debugger.sharedInstance.addEvent(self.hit.url, icon: "save48")
                             }
@@ -116,7 +116,7 @@ class Sender: NSOperation {
                         } else {
                             self.tracker.delegate?.warningDidOccur?("Hit could not be saved : " + hit.url)
                             
-                            #if os(iOS)
+                            #if os(iOS) && !AT_EXTENSION
                             if(Debugger.sharedInstance.viewController != nil) {
                                 Debugger.sharedInstance.addEvent("Hit could not be saved : " + hit.url, icon: "warning48")
                             }
@@ -155,7 +155,7 @@ class Sender: NSOperation {
                                     if(db.insert(&self.hit.url, mhOlt: self.mhOlt)) {
                                         self.tracker.delegate?.saveDidEnd?(self.hit.url)
                                         
-                                        #if os(iOS)
+                                        #if os(iOS) && !AT_EXTENSION
                                         if(Debugger.sharedInstance.viewController != nil) {
                                             Debugger.sharedInstance.addEvent(self.hit.url, icon: "save48")
                                         }
@@ -163,7 +163,7 @@ class Sender: NSOperation {
                                     } else {
                                         self.tracker.delegate?.warningDidOccur?("Hit could not be saved : " + self.hit.url)
                                         
-                                        #if os(iOS)
+                                        #if os(iOS) && !AT_EXTENSION
                                         if(Debugger.sharedInstance.viewController != nil) {
                                             Debugger.sharedInstance.addEvent("Hit could not be saved : " + self.hit.url, icon: "warning48")
                                         }
@@ -187,7 +187,7 @@ class Sender: NSOperation {
                                 // On lève une erreur indiquant qu'une réponse autre que 200 a été reçue
                                 self.tracker.delegate?.sendDidEnd?(HitStatus.Failed, message: errorMessage)
                                 
-                                #if os(iOS)
+                                #if os(iOS) && !AT_EXTENSION
                                 if(Debugger.sharedInstance.viewController != nil) {
                                     Debugger.sharedInstance.addEvent(errorMessage, icon: "error48")
                                 }
@@ -206,7 +206,7 @@ class Sender: NSOperation {
                             
                             self.tracker.delegate?.sendDidEnd?(HitStatus.Success, message: self.hit.url)
                             
-                            #if os(iOS)
+                            #if os(iOS) && !AT_EXTENSION
                             if(Debugger.sharedInstance.viewController != nil) {
                                 Debugger.sharedInstance.addEvent(self.hit.url, icon: "sent48")
                             }
@@ -229,7 +229,7 @@ class Sender: NSOperation {
                         if(db.insert(&hit.url, mhOlt: self.mhOlt)) {
                             self.tracker.delegate?.saveDidEnd?(hit.url)
                             
-                            #if os(iOS)
+                            #if os(iOS) && !AT_EXTENSION
                             if(Debugger.sharedInstance.viewController != nil) {
                                 Debugger.sharedInstance.addEvent(self.hit.url, icon: "save48")
                             }
@@ -237,7 +237,7 @@ class Sender: NSOperation {
                         } else {
                             self.tracker.delegate?.warningDidOccur?("Hit could not be saved : " + hit.url)
                             
-                            #if os(iOS)
+                            #if os(iOS) && !AT_EXTENSION
                             if(Debugger.sharedInstance.viewController != nil) {
                                 Debugger.sharedInstance.addEvent("Hit could not be saved : " + hit.url, icon: "warning48")
                             }
@@ -250,7 +250,7 @@ class Sender: NSOperation {
                 //On lève une erreur indiquant que le hit n'a pas été correctement construit et n'a pas pu être envoyé
                 self.tracker.delegate?.sendDidEnd?(HitStatus.Failed, message: "Hit could not be parsed and sent")
                 
-                #if os(iOS)
+                #if os(iOS) && !AT_EXTENSION
                 if(Debugger.sharedInstance.viewController != nil) {
                     Debugger.sharedInstance.addEvent("Hit could not be parsed and sent : " + hit.url, icon: "error48")
                 }

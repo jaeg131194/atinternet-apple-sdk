@@ -78,9 +78,7 @@
 		4F47A4941D3542A400702747 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4591D3542A400702747 /* Tracker.swift */; };
 		4F47A4951D3542A400702747 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4591D3542A400702747 /* Tracker.swift */; };
 		4F47A4991D35436200702747 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4981D35436200702747 /* Debugger.swift */; };
-		4F47A49A1D35436200702747 /* Debugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4981D35436200702747 /* Debugger.swift */; };
 		4F47A49E1D35437300702747 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F47A49D1D35437300702747 /* Images.xcassets */; };
-		4F47A49F1D35437300702747 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F47A49D1D35437300702747 /* Images.xcassets */; };
 		4F47A4BD1D35446700702747 /* Aisle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4A31D35446700702747 /* Aisle.swift */; };
 		4F47A4BE1D35446700702747 /* Aisle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4A31D35446700702747 /* Aisle.swift */; };
 		4F47A4BF1D35446700702747 /* Aisle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4A31D35446700702747 /* Aisle.swift */; };
@@ -1646,7 +1644,6 @@
 				4F47A5BA1D36214200702747 /* tvtracking.manifest.json in Resources */,
 				4F47A5641D3620E800702747 /* DefaultConfiguration~ipad.plist in Resources */,
 				4F47A56E1D3620E800702747 /* DefaultConfiguration~ipod.plist in Resources */,
-				4F47A49F1D35437300702747 /* Images.xcassets in Resources */,
 				4F47A55F1D3620E800702747 /* DefaultConfiguration.plist in Resources */,
 				4F47A5691D3620E800702747 /* DefaultConfiguration~iphone.plist in Resources */,
 			);
@@ -1897,7 +1894,6 @@
 			files = (
 				4F47A5341D35451A00702747 /* Crash.m in Sources */,
 				4F47A53C1D35451A00702747 /* Hash.m in Sources */,
-				4F47A49A1D35436200702747 /* Debugger.swift in Sources */,
 				4F47A5471D35458E00702747 /* DefaultTrackerDelegate.swift in Sources */,
 				4F47A4E21D35446700702747 /* IdentifiedVisitor.swift in Sources */,
 				4F47A6B71D3CD75600702747 /* UIImageExtension.swift in Sources */,

@@ -29,7 +29,7 @@
 
 import UIKit
 
-class Debugger: NSObject {
+internal class Debugger: NSObject {
     /// View controller where to display debugger
     weak var _viewController: UIViewController?
     

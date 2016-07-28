@@ -390,7 +390,7 @@ public class Tracker: NSObject {
     /// Dispatcher
     lazy var dispatcher: Dispatcher = Dispatcher(tracker: self)
     
-    #if os(iOS)
+    #if os(iOS) && !AT_EXTENSION
     /// Debugger
     public var debugger: UIViewController? {
         get {
