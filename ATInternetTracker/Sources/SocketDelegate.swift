@@ -81,7 +81,7 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      */
     func webSocketDidOpen(webSocket: SRWebSocket!) {
         print("connected")
-        liveManager.sender?.sendMessage(App().description)
+        //liveManager.sender?.sendMessage(App().description)
         timer?.invalidate()
     }
     
