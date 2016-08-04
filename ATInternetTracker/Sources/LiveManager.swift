@@ -97,7 +97,7 @@ class LiveNetworkManager: LiveNetworkState {
         self.currentPopupDisplayed?.dismiss(true)
         let texts = getTexts()
         let p = SmartPopUp(frame: CGRectZero, title: texts["ASK_PAIRING_TITLE"]!, message: texts["ASK_PAIRING_TEXT"]!, okTitle: texts["CONFIRM"]!, cancelTitle: texts["CANCEL"]!)
-        let popup = KLCPopup(contentView: p,
+        self.currentPopupDisplayed = KLCPopup(contentView: p,
                              showType: KLCPopupShowType.BounceInFromTop,
                              dismissType: KLCPopupDismissType.BounceOutToBottom,
                              maskType: KLCPopupMaskType.Dimmed,
@@ -105,15 +105,14 @@ class LiveNetworkManager: LiveNetworkState {
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
             self.deviceAcceptedLive()
-            popup.dismiss(true)
+            self.currentPopupDisplayed!.dismiss(true)
         }
         p.addCancelAction { () -> () in
             self.deviceRefusedLive()
-            popup.dismiss(true)
+            self.currentPopupDisplayed!.dismiss(true)
         }
-        self.currentPopupDisplayed = popup
         
-        popup.show()
+        self.currentPopupDisplayed!.show()
     }
     
     
@@ -122,48 +121,51 @@ class LiveNetworkManager: LiveNetworkState {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
         let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_CANCELED_TITLE"]!, message: texts["INFO_PAIRING_CANCELED_TEXT"]!, okTitle: texts["CONFIRM"]!)
-        let popup = KLCPopup(contentView: p,
+        self.currentPopupDisplayed = KLCPopup(contentView: p,
                              showType: KLCPopupShowType.BounceInFromTop,
                              dismissType: KLCPopupDismissType.BounceOutToBottom,
                              maskType: KLCPopupMaskType.Dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
-            popup.dismiss(true)
+            self.currentPopupDisplayed!.dismiss(true)
         }
-        popup.show()
+        
+        self.currentPopupDisplayed!.show()
     }
     
     func showStoppedPopup() {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
         let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_STOPPED_TITLE"]!, message: texts["INFO_PAIRING_STOPPED_TEXT"]!, okTitle: texts["CONFIRM"]!)
-        let popup = KLCPopup(contentView: p,
+        self.currentPopupDisplayed = KLCPopup(contentView: p,
                              showType: KLCPopupShowType.BounceInFromTop,
                              dismissType: KLCPopupDismissType.BounceOutToBottom,
                              maskType: KLCPopupMaskType.Dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
-            popup.dismiss(true)
+            self.currentPopupDisplayed!.dismiss(true)
         }
-        popup.show()
+        
+        self.currentPopupDisplayed!.show()
     }
     
     func showRefusedPopup() {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
         let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_REFUSED_TITLE"]!, message: texts["INFO_PAIRING_REFUSED_TEXT"]!, okTitle: texts["CONFIRM"]!)
-        let popup = KLCPopup(contentView: p,
+        self.currentPopupDisplayed = KLCPopup(contentView: p,
                              showType: KLCPopupShowType.BounceInFromTop,
                              dismissType: KLCPopupDismissType.BounceOutToBottom,
                              maskType: KLCPopupMaskType.Dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
-            popup.dismiss(true)
+            self.currentPopupDisplayed!.dismiss(true)
         }
-        popup.show()
+
+        self.currentPopupDisplayed!.show()
     }
     
     func getTexts() -> [String:String] {
@@ -177,7 +179,7 @@ class LiveNetworkManager: LiveNetworkState {
             "INFO_PAIRING_STOPPED_TITLE": NSLocalizedString("INFO_PAIRING_STOPPED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
             "INFO_PAIRING_STOPPED_TEXT": NSLocalizedString("INFO_PAIRING_STOPPED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
             "INFO_PAIRING_REFUSED_TEXT": NSLocalizedString("INFO_PAIRING_REFUSED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "INFO_PAIRING_REFUSED_TITLE": NSLocalizedString("INFO_PAIRING_REFUSED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
+            "INFO_PAIRING_REFUSED_TITLE": NSLocalizedString("INFO_PAIRING_REFUSED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre")
         ]
     }
 }

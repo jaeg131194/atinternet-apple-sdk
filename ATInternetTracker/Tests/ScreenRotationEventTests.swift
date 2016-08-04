@@ -28,7 +28,7 @@ class ScreenRotationEventTests: XCTestCase {
         guard let _ = orientation else {
             return
         }
-        let rotationEvent = ScreenRotationEvent(orientation: orientation!)
+        let rotationEvent = ScreenRotationEvent(orientation: .Portrait)
         let jsonObj: NSMutableDictionary = [
             "event": "screenRotation",
             "data":[

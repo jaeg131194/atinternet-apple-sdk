@@ -81,9 +81,13 @@ class SEScreenshot: SocketEvent {
             if let toolbar = self.liveManager.toolbar?.toolbar {
                 toIgnore.append(toolbar)
             }
+            if let popup = self.liveManager.currentPopupDisplayed {
+                toIgnore.append(popup)
+            }
             
             var base64 = UIApplication.sharedApplication()
-                .keyWindow?.screenshot(toIgnore)?
+                .keyWindow?
+                .screenshot(toIgnore)?
                 .toBase64()!
                 .stringByReplacingOccurrencesOfString("\n", withString: "")
                 .stringByReplacingOccurrencesOfString("\r", withString: "")
@@ -133,8 +137,12 @@ class SEInterfaceAskedForScreenshot: SocketEvent {
             if let toolbar = self.liveManager.toolbar?.toolbar {
                 toIgnore.append(toolbar)
             }
+            if let popup = self.liveManager.currentPopupDisplayed {
+                toIgnore.append(popup)
+            }
             let base64 = UIApplication.sharedApplication()
-                .keyWindow?.screenshot(toIgnore)?
+                .keyWindow?
+                .screenshot(toIgnore)?
                 .toBase64()!
                 .stringByReplacingOccurrencesOfString("\n", withString: "")
                 .stringByReplacingOccurrencesOfString("\r", withString: "")

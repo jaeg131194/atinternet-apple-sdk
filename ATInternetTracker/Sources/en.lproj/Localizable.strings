@@ -16,5 +16,7 @@ INFO_PAIRING_CANCELED_TITLE = "DECONNEXION";
 INFO_PAIRING_CANCELED_TEXT = "La demande d'appairage à été annulée";
 INFO_PAIRING_STOPPED_TITLE = "Live terminé";
 INFO_PAIRING_STOPPED_TEXT = "L'interface s'est déconnectée";
+INFO_PAIRING_REFUSED_TEXT = "L'interface a refusée l'appairage";
+INFO_PAIRING_REFUSED_TITLE = "Information";
 CONFIRM = "OK";
 CANCEL = "REFUSER";

@@ -9,8 +9,16 @@
 import Foundation
 import UIKit
 
+
+
 /// Singleton managing the displayed UIViewController events
 class UIViewControllerContext {
+    
+    enum UIViewControllerOrientation: Int {
+        case Portrait = 1
+        case Landscape = 2
+    }
+    
     /// A Stack of UIVIewController displayed
     lazy var activeViewControllers = [UIViewController]()
     
@@ -19,6 +27,7 @@ class UIViewControllerContext {
         return activeViewControllers.last
     }
     
+    lazy var currentOrientation: UIViewControllerOrientation = UIViewControllerOrientation.Portrait
     var isPeekAndPoped: Bool = false
     var isPeek: Bool = false
         
