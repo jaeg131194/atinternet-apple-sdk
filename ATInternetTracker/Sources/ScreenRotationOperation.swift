@@ -28,7 +28,6 @@ class ScreenRotationOperation: NSOperation {
     
     override func main() {
         autoreleasepool {
-            
             // Wait a little in order to make this operation cancellable
             NSThread.sleepForTimeInterval(0.2)
             if !self.cancelled {

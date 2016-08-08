@@ -155,7 +155,7 @@ public class AutoTracker: Tracker {
     static var isConfigurationLoaded = false
 
     /// Screen orientation
-    private var orientation: UIDeviceOrientation?
+    internal var orientation: UIDeviceOrientation?
     
     /// Smart SDK toolbar
     private var toolbar: SmartToolBarController?
@@ -219,6 +219,7 @@ public class AutoTracker: Tracker {
                 
                 removeNotifications()
                 addNotifications()
+                registerCurrentOrientation()
                 
                 UIApplication.at_swizzle()
                 UIViewController.at_unswizzle_instances()
@@ -245,6 +246,15 @@ public class AutoTracker: Tracker {
                 UISwitch.at_swizzle()
                 self.toolbar?.toolbar.removeFromSuperview()
             }
+        }
+    }
+    
+    func registerCurrentOrientation() {
+        let orientation = UIApplication.sharedApplication().statusBarOrientation
+        if orientation == .Portrait || orientation == .PortraitUpsideDown {
+            UIViewControllerContext.sharedInstance.currentOrientation = UIViewControllerContext.UIViewControllerOrientation.Portrait
+        } else {
+            UIViewControllerContext.sharedInstance.currentOrientation = UIViewControllerContext.UIViewControllerOrientation.Landscape
         }
     }
     
@@ -280,7 +290,7 @@ public class AutoTracker: Tracker {
     
     func windowBecomeVisible(notification: NSNotification) {
         if let delegate = UIApplication.sharedApplication().keyWindow {
-            if let win = delegate.window {
+            if let _ = delegate.window {
                 //print(win)
                 addToolbar("keyWindow")
             }
@@ -316,13 +326,16 @@ public class AutoTracker: Tracker {
             orientation = currentOrientation
         } else {
             if currentOrientation != orientation && currentOrientation != UIDeviceOrientation.FaceUp && currentOrientation != UIDeviceOrientation.FaceDown && UIViewControllerContext.sharedInstance.currentViewController != nil {
-                EventManager.sharedInstance.addEvent(ScreenRotationOperation(rotationEvent: ScreenRotationEvent(orientation: currentOrientation)))
+                let deviceRotation = DeviceRotationEvent(orientation: currentOrientation)
+                deviceRotation.viewController = UIViewControllerContext.sharedInstance.currentViewController
+                EventManager.sharedInstance.addEvent(DeviceRotationOperation(rotationEvent: deviceRotation))
             }
         }
         
         if currentOrientation != UIDeviceOrientation.FaceUp && currentOrientation != UIDeviceOrientation.FaceDown {
             orientation = currentOrientation
         }
+        
         
         toolbar?.rotateIfNeeded()
     }

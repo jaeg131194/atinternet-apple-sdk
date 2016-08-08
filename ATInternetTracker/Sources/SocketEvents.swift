@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+/// Factory making a different class in charge of handling different events
 class SocketEventFactory {
     class func create(eventName: String, liveManager: LiveNetworkManager, messageData: JSON?) -> SocketEvent {
         switch eventName {
@@ -38,6 +39,7 @@ class SocketEventFactory {
     }
 }
 
+/// Handle all the incoming messages from the websocket
 class SocketEvent {
     let liveManager: LiveNetworkManager
     let messageData: JSON?
@@ -81,9 +83,13 @@ class SEScreenshot: SocketEvent {
             if let toolbar = self.liveManager.toolbar?.toolbar {
                 toIgnore.append(toolbar)
             }
+            if let popup = self.liveManager.currentPopupDisplayed {
+                toIgnore.append(popup)
+            }
             
             var base64 = UIApplication.sharedApplication()
-                .keyWindow?.screenshot(toIgnore)?
+                .keyWindow?
+                .screenshot(toIgnore)?
                 .toBase64()!
                 .stringByReplacingOccurrencesOfString("\n", withString: "")
                 .stringByReplacingOccurrencesOfString("\r", withString: "")
@@ -133,8 +139,12 @@ class SEInterfaceAskedForScreenshot: SocketEvent {
             if let toolbar = self.liveManager.toolbar?.toolbar {
                 toIgnore.append(toolbar)
             }
+            if let popup = self.liveManager.currentPopupDisplayed {
+                toIgnore.append(popup)
+            }
             let base64 = UIApplication.sharedApplication()
-                .keyWindow?.screenshot(toIgnore)?
+                .keyWindow?
+                .screenshot(toIgnore)?
                 .toBase64()!
                 .stringByReplacingOccurrencesOfString("\n", withString: "")
                 .stringByReplacingOccurrencesOfString("\r", withString: "")

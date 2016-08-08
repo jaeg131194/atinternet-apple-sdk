@@ -10,26 +10,27 @@ import Foundation
 import UIKit
 
 /// Object used for manage screen rotation events. Note that face up and face down are ignored at runtime
-class ScreenRotationEvent {
+class DeviceRotationEvent {
     /// Method called by the touched UIView
     lazy var methodName = "rotate"
     
     /// A description of the gesture
-    var orientation: UIViewControllerContext.UIViewControllerOrientation
+    var orientation: UIDeviceOrientation
+    
+    weak var viewController: UIViewController?
     
     /// current screen
     lazy var currentScreen: Screen = Screen()
     
-    /// the general event type
-    let type: String = "screen"
+    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.Rotate
     
     /// JSON description
     var description: String {
         let jsonObj: NSMutableDictionary = [
-            "event": "screenRotation",
+            "event": "deviceRotation",
             "data":[
                 "name": self.currentScreen.name,
-                "type" : self.type,
+                "type" : Gesture.getEventTypeRawValue(self.eventType.rawValue),
                 "className": self.currentScreen.className,
                 "methodName": self.methodName,
                 "direction": self.orientation.rawValue,
@@ -41,7 +42,7 @@ class ScreenRotationEvent {
         jsonObj.setValue(data, forKey: "data")
         return jsonObj.toJSON()
     }
-
+    
     /**
      RotationEvent init
      
@@ -49,7 +50,7 @@ class ScreenRotationEvent {
      
      - returns: RotationEvent
      */
-    init(orientation: UIViewControllerContext.UIViewControllerOrientation) {
+    init(orientation: UIDeviceOrientation) {
         self.orientation = orientation
     }
 }

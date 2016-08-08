@@ -34,11 +34,26 @@ protocol SimpleStorageProtocol {
 /// Simple storage impl with UserDefault
 class UserDefaultSimpleStorage: SimpleStorageProtocol {
     
+    /**
+     get from user default
+     
+     - parameter name: a name
+     
+     - returns: the object
+     */
     func getByName(name: String) -> AnyObject? {
         let userDefault = NSUserDefaults.standardUserDefaults()
         return userDefault.objectForKey(name)
     }
     
+    /**
+     save to user default
+     
+     - parameter config: an object
+     - parameter name:   the name
+     
+     - returns: true if success
+     */
     func saveByName(config: AnyObject, name: String) -> Bool {
         let userDefault = NSUserDefaults.standardUserDefaults()
         userDefault.setObject(config, forKey: name)
@@ -117,6 +132,11 @@ class ApiS3Client {
         self.network = networkService
     }
 
+    /**
+     get the livetagging configuration mapping url
+     
+     - returns: the correct url
+     */
     func getMappingURL() -> NSURL {
         return NSURL(string:S3URL
             .stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
@@ -125,6 +145,11 @@ class ApiS3Client {
         )!
     }
     
+    /**
+     get the check url
+     
+     - returns: the url
+     */
     private func getCheckURL() -> NSURL {
         return NSURL(string:S3URLCheck
             .stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
@@ -137,10 +162,20 @@ class ApiS3Client {
         network.getURL(getMappingURL(), onLoaded: onLoaded, onError: onError, retryCount: 5)
     }
 
+    /**
+     save the config
+     
+     - parameter mapping: the config
+     */
     func saveSmartSDKMapping(mapping: JSON) {
         store.saveByName(mapping.object, name: "at_smartsdk_config")
     }
     
+    /**
+     get the config
+     
+     - returns: the config
+     */
     private func getSmartSDKMapping() -> JSON? {
         let jsonObj = store.getByName("at_smartsdk_config")
         if let obj = jsonObj {
@@ -151,10 +186,20 @@ class ApiS3Client {
         return nil
     }
     
+    /**
+     get the checksum - actually it's a timestamp used to know if we need to fetch the configuration or not
+     
+     - parameter callback: the checksum
+     */
     private func fetchCheckSum(callback: (JSON?) -> ()) {
         network.getURL(getCheckURL(), onLoaded: callback, onError: {}, retryCount: 1)
     }
     
+    /**
+     Main method - get the most recent configuration from the network/cache
+     
+     - parameter callback: the configuration
+     */
     func fetchMapping(callback: (JSON?) -> ()) {
         func getRemoteMapping(callback: (JSON?) -> ()) {
             self.fetchSmartSDKMapping({ (mapping: JSON?) in

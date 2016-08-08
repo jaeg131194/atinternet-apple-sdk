@@ -48,8 +48,8 @@ class PendingState: LiveNetworkState {
         liveManager.toolbar?.pendingToConnected()
         liveManager.current = liveManager.connected
         liveManager.networkStatus = .Connected
-        liveManager.sender?.sendMessage(App().description)
         self.liveManager.sender?.sendMessageForce(DeviceAcceptedLive().description)
+        liveManager.sender?.sendBuffer()
         liveManager.sender?.sendAll()
     }
     
@@ -58,7 +58,7 @@ class PendingState: LiveNetworkState {
         liveManager.current = liveManager.connected
         liveManager.networkStatus = .Connected
         liveManager.sender?.stopAskingForLive()
-        liveManager.sender?.sendMessage(App().description)
+        liveManager.sender?.sendBuffer()
         self.liveManager.sender?.sendAll()
     }
     func interfaceRefusedLive(){

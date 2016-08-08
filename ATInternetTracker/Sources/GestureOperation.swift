@@ -96,7 +96,7 @@ class GestureOperation: NSOperation {
      */
     func handleDelegate(gesture: Gesture) {
         if hasDelegate() {
-            gestureEvent.viewController!.performSelector(#selector(IAutoTracker.gestureWasDetected(_:)), withObject: gesture)
+            self.gestureEvent.viewController!.performSelector(#selector(IAutoTracker.gestureWasDetected(_:)), withObject: gesture)
             
             if gesture.isReady {
                 return

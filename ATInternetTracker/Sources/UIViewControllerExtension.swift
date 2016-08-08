@@ -58,6 +58,8 @@ extension UIViewController {
         }
         
         do {
+            try self.jr_swizzleMethod(#selector(UIViewController.viewWillTransitionToSize(_:withTransitionCoordinator:)),
+                                      withMethod: #selector(UIViewController.at_viewWillTransitionToSize(_:withTransitionCoordinator:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidAppear(_:)), withMethod: #selector(UIViewController.at_viewDidAppear(_:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidDisappear(_:)), withMethod: #selector(UIViewController.at_viewDidDisappear(_:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewWillDisappear(_:)), withMethod: #selector(UIViewController.at_viewWillDisappear(_:)))
@@ -65,7 +67,6 @@ extension UIViewController {
         } catch {
             NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
         }
-        
     }
     
     func at_swizzle_instance(name: Selector, name2: Selector, selfClass: AnyClass) {
@@ -89,10 +90,28 @@ extension UIViewController {
         UIViewControllerContext.sharedInstance.isPeek = true
         return self.at_previewingContext(previewingContext, viewControllerForLocation: location)
     }
+    
+    func at_viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        let oldOrientation = UIViewControllerContext.sharedInstance.currentOrientation
+        if size.width < size.height {
+            if oldOrientation != .Portrait {
+                UIViewControllerContext.sharedInstance.currentOrientation = .Portrait
+                EventManager.sharedInstance.addEvent(ScreenRotationOperation(rotationEvent: ScreenRotationEvent(orientation: UIViewControllerContext.sharedInstance.currentOrientation)))
+            }
+        } else {
+            if oldOrientation != .Landscape {
+                UIViewControllerContext.sharedInstance.currentOrientation = .Landscape
+                EventManager.sharedInstance.addEvent(ScreenRotationOperation(rotationEvent: ScreenRotationEvent(orientation: UIViewControllerContext.sharedInstance.currentOrientation)))
+            }
+        }
+    }
 
     func at_viewDidLoad() {
         let selfClass: AnyClass = object_getClass(self)
-        if selfClass.conformsToProtocol(NSProtocolFromString("UIViewControllerPreviewingDelegate")!){
+        guard let previewProtocol = NSProtocolFromString("UIViewControllerPreviewingDelegate") else {
+            return
+        }
+        if selfClass.conformsToProtocol(previewProtocol){
             var mc:CUnsignedInt = 0
             var mlist = class_copyMethodList(selfClass, &mc);
             for _ in 0...mc {
@@ -144,7 +163,7 @@ extension UIViewController {
         }
         
         context.viewAppearedTime = now
-        
+        print("screen \(self.classLabel)")
         EventManager.sharedInstance.addEvent(operation)
         
         at_viewDidAppear(animated)

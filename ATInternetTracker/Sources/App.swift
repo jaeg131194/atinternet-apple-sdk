@@ -26,6 +26,7 @@ class App {
                 "width": s.width,
                 "height": s.height,
                 "scale": s.scale,
+                "screenOrientation": s.orientation,
                 "siteID": ATInternet.sharedInstance.defaultTracker.configuration.parameters["site"]!
             ]
         ]
