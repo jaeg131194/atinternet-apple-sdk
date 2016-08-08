@@ -116,8 +116,8 @@ class S3NetworkService: SimpleNetworkService {
 
 /// Class handling the  loading of the LiveTagging configuration file
 class ApiS3Client {
-    let S3URL = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/siteID/{siteID}/token/{token}/version/{version}"
-    let S3URLCheck = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/siteID/{siteID}/token/{token}/version/{version}/lastupdate"
+    let S3URL = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}"
+    let S3URLCheck = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}/lastupdate"
     let store: SimpleStorageProtocol
     let network: SimpleNetworkService
     let token: String
@@ -139,7 +139,7 @@ class ApiS3Client {
      */
     func getMappingURL() -> NSURL {
         return NSURL(string:S3URL
-            .stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
+            //.stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
             .stringByReplacingOccurrencesOfString("{token}", withString: self.token)
             .stringByReplacingOccurrencesOfString("{version}", withString: self.version)
         )!
@@ -152,7 +152,7 @@ class ApiS3Client {
      */
     private func getCheckURL() -> NSURL {
         return NSURL(string:S3URLCheck
-            .stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
+            //.stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
             .stringByReplacingOccurrencesOfString("{token}", withString: self.token)
             .stringByReplacingOccurrencesOfString("{version}", withString: self.version)
         )!
