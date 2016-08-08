@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+/// Factory making a different class in charge of handling different events
 class SocketEventFactory {
     class func create(eventName: String, liveManager: LiveNetworkManager, messageData: JSON?) -> SocketEvent {
         switch eventName {
@@ -38,6 +39,7 @@ class SocketEventFactory {
     }
 }
 
+/// Handle all the incoming messages from the websocket
 class SocketEvent {
     let liveManager: LiveNetworkManager
     let messageData: JSON?

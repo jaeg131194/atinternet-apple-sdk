@@ -6,6 +6,9 @@
 import Foundation
 import UIKit
 
+/// Mostly static messages for the websocket
+
+/// Device ask for a live
 class DeviceAskingForLive {
     var description: String {
         let askForLive: NSMutableDictionary = [
@@ -19,6 +22,7 @@ class DeviceAskingForLive {
     }
 }
 
+/// Device refuse a live
 class DeviceRefusedLive {
     var description: String {
         let deviceRefusedLive: NSMutableDictionary = [
@@ -31,6 +35,7 @@ class DeviceRefusedLive {
     }
 }
 
+/// Device abort a live
 class DeviceAbortedLiveRequest {
     var description: String {
         let deviceAbortedLiveRequest: NSMutableDictionary = [
@@ -43,6 +48,7 @@ class DeviceAbortedLiveRequest {
     }
 }
 
+/// Device stop a live
 class DeviceStoppedLive {
     var description: String {
         let deviceStoppedLive: NSMutableDictionary = [
@@ -55,6 +61,7 @@ class DeviceStoppedLive {
     }
 }
 
+/// Device accept the live
 class DeviceAcceptedLive {
     var description: String {
         let deviceAcceptedLive: NSMutableDictionary = [
@@ -67,6 +74,7 @@ class DeviceAcceptedLive {
     }
 }
 
+/// Send a fresh screenshot for the current screen
 class ScreenshotUpdated {
     let screenshot:String
     let currentScreen: Screen
