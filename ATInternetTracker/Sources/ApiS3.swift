@@ -122,10 +122,8 @@ class ApiS3Client {
     let network: SimpleNetworkService
     let token: String
     let version: String
-    let siteID: String
 
-    init(siteID: String, token: String, version: String, store: SimpleStorageProtocol, networkService: SimpleNetworkService) {
-        self.siteID = siteID
+    init(token: String, version: String, store: SimpleStorageProtocol, networkService: SimpleNetworkService) {
         self.token = token
         self.version = version
         self.store = store
@@ -139,7 +137,6 @@ class ApiS3Client {
      */
     func getMappingURL() -> NSURL {
         return NSURL(string:S3URL
-            //.stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
             .stringByReplacingOccurrencesOfString("{token}", withString: self.token)
             .stringByReplacingOccurrencesOfString("{version}", withString: self.version)
         )!
@@ -152,7 +149,6 @@ class ApiS3Client {
      */
     private func getCheckURL() -> NSURL {
         return NSURL(string:S3URLCheck
-            //.stringByReplacingOccurrencesOfString("{siteID}", withString: self.siteID)
             .stringByReplacingOccurrencesOfString("{token}", withString: self.token)
             .stringByReplacingOccurrencesOfString("{version}", withString: self.version)
         )!

@@ -31,20 +31,19 @@ class APITests: XCTestCase {
     }
 
     func testApiUrlGeneration() {
-        let api = ApiS3Client(siteID: "410501",
-                              token: "6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f",
+        let api = ApiS3Client( token: "6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f",
                               version: "1.1",
                               store: MockStore(),
                               networkService: MockNetwork())
         let url = api.getMappingURL()
 
-        XCTAssertEqual(url, NSURL(string: "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/siteID/410501/token/6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f/version/1.1"))
+        XCTAssertEqual(url, NSURL(string: "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f/version/1.1"))
     }
 
     func testFetchMappingIfNoMappingInMemory() {
         let exp = expectationWithDescription("async")
         
-        let api = ApiS3Client(siteID: "site", token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
+        let api = ApiS3Client(token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
         api.fetchMapping({(apiMapping: JSON?) in
             XCTAssertNotNil(apiMapping)
             exp.fulfill()
@@ -60,7 +59,7 @@ class APITests: XCTestCase {
     func testFetchMappingIfCheckSumDiffer() {
         let exp = expectationWithDescription("async")
         let ts = "123"
-        let api = ApiS3Client(siteID: "site", token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
+        let api = ApiS3Client(token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
         let fakeAPI: JSON = JSON(["timestamp":ts])
         api.saveSmartSDKMapping(fakeAPI)
         api.fetchMapping({ (mapping:JSON?) in
@@ -76,7 +75,7 @@ class APITests: XCTestCase {
     
     func testDontFetchMappingIfCheckSumOk() {
         let exp = expectationWithDescription("async")
-        let api = ApiS3Client(siteID: "site", token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
+        let api = ApiS3Client(token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
         api.fetchMapping({ (mapping:JSON?) in
             api.saveSmartSDKMapping(mapping!)
             api.fetchMapping({ (mapping:JSON?) in
