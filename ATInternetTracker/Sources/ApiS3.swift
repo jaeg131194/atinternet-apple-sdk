@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+typealias MappingRequest = (url: NSURL, onLoaded: (JSON?) -> (), onError: () -> ())
 /**
  *  Simple storage protocol
  */
@@ -73,41 +75,40 @@ protocol SimpleNetworkService {
      - parameter onError:    callback if an error is detected
      - parameter retryCount: retrycount if error
      */
-    func getURL(url: NSURL, onLoaded: (JSON?) -> (), onError: () -> (), retryCount: Int)
+    func getURL(request: MappingRequest, retryCount: Int)
 }
 
 /// Light network service impl with error handling
 class S3NetworkService: SimpleNetworkService {
     
     /// retry wrapper for getURL
-    func retry( f: (NSURL, (JSON?) -> (), () -> (), Int) -> (), url: NSURL, onLoaded: (JSON?) -> (), onError: () -> (), retryCount: Int) -> () {
+    func retry( f: (MappingRequest, Int) -> (), request: MappingRequest, retryCount: Int) -> () {
         if retryCount >= 0 {
-            print("retrying... remaining:\(retryCount)")
-            sleep(5)
-            f(url, onLoaded, onError, retryCount)
+            sleep(3+arc4random_uniform(5))
+            f((request.url, request.onLoaded, request.onError), retryCount)
         } else {
-            onError()
+            request.onError()
         }
     }
     
-    func getURL(url: NSURL, onLoaded: (JSON?) -> (), onError: () -> (), retryCount: Int) {
-        print(url.absoluteString)
-        let request = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 30)
-        request.HTTPMethod = "GET"
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue()) { (r: NSURLResponse?, data: NSData?, err: NSError?) in
+    func getURL(request: MappingRequest, retryCount: Int) {
+        print(request.url.absoluteString)
+        let urlRequest = NSMutableURLRequest(URL: request.url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 30)
+        urlRequest.HTTPMethod = "GET"
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: NSOperationQueue()) { (r: NSURLResponse?, data: NSData?, err: NSError?) in
             if let _ = err {
-                self.retry(self.getURL, url: url, onLoaded: onLoaded, onError: onError, retryCount: retryCount-1)
+                self.retry(self.getURL, request: (url: request.url, onLoaded: request.onLoaded, onError: request.onError), retryCount: retryCount-1)
             }
             if let jsonData = data {
                 let res = JSON(data: jsonData)
                 if res["type"] >= 500 {
-                    self.retry(self.getURL, url: url, onLoaded: onLoaded, onError: onError, retryCount: retryCount-1)
+                    self.retry(self.getURL, request: (url: request.url, onLoaded: request.onLoaded, onError: request.onError), retryCount: retryCount-1)
                 }
                 else if res["type"] >= 400 {
-                    onError()
+                    request.onError()
                 }
                 else {
-                    onLoaded(res)
+                    request.onLoaded(res)
                 }
             }
         }
@@ -155,7 +156,7 @@ class ApiS3Client {
     }
 
     func fetchSmartSDKMapping(onLoaded: (JSON?) -> (), onError: () -> ()) {
-        network.getURL(getMappingURL(), onLoaded: onLoaded, onError: onError, retryCount: 5)
+        network.getURL((getMappingURL(), onLoaded: onLoaded, onError: onError), retryCount: 5)
     }
 
     /**
@@ -188,7 +189,7 @@ class ApiS3Client {
      - parameter callback: the checksum
      */
     private func fetchCheckSum(callback: (JSON?) -> ()) {
-        network.getURL(getCheckURL(), onLoaded: callback, onError: {}, retryCount: 1)
+        network.getURL((getCheckURL(), onLoaded: callback, onError: {}), retryCount: 1)
     }
     
     /**

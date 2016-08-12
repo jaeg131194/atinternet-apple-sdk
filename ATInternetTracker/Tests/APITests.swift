@@ -10,8 +10,8 @@ class MockStore: SimpleStorageProtocol {
 }
 
 class MockNetwork: SimpleNetworkService {
-    func getURL(url: NSURL, onLoaded: (JSON?) -> (), onError: () -> (), retryCount: Int) {
-        onLoaded(JSON(["timestamp":123456]))
+    func getURL(request: MappingRequest, retryCount: Int) {
+        request.onLoaded(JSON(["timestamp":123456]))
     }
 }
 
