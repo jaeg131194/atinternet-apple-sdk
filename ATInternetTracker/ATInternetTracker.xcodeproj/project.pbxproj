@@ -687,12 +687,12 @@
 		4FFB609D1D3E7FD900586F9E /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		8E5339831D3F82A80081445B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		8E5339841D3F845F0081445B /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
+		8EC97ED31D5A2CC1007360F3 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC97ED21D5A2CC1007360F3 /* APITests.swift */; };
 		8EDC3CF61D3E225100A14458 /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
 		8EFF4AF81D50D79C005DF2A7 /* DeviceRotationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AF71D50D79C005DF2A7 /* DeviceRotationEvent.swift */; };
 		8EFF4AF91D50D79C005DF2A7 /* DeviceRotationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AF71D50D79C005DF2A7 /* DeviceRotationEvent.swift */; };
 		8EFF4AFB1D50D7B0005DF2A7 /* DeviceRotationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AFA1D50D7B0005DF2A7 /* DeviceRotationOperation.swift */; };
 		8EFF4AFC1D50D7B0005DF2A7 /* DeviceRotationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AFA1D50D7B0005DF2A7 /* DeviceRotationOperation.swift */; };
-		8EFF4B051D537653005DF2A7 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4B031D537653005DF2A7 /* APITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -911,10 +911,10 @@
 		4FF5946D1D3FB6890004D336 /* SmartTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTracker.h; sourceTree = "<group>"; };
 		4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tvOSTracker.h; sourceTree = "<group>"; };
 		4FF594711D3FB8690004D336 /* watchOSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watchOSTracker.h; sourceTree = "<group>"; };
+		8EC97ED21D5A2CC1007360F3 /* APITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APITests.swift; path = Tests/APITests.swift; sourceTree = "<group>"; };
 		8EDC3CF51D3E225100A14458 /* ApiS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiS3.swift; sourceTree = "<group>"; };
 		8EFF4AF71D50D79C005DF2A7 /* DeviceRotationEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceRotationEvent.swift; sourceTree = "<group>"; };
 		8EFF4AFA1D50D7B0005DF2A7 /* DeviceRotationOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceRotationOperation.swift; sourceTree = "<group>"; };
-		8EFF4B031D537653005DF2A7 /* APITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1306,7 +1306,7 @@
 			children = (
 				4F47A6F61D3D126500702747 /* EventManagerTests.swift */,
 				4F47A6FE1D3D126500702747 /* MathTests.swift */,
-				8EFF4B031D537653005DF2A7 /* APITests.swift */,
+				8EC97ED21D5A2CC1007360F3 /* APITests.swift */,
 				4F47A7001D3D126500702747 /* NSObjectExtensionTests.swift */,
 				4F47A7011D3D126500702747 /* NSObjectTests.swift */,
 				4F47A7041D3D126500702747 /* PanEventTests.swift */,
@@ -2248,7 +2248,6 @@
 				4F47A9291D3E2FE100702747 /* SelfPromotionTests.swift in Sources */,
 				4F47A92A1D3E2FE100702747 /* DefaultTrackerDelegate.swift in Sources */,
 				4F47A92B1D3E2FE100702747 /* SwiftyJSON.swift in Sources */,
-				8EFF4B051D537653005DF2A7 /* APITests.swift in Sources */,
 				4F47A92C1D3E2FE100702747 /* Video.swift in Sources */,
 				4F47A92D1D3E2FE100702747 /* NuggAd.swift in Sources */,
 				4F47A9C31D3E347400702747 /* UIViewExtension.swift in Sources */,
@@ -2293,6 +2292,7 @@
 				4F47A9461D3E2FE100702747 /* ConfigurationTests.swift in Sources */,
 				4F47A9471D3E2FE100702747 /* Screen.swift in Sources */,
 				4F47A9971D3E317000702747 /* PendingState.swift in Sources */,
+				8EC97ED31D5A2CC1007360F3 /* APITests.swift in Sources */,
 				4F47A9481D3E2FE100702747 /* Aisle.swift in Sources */,
 				4F47A9B31D3E319900702747 /* UIApplicationTests.swift in Sources */,
 				4F47A9491D3E2FE100702747 /* CustomVarTests.swift in Sources */,

@@ -153,7 +153,7 @@ class GestureOperation: NSOperation {
             assert(gestureEvent.methodName != nil)
             
             let eventKeyBase = Gesture.getEventTypeRawValue(gestureEvent.eventType.rawValue)+"."+gestureEvent.direction+"."+gestureEvent.methodName!
-            let position = gesture.view != nil ? "."+String(gesture.view?.position) : ""
+            let position = gesture.view != nil ? "."+String(gesture.view!.position) : ""
             let view = gesture.view != nil ? "."+gesture.view!.className : ""
             let screen = gesture.screen != nil ? "."+gesture.screen!.className : ""
             
