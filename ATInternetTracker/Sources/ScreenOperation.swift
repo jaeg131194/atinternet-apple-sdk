@@ -64,7 +64,9 @@ class ScreenOperation: NSOperation {
                 tracker.socketSender!.sendMessage(screenEvent.description)
             }
             if (tracker.enableAutoTracking) {
-                sendScreenHit(tracker)
+                if !sendScreenHit(tracker) {
+                    print("hit ignored")
+                }
             }
         }
     }
@@ -74,11 +76,14 @@ class ScreenOperation: NSOperation {
      
      - parameter tracker: AutoTracker
      */
-    func sendScreenHit(tracker: AutoTracker) {
+    func sendScreenHit(tracker: AutoTracker) -> Bool {
         let screen = tracker.screens.add(screenEvent.screen)
-        mapConfiguration(screen)
-        handleDelegate(screen)
-        screen.sendView()
+        let shouldSend = mapConfiguration(screen)
+        if shouldSend {
+            handleDelegate(screen)
+            screen.sendView()
+        }
+        return shouldSend
     }
     
     /**
@@ -86,14 +91,20 @@ class ScreenOperation: NSOperation {
      
      - parameter screen: the screen
      */
-    func mapConfiguration(screen: Screen) {
+    func mapConfiguration(screen: Screen) -> Bool {
         waitForConfigurationLoaded()
         
         if let mapping = Configuration.smartSDKMapping {
+            if let shouldTag = mapping["configuration"]["screens"][screen.className]["ignoreElement"].bool {
+                if !shouldTag {
+                    return false
+                }
+            }
             if let mappedName = mapping["configuration"]["screens"][screen.className]["title"].string {
                 screen.name = mappedName
             }
         }
+        return true
     }
     
     /**

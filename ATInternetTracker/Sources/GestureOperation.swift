@@ -63,7 +63,7 @@ class GestureOperation: NSOperation {
      
      - parameter tracker: AutoTracker
      */
-    func sendGestureHit(tracker: AutoTracker) {
+    func sendGestureHit(tracker: AutoTracker) -> Bool {
         let gesture = tracker.gestures.add()
         if let method = gestureEvent.methodName {
             gesture.name = method
@@ -84,9 +84,12 @@ class GestureOperation: NSOperation {
             gesture.action = .Navigate
         }
         
-        mapConfiguration(gesture)
-        handleDelegate(gesture)
-        tracker.dispatcher.dispatch([gesture])
+        let shouldSendHit = mapConfiguration(gesture)
+        if shouldSendHit {
+            handleDelegate(gesture)
+            tracker.dispatcher.dispatch([gesture])
+        }
+        return shouldSendHit
     }
     
     /**
@@ -143,7 +146,7 @@ class GestureOperation: NSOperation {
      
      - parameter gesture: the gesture to map
      */
-    func mapConfiguration(gesture: Gesture) {
+    func mapConfiguration(gesture: Gesture) -> Bool {
         waitForConfigurationLoaded()
         
         if let mapping = Configuration.smartSDKMapping {
@@ -169,12 +172,18 @@ class GestureOperation: NSOperation {
             let events = [one, two, tree, four, five, six, seven, height]
             
             for aKey in events {
+                if let shouldIgnore = mapping["configuration"]["events"][aKey]["ignoreElement"].bool {
+                    if shouldIgnore {
+                        return false
+                    }
+                }
                 if let mappedName = mapping["configuration"]["events"][aKey]["title"].string {
                     gesture.name = mappedName
                     break
                 }
             }
         }
+        return true
     }
     
     /**
