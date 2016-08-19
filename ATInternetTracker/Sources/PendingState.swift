@@ -16,9 +16,9 @@ class PendingState: LiveNetworkState {
     
     func deviceAskedForLive() {}
     func interfaceAskedForLive() {
-        // special patch: interface and device made a request, making deadlock...
+        // special patch: interface and device made a request, making "deadlock"
         let isAsking: Bool? = self.liveManager.sender?.timer?.valid
-        if isAsking.getOrElse(false) {
+        if isAsking ?? false {
             liveManager.sender?.stopAskingForLive()
             liveManager.toolbar?.pendingToConnected()
             liveManager.current = liveManager.connected

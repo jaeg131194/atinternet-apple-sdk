@@ -48,29 +48,16 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      - parameter message:   the message
      */
     func webSocket(webSocket: SRWebSocket!, didReceiveMessage message: AnyObject!) {
-        guard let msg = message as? String else {
-            return
-        }
-        guard let json = msg.toJSONObject() else {
-            return
-        }
-        guard let evt = json["event"] else {
-            return
-        }
-        guard let event = evt as? String else {
+        let jsonData = JSON.parse( (message as? String) ?? "{}")
+        guard let event = jsonData["event"].string else {
             return
         }
         
-        guard let data = json["data"] else {
+        guard let data = jsonData["data"].dictionaryObject else {
             return
         }
-        
-        var jsonData: JSON? = nil
-        if data != nil {
-            jsonData = JSON(data!)
-        }
-        
-        let socketEvent = SocketEventFactory.create(event, liveManager: self.liveManager, messageData: jsonData)
+
+        let socketEvent = SocketEventFactory.create(event, liveManager: self.liveManager, messageData: JSON(data))
         socketEvent.process()
     }
     
@@ -81,7 +68,6 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      */
     func webSocketDidOpen(webSocket: SRWebSocket!) {
         print("connected")
-        //liveManager.sender?.sendMessage(App().description)
         timer?.invalidate()
     }
     

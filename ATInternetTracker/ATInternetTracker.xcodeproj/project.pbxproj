@@ -341,7 +341,6 @@
 		4F47A6271D36244400702747 /* TapEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6181D36244400702747 /* TapEvent.swift */; };
 		4F47A6321D3624AF00702747 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6281D3624AF00702747 /* DictionaryExtension.swift */; };
 		4F47A6331D3624AF00702747 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6291D3624AF00702747 /* NSObjectExtension.swift */; };
-		4F47A6341D3624AF00702747 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62A1D3624AF00702747 /* OptionalExtension.swift */; };
 		4F47A6351D3624AF00702747 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */; };
 		4F47A6361D3624AF00702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
 		4F47A6371D3624AF00702747 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62D1D3624AF00702747 /* UILabelExtension.swift */; };
@@ -593,7 +592,6 @@
 		4F47A9B91D3E31F200702747 /* Rotator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5ED1D36230D00702747 /* Rotator.swift */; };
 		4F47A9BA1D3E320B00702747 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6281D3624AF00702747 /* DictionaryExtension.swift */; };
 		4F47A9BC1D3E345C00702747 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */; };
-		4F47A9BD1D3E346600702747 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62A1D3624AF00702747 /* OptionalExtension.swift */; };
 		4F47A9BE1D3E346800702747 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6291D3624AF00702747 /* NSObjectExtension.swift */; };
 		4F47A9BF1D3E346A00702747 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62D1D3624AF00702747 /* UILabelExtension.swift */; };
 		4F47A9C01D3E346C00702747 /* UIRefreshControlExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62E1D3624AF00702747 /* UIRefreshControlExtension.swift */; };
@@ -832,7 +830,6 @@
 		4F47A6181D36244400702747 /* TapEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapEvent.swift; sourceTree = "<group>"; };
 		4F47A6281D3624AF00702747 /* DictionaryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		4F47A6291D3624AF00702747 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
-		4F47A62A1D3624AF00702747 /* OptionalExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		4F47A62C1D3624AF00702747 /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		4F47A62D1D3624AF00702747 /* UILabelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
@@ -1176,7 +1173,6 @@
 			children = (
 				4F47A6281D3624AF00702747 /* DictionaryExtension.swift */,
 				4F47A6291D3624AF00702747 /* NSObjectExtension.swift */,
-				4F47A62A1D3624AF00702747 /* OptionalExtension.swift */,
 				4F47A5C61D36223D00702747 /* StringExtension.swift */,
 				4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */,
 				4F47A62C1D3624AF00702747 /* UIImageExtension.swift */,
@@ -2059,7 +2055,6 @@
 				4F47A6001D3623B100702747 /* LiveManager.swift in Sources */,
 				4F47A5971D36210700702747 /* OnAppAd.swift in Sources */,
 				4F47A5F51D36236000702747 /* SRWebSocket.m in Sources */,
-				4F47A6341D3624AF00702747 /* OptionalExtension.swift in Sources */,
 				4F47A57A1D3620FA00702747 /* Hit.swift in Sources */,
 				4F47A6191D36244400702747 /* EventManager.swift in Sources */,
 				4F47A5C31D36215D00702747 /* Reachability.swift in Sources */,
@@ -2320,7 +2315,6 @@
 				4F47A9A81D3E319900702747 /* PanEventTests.swift in Sources */,
 				4F47A9521D3E2FE100702747 /* Configuration.swift in Sources */,
 				4F47A9531D3E2FE100702747 /* Offline.swift in Sources */,
-				4F47A9BD1D3E346600702747 /* OptionalExtension.swift in Sources */,
 				4F47A9A41D3E319900702747 /* EventManagerTests.swift in Sources */,
 				4F47A9541D3E2FE100702747 /* RichMedia.swift in Sources */,
 				4F47A9551D3E2FE100702747 /* Audio.swift in Sources */,

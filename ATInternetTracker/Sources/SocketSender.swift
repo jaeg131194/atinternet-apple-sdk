@@ -97,6 +97,7 @@ public class SocketSender {
     }
     
     func sendBuffer() {
+        print("send buffer")
         assert(isConnected())
         assert(self.liveManager.networkStatus == .Connected)
         socket?.send(buffer.currentApp)
@@ -120,12 +121,14 @@ public class SocketSender {
      - parameter json: the message as a String (JSON formatted)
      */
     func sendMessage(json: String) {
-        let obj = json.toJSONObject() as! NSDictionary
-        let eventName = obj.objectForKey("event") as! String
+        let eventName = JSON.parse(json)["event"].string
         print(eventName)
         // keep a ref to the last screen
         if eventName == "viewDidAppear" {
             buffer.currentScreen = json
+            if self.liveManager.networkStatus == .Disconnected {
+                return
+            }
         }
         
         self.queue.append(json)
