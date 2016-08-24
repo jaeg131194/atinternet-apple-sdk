@@ -56,9 +56,9 @@ public class SocketSender {
      */
     init(liveManager: LiveNetworkManager, token: String) {
         //self.URL = "ws://172.20.23.137:5000/"+token
-        //self.URL = "ws://172.20.23.137:5000/"+token
+        self.URL = "ws://172.20.23.137:5000/"+token
         //self.URL = "ws://tagsmartsdk.eu-west-1.elasticbeanstalk.com:5000/"+token
-        self.URL = "ws://172.20.23.145:5000/"+token
+        //self.URL = "ws://172.20.23.145:5000/"+token
         //self.URL = "ws://tagsmartsdk.eu-west-1.elasticbeanstalk.com:5000/"+token
         self.liveManager = liveManager
         self.socketHandler = SocketDelegate(liveManager: liveManager)
@@ -97,6 +97,7 @@ public class SocketSender {
     }
     
     func sendBuffer() {
+        print("send buffer")
         assert(isConnected())
         assert(self.liveManager.networkStatus == .Connected)
         socket?.send(buffer.currentApp)
@@ -120,12 +121,14 @@ public class SocketSender {
      - parameter json: the message as a String (JSON formatted)
      */
     func sendMessage(json: String) {
-        let obj = json.toJSONObject() as! NSDictionary
-        let eventName = obj.objectForKey("event") as! String
+        let eventName = JSON.parse(json)["event"].string
         print(eventName)
         // keep a ref to the last screen
         if eventName == "viewDidAppear" {
             buffer.currentScreen = json
+            if self.liveManager.networkStatus == .Disconnected {
+                return
+            }
         }
         
         self.queue.append(json)

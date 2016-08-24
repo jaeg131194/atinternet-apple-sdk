@@ -341,7 +341,6 @@
 		4F47A6271D36244400702747 /* TapEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6181D36244400702747 /* TapEvent.swift */; };
 		4F47A6321D3624AF00702747 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6281D3624AF00702747 /* DictionaryExtension.swift */; };
 		4F47A6331D3624AF00702747 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6291D3624AF00702747 /* NSObjectExtension.swift */; };
-		4F47A6341D3624AF00702747 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62A1D3624AF00702747 /* OptionalExtension.swift */; };
 		4F47A6351D3624AF00702747 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */; };
 		4F47A6361D3624AF00702747 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62C1D3624AF00702747 /* UIImageExtension.swift */; };
 		4F47A6371D3624AF00702747 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62D1D3624AF00702747 /* UILabelExtension.swift */; };
@@ -593,7 +592,6 @@
 		4F47A9B91D3E31F200702747 /* Rotator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A5ED1D36230D00702747 /* Rotator.swift */; };
 		4F47A9BA1D3E320B00702747 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6281D3624AF00702747 /* DictionaryExtension.swift */; };
 		4F47A9BC1D3E345C00702747 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */; };
-		4F47A9BD1D3E346600702747 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62A1D3624AF00702747 /* OptionalExtension.swift */; };
 		4F47A9BE1D3E346800702747 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A6291D3624AF00702747 /* NSObjectExtension.swift */; };
 		4F47A9BF1D3E346A00702747 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62D1D3624AF00702747 /* UILabelExtension.swift */; };
 		4F47A9C01D3E346C00702747 /* UIRefreshControlExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A62E1D3624AF00702747 /* UIRefreshControlExtension.swift */; };
@@ -687,12 +685,12 @@
 		4FFB609D1D3E7FD900586F9E /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		8E5339831D3F82A80081445B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		8E5339841D3F845F0081445B /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
+		8EC97ED31D5A2CC1007360F3 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC97ED21D5A2CC1007360F3 /* APITests.swift */; };
 		8EDC3CF61D3E225100A14458 /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
 		8EFF4AF81D50D79C005DF2A7 /* DeviceRotationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AF71D50D79C005DF2A7 /* DeviceRotationEvent.swift */; };
 		8EFF4AF91D50D79C005DF2A7 /* DeviceRotationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AF71D50D79C005DF2A7 /* DeviceRotationEvent.swift */; };
 		8EFF4AFB1D50D7B0005DF2A7 /* DeviceRotationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AFA1D50D7B0005DF2A7 /* DeviceRotationOperation.swift */; };
 		8EFF4AFC1D50D7B0005DF2A7 /* DeviceRotationOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4AFA1D50D7B0005DF2A7 /* DeviceRotationOperation.swift */; };
-		8EFF4B051D537653005DF2A7 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF4B031D537653005DF2A7 /* APITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -832,7 +830,6 @@
 		4F47A6181D36244400702747 /* TapEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapEvent.swift; sourceTree = "<group>"; };
 		4F47A6281D3624AF00702747 /* DictionaryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		4F47A6291D3624AF00702747 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
-		4F47A62A1D3624AF00702747 /* OptionalExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		4F47A62C1D3624AF00702747 /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		4F47A62D1D3624AF00702747 /* UILabelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
@@ -911,10 +908,10 @@
 		4FF5946D1D3FB6890004D336 /* SmartTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTracker.h; sourceTree = "<group>"; };
 		4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tvOSTracker.h; sourceTree = "<group>"; };
 		4FF594711D3FB8690004D336 /* watchOSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watchOSTracker.h; sourceTree = "<group>"; };
+		8EC97ED21D5A2CC1007360F3 /* APITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APITests.swift; path = Tests/APITests.swift; sourceTree = "<group>"; };
 		8EDC3CF51D3E225100A14458 /* ApiS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiS3.swift; sourceTree = "<group>"; };
 		8EFF4AF71D50D79C005DF2A7 /* DeviceRotationEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceRotationEvent.swift; sourceTree = "<group>"; };
 		8EFF4AFA1D50D7B0005DF2A7 /* DeviceRotationOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceRotationOperation.swift; sourceTree = "<group>"; };
-		8EFF4B031D537653005DF2A7 /* APITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1176,7 +1173,6 @@
 			children = (
 				4F47A6281D3624AF00702747 /* DictionaryExtension.swift */,
 				4F47A6291D3624AF00702747 /* NSObjectExtension.swift */,
-				4F47A62A1D3624AF00702747 /* OptionalExtension.swift */,
 				4F47A5C61D36223D00702747 /* StringExtension.swift */,
 				4F47A62B1D3624AF00702747 /* UIApplicationExtension.swift */,
 				4F47A62C1D3624AF00702747 /* UIImageExtension.swift */,
@@ -1306,7 +1302,7 @@
 			children = (
 				4F47A6F61D3D126500702747 /* EventManagerTests.swift */,
 				4F47A6FE1D3D126500702747 /* MathTests.swift */,
-				8EFF4B031D537653005DF2A7 /* APITests.swift */,
+				8EC97ED21D5A2CC1007360F3 /* APITests.swift */,
 				4F47A7001D3D126500702747 /* NSObjectExtensionTests.swift */,
 				4F47A7011D3D126500702747 /* NSObjectTests.swift */,
 				4F47A7041D3D126500702747 /* PanEventTests.swift */,
@@ -2059,7 +2055,6 @@
 				4F47A6001D3623B100702747 /* LiveManager.swift in Sources */,
 				4F47A5971D36210700702747 /* OnAppAd.swift in Sources */,
 				4F47A5F51D36236000702747 /* SRWebSocket.m in Sources */,
-				4F47A6341D3624AF00702747 /* OptionalExtension.swift in Sources */,
 				4F47A57A1D3620FA00702747 /* Hit.swift in Sources */,
 				4F47A6191D36244400702747 /* EventManager.swift in Sources */,
 				4F47A5C31D36215D00702747 /* Reachability.swift in Sources */,
@@ -2248,7 +2243,6 @@
 				4F47A9291D3E2FE100702747 /* SelfPromotionTests.swift in Sources */,
 				4F47A92A1D3E2FE100702747 /* DefaultTrackerDelegate.swift in Sources */,
 				4F47A92B1D3E2FE100702747 /* SwiftyJSON.swift in Sources */,
-				8EFF4B051D537653005DF2A7 /* APITests.swift in Sources */,
 				4F47A92C1D3E2FE100702747 /* Video.swift in Sources */,
 				4F47A92D1D3E2FE100702747 /* NuggAd.swift in Sources */,
 				4F47A9C31D3E347400702747 /* UIViewExtension.swift in Sources */,
@@ -2293,6 +2287,7 @@
 				4F47A9461D3E2FE100702747 /* ConfigurationTests.swift in Sources */,
 				4F47A9471D3E2FE100702747 /* Screen.swift in Sources */,
 				4F47A9971D3E317000702747 /* PendingState.swift in Sources */,
+				8EC97ED31D5A2CC1007360F3 /* APITests.swift in Sources */,
 				4F47A9481D3E2FE100702747 /* Aisle.swift in Sources */,
 				4F47A9B31D3E319900702747 /* UIApplicationTests.swift in Sources */,
 				4F47A9491D3E2FE100702747 /* CustomVarTests.swift in Sources */,
@@ -2320,7 +2315,6 @@
 				4F47A9A81D3E319900702747 /* PanEventTests.swift in Sources */,
 				4F47A9521D3E2FE100702747 /* Configuration.swift in Sources */,
 				4F47A9531D3E2FE100702747 /* Offline.swift in Sources */,
-				4F47A9BD1D3E346600702747 /* OptionalExtension.swift in Sources */,
 				4F47A9A41D3E319900702747 /* EventManagerTests.swift in Sources */,
 				4F47A9541D3E2FE100702747 /* RichMedia.swift in Sources */,
 				4F47A9551D3E2FE100702747 /* Audio.swift in Sources */,

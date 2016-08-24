@@ -197,12 +197,10 @@ public class AutoTracker: Tracker {
     }
     
     private func fetchMappingConfig() {
-        let siteID = self.configuration.parameters["site"]
-
         let version = TechnicalContext.applicationVersion
-        let s3Client = ApiS3Client(siteID: siteID!, token: token!, version: version, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
+        let s3Client = ApiS3Client(token: token!, version: version, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
         s3Client.fetchMapping { (mapping: JSON?) in
-            //print("config: \(mapping)")
+            print("config: \(mapping)")
             if let _ = mapping {
                 Configuration.smartSDKMapping = mapping!
                 s3Client.saveSmartSDKMapping(mapping!)

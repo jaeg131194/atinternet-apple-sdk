@@ -44,7 +44,7 @@ class DeviceRotationOperation: NSOperation {
             }
             
             if tracker.enableAutoTracking {
-                sendGestureHit(tracker)
+                sendRotationHit(tracker)
             }
         }
     }
@@ -54,16 +54,16 @@ class DeviceRotationOperation: NSOperation {
      
      - parameter tracker: AutoTracker
      */
-    func sendGestureHit(tracker: AutoTracker) {
-        let gesture = tracker.gestures.add()
-        gesture.name = rotationEvent.methodName
+    func sendRotationHit(tracker: AutoTracker) {
+        let rotationGesture = tracker.gestures.add()
+        rotationGesture.name = rotationEvent.methodName
         
-        gesture.screen = rotationEvent.currentScreen
-        gesture.type = rotationEvent.eventType
-        gesture.customObjects.add(["deviceOrientation":tracker.orientation!.rawValue, "interfaceOrientation":UIApplication.sharedApplication().statusBarOrientation.rawValue])
+        rotationGesture.screen = rotationEvent.currentScreen
+        rotationGesture.type = rotationEvent.eventType
+        rotationGesture.customObjects.add(["deviceOrientation":tracker.orientation!.rawValue, "interfaceOrientation":UIApplication.sharedApplication().statusBarOrientation.rawValue])
         
-        handleDelegate(gesture)
-        tracker.dispatcher.dispatch([gesture])
+        handleDelegate(rotationGesture)
+        tracker.dispatcher.dispatch([rotationGesture])
     }
     
     /**
