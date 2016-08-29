@@ -544,54 +544,56 @@ internal class Debugger: NSObject {
         rowView.tag = tag
         rowView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(Debugger.eventRowSelected(_:))))
         
-        scrollView.addSubview(rowView)
+        scrollView.insertSubview(rowView, atIndex: 0)
         
         scrollView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[rowView]-0-|", options:NSLayoutFormatOptions(rawValue: 0), metrics:nil, views:["rowView": rowView]))
         
+        if previousConstraintForEvents != nil {
+            scrollView.removeConstraint(previousConstraintForEvents)
+        }
+        
+        previousConstraintForEvents = NSLayoutConstraint(item: rowView,
+                                                         attribute: .Top,
+                                                         relatedBy: .Equal,
+                                                         toItem: scrollView,
+                                                         attribute: .Top,
+                                                         multiplier: 1.0,
+                                                         constant: 0)
+        scrollView.addConstraint(previousConstraintForEvents)
+        
+        
         if(tag == 0) {
             scrollView.addConstraint(NSLayoutConstraint(item: rowView,
-                attribute: .Top,
+                attribute: .CenterX,
                 relatedBy: .Equal,
                 toItem: scrollView,
-                attribute: .Top,
+                attribute: .CenterX,
                 multiplier: 1.0,
                 constant: 0))
             
             scrollView.addConstraint(NSLayoutConstraint(item: rowView,
-                attribute: .CenterX,
+                attribute: .Bottom,
                 relatedBy: .Equal,
                 toItem: scrollView,
-                attribute: .CenterX,
-                multiplier: 1.0,
-                constant: 0))
-        } else {
-            scrollView.addConstraint(NSLayoutConstraint(item: rowView,
-                attribute: .Top,
-                relatedBy: .Equal,
-                toItem: previousRow,
                 attribute: .Bottom,
                 multiplier: 1.0,
                 constant: 0))
+        } else {
+            if let previous = previousRow {
+                scrollView.addConstraint(NSLayoutConstraint(item: previous,
+                    attribute: .Top,
+                    relatedBy: .Equal,
+                    toItem: rowView,
+                    attribute: .Bottom,
+                    multiplier: 1.0,
+                    constant: 0))
+            }
         }
         
         if(tag % 2 == 0) {
             rowView.backgroundColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1)
         } else {
             rowView.backgroundColor = UIColor.whiteColor()
-        }
-        
-        if(tag == receivedEvents.count - 1) {
-            if previousConstraintForEvents != nil {
-                scrollView.removeConstraint(previousConstraintForEvents)
-            }
-            previousConstraintForEvents = NSLayoutConstraint(item: rowView,
-                                                             attribute: .Bottom,
-                                                             relatedBy: .Equal,
-                                                             toItem: scrollView,
-                                                             attribute: .Bottom,
-                                                             multiplier: 1.0,
-                                                             constant: 0)
-            scrollView.addConstraint(previousConstraintForEvents)
         }
         
         let iconView = UIImageView()
@@ -743,7 +745,7 @@ internal class Debugger: NSObject {
         
         let scrollview = window.content.viewWithTag(-100) as! UIScrollView
         
-        buildEventRow(self.receivedEvents[self.receivedEvents.count - 1], tag: self.receivedEvents.count - 1, scrollView: scrollview, previousRow: scrollview.viewWithTag(self.receivedEvents.count - 2))
+        buildEventRow(self.receivedEvents[0], tag: self.receivedEvents.count - 1, scrollView: scrollview, previousRow: scrollview.viewWithTag(self.receivedEvents.count - 2))
     }
     
     /**
@@ -753,7 +755,7 @@ internal class Debugger: NSObject {
         self.windows[0].content.hidden = true
         
         if let row = recogniser.view {
-            let window = createEventDetailView(receivedEvents[row.tag].message)
+            let window = createEventDetailView(receivedEvents[(receivedEvents.count - 1) - row.tag].message)
             
             hidePreviousWindowMenuButtons(window)
         }
