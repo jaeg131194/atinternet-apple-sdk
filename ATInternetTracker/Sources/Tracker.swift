@@ -149,11 +149,16 @@ public enum BackgroundMode {
 
 public class AutoTracker: Tracker {
     
+    /// Private variables
+    private var _token: String?
+    private var _enableAutoTracking: Bool = false
+    private var _enableLiveTagging: Bool = false
+    
     /// Checks whether swizzling has already been activated
     private static var eventDetectionEnabled = false
     
     static var isConfigurationLoaded = false
-
+    
     /// Screen orientation
     internal var orientation: UIDeviceOrientation?
     
@@ -162,10 +167,13 @@ public class AutoTracker: Tracker {
     
     /// Token for authentication
     public var token: String? {
-        didSet {
+        get {
+            return _token
+        } set {
+            _token = newValue
             self.liveManager = LiveNetworkManager()
             self.liveManager!.initState()
-            self.socketSender = SocketSender(liveManager: liveManager!, token: token!)
+            self.socketSender = SocketSender(liveManager: liveManager!, token: _token!)
             liveManager!.sender = socketSender
         }
     }
@@ -178,34 +186,30 @@ public class AutoTracker: Tracker {
     var liveManager: LiveNetworkManager?
     
     /// Enable the socket connexion to send events
-    public var enableLiveTagging = false {
-        didSet {
+    public var enableLiveTagging: Bool {
+        get {
+            return _enableLiveTagging
+        } set {
+            _enableLiveTagging = newValue
+            
             assert(token != nil && token != "", "you must provide a token before enabling live tagging")
-            enableEventDetection(enableLiveTagging)
-            enableLiveTagging == true ? socketSender?.open() : socketSender?.close()
+            enableEventDetection(_enableLiveTagging)
+            _enableLiveTagging == true ? socketSender?.open() : socketSender?.close()
         }
     }
     
     /// Enables Auto Tracking
-    public var enableAutoTracking = false {
-        didSet {
-            if enableAutoTracking && token != nil && token != "" {
+    public var enableAutoTracking: Bool {
+        get {
+            return _enableAutoTracking
+        } set {
+            _enableAutoTracking = newValue
+            
+            if _enableAutoTracking && (_token != nil && token! != "") {
                 fetchMappingConfig()
             }
-            enableEventDetection(enableAutoTracking)
-        }
-    }
-    
-    private func fetchMappingConfig() {
-        let version = TechnicalContext.applicationVersion
-        let s3Client = ApiS3Client(token: token!, version: version, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
-        s3Client.fetchMapping { (mapping: JSON?) in
-            print("config: \(mapping)")
-            if let _ = mapping {
-                Configuration.smartSDKMapping = mapping!
-                s3Client.saveSmartSDKMapping(mapping!)
-            }
-            AutoTracker.isConfigurationLoaded = true
+            
+            enableEventDetection(_enableAutoTracking)
         }
     }
 
