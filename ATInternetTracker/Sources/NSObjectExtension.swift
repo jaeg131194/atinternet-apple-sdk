@@ -15,7 +15,7 @@ extension NSObject {
     var classLabel: String {
         let str =  NSStringFromClass(self.classForCoder)
         
-        if let name = str.componentsSeparatedByString(".").last {
+        if let name = str.components(separatedBy: ".").last {
             return name
         }
         
@@ -29,10 +29,10 @@ extension NSObject {
      
      - returns: true is the property is present in the object
      */
-    func at_hasProperty(property: String) -> Bool {
+    func at_hasProperty(_ property: String) -> Bool {
         let cp = class_getProperty(object_getClass(self), property)
         if cp != nil {
-            if let _ = self.valueForKey(property) {
+            if let _ = self.value(forKey: property) {
                 return true
             }
         }

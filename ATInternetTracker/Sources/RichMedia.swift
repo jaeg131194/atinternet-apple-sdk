@@ -34,46 +34,46 @@ import Foundation
 
 public class RichMedia : BusinessObject {
     
-    private var _isBuffering: Bool?
-    private var _isEmbedded: Bool?
+    fileprivate var _isBuffering: Bool?
+    fileprivate var _isEmbedded: Bool?
     
     /// Rich media broadcast type
     public enum BroadcastMode: String {
-        case Clip = "clip"
-        case Live = "live"
+        case clip = "clip"
+        case live = "live"
     }
     
     /// Rich media hit status
     @objc public enum RichMediaAction: Int {
-        case Play = 0
-        case Pause = 1
-        case Stop = 2
-        case Move = 3
-        case Refresh = 4
+        case play = 0
+        case pause = 1
+        case stop = 2
+        case move = 3
+        case refresh = 4
     }
     
     /// Player instance
     var player: MediaPlayer
     
     /// Refresh timer
-    var timer: NSTimer?
+    var timer: Timer?
     
     /// Media is buffering
-    public var isBuffering: Bool = false {
+    open var isBuffering: Bool = false {
         didSet {
             _isBuffering = isBuffering
         }
     }
     
     /// Media is embedded in app
-    public var isEmbedded: Bool = false {
+    open var isEmbedded: Bool = false {
         didSet {
             _isEmbedded = isEmbedded
         }
     }
     
     /// Media is live or clip
-    var broadcastMode: BroadcastMode = BroadcastMode.Clip
+    var broadcastMode: BroadcastMode = BroadcastMode.clip
     
     /// Media name
     public var name: String = ""
@@ -94,7 +94,7 @@ public class RichMedia : BusinessObject {
     var refreshDuration: Int = 5
     
     /// Action
-    public var action: RichMediaAction = RichMediaAction.Play
+    public var action: RichMediaAction = RichMediaAction.play
     
     /// Web domain 
     public var webdomain: String?
@@ -105,7 +105,7 @@ public class RichMedia : BusinessObject {
         super.init(tracker: player.tracker)
     }
     
-    private func getActionEnumRawValue(value: Int) -> String {
+    fileprivate func getActionEnumRawValue(_ value: Int) -> String {
         switch value {
         case 0:
             return "play"
@@ -127,39 +127,39 @@ public class RichMedia : BusinessObject {
         let encodingOption = ParamOption()
         encodingOption.encode = true
         
-        self.tracker.setParam("p", value: buildMediaName(), options: encodingOption)
+        _ = self.tracker.setParam("p", value: buildMediaName(), options: encodingOption)
         
-        self.tracker.setParam("plyr", value: player.playerId)
+        _ = self.tracker.setParam("plyr", value: player.playerId)
         
-        self.tracker.setParam("m6", value: broadcastMode.rawValue)
+        _ = self.tracker.setParam("m6", value: broadcastMode.rawValue)
         
-        self.tracker.setParam("a", value: getActionEnumRawValue(action.rawValue))
+        _ = self.tracker.setParam("a", value: getActionEnumRawValue(action.rawValue))
         
         if let optIsEmbedded = self._isEmbedded {
-            self.tracker.setParam("m5", value: optIsEmbedded ? "ext" : "int")
+            _ = self.tracker.setParam("m5", value: optIsEmbedded ? "ext" : "int")
         }
         
         if self.level2 > 0 {
-            self.tracker.setParam("s2", value: level2)
+            _ = self.tracker.setParam("s2", value: level2)
         }
         
-        if(action == RichMediaAction.Play) {
+        if(action == RichMediaAction.play) {
             if let optIsBuffering = self._isBuffering {
-                self.tracker.setParam("buf", value: optIsBuffering ? 1 : 0)
+                _ = self.tracker.setParam("buf", value: optIsBuffering ? 1 : 0)
             }
             
             if let optIsEmbedded = self._isEmbedded {
                 if (optIsEmbedded) {
                     if let optWebDomain = self.webdomain {
-                        self.tracker.setParam("m9", value: optWebDomain)
+                        _ = self.tracker.setParam("m9", value: optWebDomain)
                     }
                 } else {
                     if TechnicalContext.screenName != "" {
-                        self.tracker.setParam("prich", value: TechnicalContext.screenName, options: encodingOption)
+                        _ = self.tracker.setParam("prich", value: TechnicalContext.screenName, options: encodingOption)
                     }
                     
                     if TechnicalContext.level2 > 0 {
-                        self.tracker.setParam("s2rich", value: TechnicalContext.level2)
+                        _ = self.tracker.setParam("s2rich", value: TechnicalContext.level2)
                     }
                 }
             }
@@ -182,7 +182,7 @@ public class RichMedia : BusinessObject {
     Refresh is enabled with default duration
     */
     public func sendPlay() {
-        self.action = RichMediaAction.Play
+        self.action = RichMediaAction.play
         
         self.tracker.dispatcher.dispatch([self])
         
@@ -194,9 +194,9 @@ public class RichMedia : BusinessObject {
     Refresh is enabled if resfreshDuration is not equal to 0
     - parameter resfreshDuration: duration between refresh hits
     */
-    public func sendPlay(refreshDuration: Int) {
+    public func sendPlay(_ refreshDuration: Int) {
         
-        self.action = RichMediaAction.Play
+        self.action = RichMediaAction.play
         
         self.tracker.dispatcher.dispatch([self])
         
@@ -215,13 +215,13 @@ public class RichMedia : BusinessObject {
     public func sendPause(){
         
         if let timer = self.timer {
-            if timer.valid {
+            if timer.isValid {
                 timer.invalidate()
                 self.timer = nil
             }
         }
         
-        self.action = RichMediaAction.Pause
+        self.action = RichMediaAction.pause
         
         self.tracker.dispatcher.dispatch([self])
     }
@@ -232,13 +232,13 @@ public class RichMedia : BusinessObject {
     public func sendStop() {
         
         if let timer = self.timer {
-            if timer.valid {
+            if timer.isValid {
                 timer.invalidate()
                 self.timer = nil
             }
         }
         
-        self.action = RichMediaAction.Stop
+        self.action = RichMediaAction.stop
         
         self.tracker.dispatcher.dispatch([self])
     }
@@ -247,7 +247,7 @@ public class RichMedia : BusinessObject {
     Send hit when media cursor position is moved
     */
     public func sendMove() {
-        self.action  = RichMediaAction.Move
+        self.action  = RichMediaAction.move
         
         self.tracker.dispatcher.dispatch([self])
     }
@@ -255,15 +255,15 @@ public class RichMedia : BusinessObject {
     /// Start the refresh timer
     func initRefresh() {
         if self.timer == nil {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(
-                NSTimeInterval(self.refreshDuration), target: self, selector: #selector(RichMedia.sendRefresh), userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(
+                timeInterval: TimeInterval(self.refreshDuration), target: self, selector: #selector(RichMedia.sendRefresh), userInfo: nil, repeats: true)
         }
         
     }
     
     /// Medthod called on the timer tick
     @objc func sendRefresh() {
-        self.action = RichMediaAction.Refresh
+        self.action = RichMediaAction.refresh
         
         self.tracker.dispatcher.dispatch([self])
     }

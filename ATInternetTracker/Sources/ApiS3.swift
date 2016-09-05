@@ -9,7 +9,7 @@
 import Foundation
 
 
-typealias MappingRequest = (url: NSURL, onLoaded: (JSON?) -> (), onError: () -> ())
+typealias MappingRequest = (url: URL, onLoaded: (JSON?) -> (), onError: () -> ())
 /**
  *  Simple storage protocol
  */
@@ -21,7 +21,7 @@ protocol SimpleStorageProtocol {
      
      - returns: the object or nil
      */
-    func getByName(name: String) -> AnyObject?
+    func getByName(_ name: String) -> Any?
     /**
      Save an object by his name
      
@@ -30,12 +30,11 @@ protocol SimpleStorageProtocol {
      
      - returns: true if success
      */
-    func saveByName(config: AnyObject, name: String) -> Bool
+    func saveByName(_ config: Any, name: String) -> Bool
 }
 
 /// Simple storage impl with UserDefault
 class UserDefaultSimpleStorage: SimpleStorageProtocol {
-    
     /**
      get from user default
      
@@ -43,9 +42,9 @@ class UserDefaultSimpleStorage: SimpleStorageProtocol {
      
      - returns: the object
      */
-    func getByName(name: String) -> AnyObject? {
-        let userDefault = NSUserDefaults.standardUserDefaults()
-        return userDefault.objectForKey(name)
+    func getByName(_ name: String) -> Any? {
+        let userDefault = UserDefaults.standard
+        return userDefault.object(forKey: name)
     }
     
     /**
@@ -56,9 +55,9 @@ class UserDefaultSimpleStorage: SimpleStorageProtocol {
      
      - returns: true if success
      */
-    func saveByName(config: AnyObject, name: String) -> Bool {
-        let userDefault = NSUserDefaults.standardUserDefaults()
-        userDefault.setObject(config, forKey: name)
+    func saveByName(_ config: Any, name: String) -> Bool {
+        let userDefault = UserDefaults.standard
+        userDefault.set(config, forKey: name)
         return true
     }
 }
@@ -75,14 +74,14 @@ protocol SimpleNetworkService {
      - parameter onError:    callback if an error is detected
      - parameter retryCount: retrycount if error
      */
-    func getURL(request: MappingRequest, retryCount: Int)
+    func getURL(_ request: MappingRequest, retryCount: Int)
 }
 
 /// Light network service impl with error handling
 class S3NetworkService: SimpleNetworkService {
     
     /// retry wrapper for getURL
-    func retry( f: (MappingRequest, Int) -> (), request: MappingRequest, retryCount: Int) -> () {
+    func retry( _ f: (MappingRequest, Int) -> (), request: MappingRequest, retryCount: Int) -> () {
         if retryCount >= 0 {
             sleep(3+arc4random_uniform(5))
             f((request.url, request.onLoaded, request.onError), retryCount)
@@ -91,11 +90,14 @@ class S3NetworkService: SimpleNetworkService {
         }
     }
     
-    func getURL(request: MappingRequest, retryCount: Int) {
+    func getURL(_ request: MappingRequest, retryCount: Int) {
         print(request.url.absoluteString)
-        let urlRequest = NSMutableURLRequest(URL: request.url, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 30)
-        urlRequest.HTTPMethod = "GET"
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: NSOperationQueue()) { (r: NSURLResponse?, data: NSData?, err: NSError?) in
+        var urlRequest = URLRequest(url: request.url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 30)
+        urlRequest.httpMethod = "GET"
+        
+
+        
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue()) { (r, data, err) in
             if let _ = err {
                 self.retry(self.getURL, request: (url: request.url, onLoaded: request.onLoaded, onError: request.onError), retryCount: retryCount-1)
             }
@@ -112,6 +114,7 @@ class S3NetworkService: SimpleNetworkService {
                 }
             }
         }
+        
     }
 }
 
@@ -136,10 +139,10 @@ class ApiS3Client {
      
      - returns: the correct url
      */
-    func getMappingURL() -> NSURL {
-        return NSURL(string:S3URL
-            .stringByReplacingOccurrencesOfString("{token}", withString: self.token)
-            .stringByReplacingOccurrencesOfString("{version}", withString: self.version)
+    func getMappingURL() -> URL {
+        return URL(string:S3URL
+            .replacingOccurrences(of: "{token}", with: self.token)
+            .replacingOccurrences(of: "{version}", with: self.version)
         )!
     }
     
@@ -148,14 +151,14 @@ class ApiS3Client {
      
      - returns: the url
      */
-    private func getCheckURL() -> NSURL {
-        return NSURL(string:S3URLCheck
-            .stringByReplacingOccurrencesOfString("{token}", withString: self.token)
-            .stringByReplacingOccurrencesOfString("{version}", withString: self.version)
+    fileprivate func getCheckURL() -> URL {
+        return URL(string:S3URLCheck
+            .replacingOccurrences(of: "{token}", with: self.token)
+            .replacingOccurrences(of: "{version}", with: self.version)
         )!
     }
 
-    func fetchSmartSDKMapping(onLoaded: (JSON?) -> (), onError: () -> ()) {
+    func fetchSmartSDKMapping(_ onLoaded: @escaping (JSON?) -> (), onError: @escaping () -> ()) {
         network.getURL((getMappingURL(), onLoaded: onLoaded, onError: onError), retryCount: 5)
     }
 
@@ -164,8 +167,8 @@ class ApiS3Client {
      
      - parameter mapping: the config
      */
-    func saveSmartSDKMapping(mapping: JSON) {
-        store.saveByName(mapping.object, name: "at_smartsdk_config")
+    func saveSmartSDKMapping(_ mapping: JSON) {
+        _ = store.saveByName(mapping.object, name: "at_smartsdk_config")
     }
     
     /**
@@ -173,7 +176,7 @@ class ApiS3Client {
      
      - returns: the config
      */
-    private func getSmartSDKMapping() -> JSON? {
+    fileprivate func getSmartSDKMapping() -> JSON? {
         let jsonObj = store.getByName("at_smartsdk_config")
         if let obj = jsonObj {
             let o = JSON(obj)
@@ -188,7 +191,7 @@ class ApiS3Client {
      
      - parameter callback: the checksum
      */
-    private func fetchCheckSum(callback: (JSON?) -> ()) {
+    fileprivate func fetchCheckSum(_ callback: @escaping (JSON?) -> ()) {
         network.getURL((getCheckURL(), onLoaded: callback, onError: {}), retryCount: 1)
     }
     
@@ -197,8 +200,8 @@ class ApiS3Client {
      
      - parameter callback: the configuration
      */
-    func fetchMapping(callback: (JSON?) -> ()) {
-        func getRemoteMapping(callback: (JSON?) -> ()) {
+    func fetchMapping(_ callback: @escaping (JSON?) -> ()) {
+        func getRemoteMapping(_ callback: @escaping (JSON?) -> ()) {
             self.fetchSmartSDKMapping({ (mapping: JSON?) in
                 callback(mapping)
                 }, onError: {

@@ -55,8 +55,8 @@ class Event: NSObject {
     - parameter type: of action
     - parameter label: of the event
     */
-    func set(category: String, action: String, label: String) -> Tracker {
-        self.set(category, action: action, label: label, value: "{}")
+    func set(_ category: String, action: String, label: String) -> Tracker {
+        _ = self.set(category, action: action, label: label, value: "{}")
         
         return self.tracker
     }
@@ -69,18 +69,18 @@ class Event: NSObject {
     - parameter label: of the event
     - parameter an: optional json value
     */
-    func set(category: String, action: String, label: String, value: String) -> Tracker {
+    func set(_ category: String, action: String, label: String, value: String) -> Tracker {
         let encodingOption = ParamOption()
         encodingOption.encode = true
         
-        self.tracker.setParam(HitParam.HitType.rawValue, value: category)
-        self.tracker.setParam(HitParam.Action.rawValue, value: action)
-        self.tracker.setParam(HitParam.Screen.rawValue, value: label, options:encodingOption)
+        _ = self.tracker.setParam(HitParam.hitType.rawValue, value: category)
+        _ = self.tracker.setParam(HitParam.action.rawValue, value: action)
+        _ = self.tracker.setParam(HitParam.screen.rawValue, value: label, options:encodingOption)
         
         let appendOptionWithEncoding = ParamOption()
         appendOptionWithEncoding.append = true
         appendOptionWithEncoding.encode = true
-        self.tracker.setParam(HitParam.JSON.rawValue, value: value, options: appendOptionWithEncoding)
+        _ = self.tracker.setParam(HitParam.json.rawValue, value: value, options: appendOptionWithEncoding)
         
         return self.tracker
     }

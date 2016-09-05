@@ -19,7 +19,7 @@ class TapEvent : GestureEvent {
     
     /// JSON description
     override var description: String {
-        let jsonObj: NSMutableDictionary = [
+        var jsonObj: [String: Any] = [
             "event": Gesture.getEventTypeRawValue(self.eventType.rawValue),
             "data":[
                 "x":self.x,
@@ -31,11 +31,12 @@ class TapEvent : GestureEvent {
                 "title": self.title ?? defaultMethodName
             ]
         ]
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.view.description.toJSONObject() as! [NSObject: AnyObject])
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
         
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.view.toJSONObject)
+        data.append(self.currentScreen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
+
         return jsonObj.toJSON()
     }
     
@@ -51,7 +52,7 @@ class TapEvent : GestureEvent {
      - returns: TapEvent
      */
     init(x: Float, y: Float, view: View, direction: String, currentScreen: Screen) {
-        super.init(type: Gesture.GestureEventType.Tap, methodName: nil, view: view, direction: direction, currentScreen: currentScreen)
+        super.init(type: Gesture.GestureEventType.tap, methodName: nil, view: view, direction: direction, currentScreen: currentScreen)
         self.x = x
         self.y = y
         self.defaultMethodName = "handleTap:"

@@ -47,8 +47,8 @@ public class View: NSObject {
         return toJSONObject.toJSON()
     }
     
-    var toJSONObject: NSDictionary {
-        let jsonObj: NSDictionary = [
+    var toJSONObject: [String: Any] {
+        let jsonObj: [String: Any] = [
             "view":[
                 "className": self.className,
                 "x": self.x,
@@ -79,13 +79,13 @@ public class View: NSObject {
     init(view: UIView?) {
         if let v = view {
             self.className = v.classLabel
-            let newFrame = v.convertRect(v.bounds, toView: nil)
+            let newFrame = v.convert(v.bounds, to: nil)
             self.x = Float(newFrame.origin.x)
             self.y = Float(newFrame.origin.y)
             self.width = Float(newFrame.width)
             self.height = Float(newFrame.height)
             self.text = v.findText(UIApplicationContext.sharedInstance.initialTouchPosition) ?? ""
-            self.visible = (v.hidden || v.alpha == 0)
+            self.visible = (v.isHidden || v.alpha == 0)
             
             super.init()
             

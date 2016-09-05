@@ -23,7 +23,7 @@ class UIApplicationTests: XCTestCase {
     func testShouldSendNowWhenSegmentedControl() {
         let segmentedControl = UISegmentedControl()
         UIApplicationContext.sharedInstance.currentTouchedView = segmentedControl
-        let b = UIApplication.sharedApplication().shouldSendNow()
+        let b = UIApplication.shared.shouldSendNow()
         let expected = false
         XCTAssertEqual(expected, b)
     }
@@ -31,7 +31,7 @@ class UIApplicationTests: XCTestCase {
     func testShouldSendNowButton() {
         let but = UIButton()
         UIApplicationContext.sharedInstance.currentTouchedView = but
-        let b = UIApplication.sharedApplication().shouldSendNow()
+        let b = UIApplication.shared.shouldSendNow()
         let expected = false
         XCTAssertEqual(expected, b)
     }

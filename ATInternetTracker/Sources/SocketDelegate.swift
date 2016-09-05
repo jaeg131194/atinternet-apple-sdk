@@ -32,8 +32,9 @@ enum SmartSocketEvent: String {
 
 
 class SocketDelegate: NSObject, SRWebSocketDelegate {
+
     let RECONNECT_INTERVAL:Double = 3.0
-    var timer: NSTimer?
+    var timer: Timer?
     let liveManager: LiveNetworkManager
     
     init(liveManager: LiveNetworkManager){
@@ -47,7 +48,7 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      - parameter webSocket: the ws
      - parameter message:   the message
      */
-    func webSocket(webSocket: SRWebSocket!, didReceiveMessage message: AnyObject!) {
+    func webSocket(_ webSocket: SRWebSocket!, didReceiveMessage message: Any!) {
         let jsonData = JSON.parse( (message as? String) ?? "{}")
         guard let event = jsonData["event"].string else {
             return
@@ -66,12 +67,12 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      
      - parameter webSocket: the ws
      */
-    func webSocketDidOpen(webSocket: SRWebSocket!) {
+    func webSocketDidOpen(_ webSocket: SRWebSocket!) {
         print("connected")
         timer?.invalidate()
     }
     
-    func webSocket(webSocket: SRWebSocket!, didFailWithError error: NSError!) {
+    func webSocket(_ webSocket: SRWebSocket!, didFailWithError error: Error!) {
         print("failed with message \(error)")
         autoReconnect()
     }
@@ -85,20 +86,20 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      - parameter reason:    the reason msg
      - parameter wasClean:  ?
      */
-    func webSocket(webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
+    func webSocket(_ webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
         print("closed with message \(reason) code \(code)")
         autoReconnect()
     }
     
-    func webSocket(webSocket: SRWebSocket!, didReceivePong pongPayload: NSData!) {}
+    func webSocket(_ webSocket: SRWebSocket!, didReceivePong pongPayload: Data!) {}
     
     func autoReconnect() {
         timer?.invalidate()
-        timer = NSTimer(timeInterval: RECONNECT_INTERVAL, target: self, selector: #selector(SocketDelegate.reconnect(_:)), userInfo: nil, repeats: true)
-        NSRunLoop.mainRunLoop().addTimer(timer!, forMode: NSRunLoopCommonModes)
+        timer = Timer(timeInterval: RECONNECT_INTERVAL, target: self, selector: #selector(SocketDelegate.reconnect(_:)), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
     }
     
-    func reconnect(timer: NSTimer) {
+    func reconnect(_ timer: Timer) {
         liveManager.sender?.open()
     }
 }

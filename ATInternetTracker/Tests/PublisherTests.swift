@@ -41,7 +41,7 @@ class PublisherTests: XCTestCase {
     
     func testInitPublisher() {
         XCTAssertTrue(publisher.campaignId == "", "Le nom de la pub doit être vide")
-        XCTAssertTrue(publisher.action == OnAppAd.OnAppAdAction.View, "L'action par défaut doit être view")
+        XCTAssertTrue(publisher.action == OnAppAd.OnAppAdAction.view, "L'action par défaut doit être view")
     }
     
     func testSetPublisherView() {
@@ -137,7 +137,7 @@ class PublisherTests: XCTestCase {
     
     func testSetPublisherTouch() {
         publisher.campaignId = "1"
-        publisher.action = OnAppAd.OnAppAdAction.Touch
+        publisher.action = OnAppAd.OnAppAdAction.touch
         publisher.setEvent()
         
         XCTAssertEqual(publisher.tracker.buffer.volatileParameters.count, 2, "Le nombre de paramètres volatiles doit être égal à 2")
@@ -150,7 +150,7 @@ class PublisherTests: XCTestCase {
     
     func testSetFullPublisherTouch() {
         publisher.campaignId = "2"
-        publisher.action = OnAppAd.OnAppAdAction.Touch
+        publisher.action = OnAppAd.OnAppAdAction.touch
         publisher.creation = "creation"
         publisher.advertiserId = "advId"
         publisher.detailedPlacement = "enBasAGauche"

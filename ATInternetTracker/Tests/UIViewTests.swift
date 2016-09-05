@@ -32,7 +32,7 @@ class UIViewTests: XCTestCase {
     }
     
     func testIsNotChildOfScrollView() {
-        let child = TestGenerator.randomViewGenerator( { return (!$0.isKindOfClass(UIScrollView.self)) } )
+        let child = TestGenerator.randomViewGenerator( { return (!$0.isKind(of: UIScrollView.self)) } )
         XCTAssertFalse(child.isInScrollView)
     }
     
@@ -52,8 +52,8 @@ class UIViewTests: XCTestCase {
     
     func testFindTextInButton() {
         let b = UIButton()
-        b.frame = CGRectMake(0,0,320,568)
-        b.setTitle("hello world", forState: UIControlState.Normal)
+        b.frame = CGRect(x: 0,y: 0,width: 320,height: 568)
+        b.setTitle("hello world", for: UIControlState())
         let window = UIWindow()
         window.addSubview(b)
         XCTAssertTrue(b.textValue == "hello world")

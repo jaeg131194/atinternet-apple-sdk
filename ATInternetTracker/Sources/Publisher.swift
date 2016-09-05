@@ -66,7 +66,7 @@ public class Publisher : OnAppAd {
     Send publisher touch hit
     */
     public func sendTouch() {
-        self.action = OnAppAdAction.Touch
+        self.action = OnAppAdAction.touch
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -74,7 +74,7 @@ public class Publisher : OnAppAd {
     Send publisher view hit
     */
     public func sendImpression() {
-        self.action = OnAppAdAction.View
+        self.action = OnAppAdAction.view
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -127,10 +127,10 @@ public class Publisher : OnAppAd {
             spot += url
         }
         
-        let positions = Tool.findParameterPosition(HitParam.HitType.rawValue, arrays: self.tracker.buffer.persistentParameters, self.tracker.buffer.volatileParameters)
+        let positions = Tool.findParameterPosition(HitParam.hitType.rawValue, arrays: self.tracker.buffer.persistentParameters, self.tracker.buffer.volatileParameters)
         
         if(positions.count > 0) {
-            for(_, position) in positions.enumerate() {
+            for(_, position) in positions.enumerated() {
                 if(position.arrayIndex == 0) {
                     currentType = (self.tracker.buffer.persistentParameters[position.index] as Param).value()
                 } else {
@@ -140,28 +140,28 @@ public class Publisher : OnAppAd {
         }
         
         if (currentType != "screen" && currentType != defaultType) {
-            self.tracker.setParam(HitParam.HitType.rawValue, value: defaultType)
+            _ = self.tracker.setParam(HitParam.hitType.rawValue, value: defaultType)
         }
         
         let option = ParamOption()
         option.append = true
         option.encode = true
-        self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(self.action.rawValue), value: spot, options: option)
+        _ = self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(self.action.rawValue), value: spot, options: option)
         
         for (_, value) in _customObjects {
             value.tracker = self.tracker
             value.setEvent()
         }
         
-        if(action == OnAppAdAction.Touch) {
+        if(action == OnAppAdAction.touch) {
             if(TechnicalContext.screenName != "") {
                 let encodingOption = ParamOption()
                 encodingOption.encode = true
-                tracker.setParam("patc", value: TechnicalContext.screenName, options: encodingOption)
+                _ = tracker.setParam("patc", value: TechnicalContext.screenName, options: encodingOption)
             }
             
             if(TechnicalContext.level2 > 0) {
-                tracker.setParam("s2atc", value: TechnicalContext.level2)
+                _ = tracker.setParam("s2atc", value: TechnicalContext.level2)
             }
         }
     }
@@ -252,7 +252,7 @@ public class PublisherImpression: ScreenInfo {
         let option = ParamOption()
         option.append = true
         option.encode = true
-        self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(OnAppAd.OnAppAdAction.View.rawValue), value: spot, options: option)
+        _ = self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(OnAppAd.OnAppAdAction.view.rawValue), value: spot, options: option)
     }
 }
 
@@ -273,7 +273,7 @@ public class PublisherImpressions: NSObject {
      @param campaignID campaign identifier
      @return the Publisher instance
      */
-    public func add(campaignId: String) -> PublisherImpression {
+    public func add(_ campaignId: String) -> PublisherImpression {
         let publisherDetail = PublisherImpression(tracker: self.tracker)
         publisherDetail.campaignId = campaignId
         
@@ -301,7 +301,7 @@ public class Publishers: NSObject {
     @param campaignID campaign identifier
     @return the Publisher instance
     */
-    public func add(campaignId: String) -> Publisher {
+    public func add(_ campaignId: String) -> Publisher {
         let publisherDetail = Publisher(tracker: self.tracker)
         publisherDetail.campaignId = campaignId
         
@@ -318,7 +318,7 @@ public class Publishers: NSObject {
         
         for(_, object) in self.tracker.businessObjects {
             if let pub = object as? Publisher {
-                if(pub.action == OnAppAd.OnAppAdAction.View) {
+                if(pub.action == OnAppAd.OnAppAdAction.view) {
                     impressions.append(pub)
                 }
             }

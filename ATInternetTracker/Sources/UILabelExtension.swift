@@ -21,13 +21,13 @@ extension UILabel {
     
     func expectedheight () -> CGFloat {
         self.numberOfLines = 0
-        self.lineBreakMode = .ByWordWrapping
-        let max = CGSizeMake(self.frame.size.width,9999)
+        self.lineBreakMode = .byWordWrapping
+        let max = CGSize(width: self.frame.size.width,height: 9999)
         let paragraph = NSMutableParagraphStyle()
-        paragraph.lineBreakMode = .ByWordWrapping
+        paragraph.lineBreakMode = .byWordWrapping
         print(self.text)
         let d = [NSFontAttributeName:self.font, NSParagraphStyleAttributeName: paragraph]
-        let x = self.text!.boundingRectWithSize(max,options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: d, context: nil)
+        let x = self.text!.boundingRect(with: max,options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: d, context: nil)
         return x.height
     }
 }

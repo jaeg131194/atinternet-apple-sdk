@@ -35,7 +35,7 @@ class TapEventTests: XCTestCase {
         let te = TapEvent(x: Float(tx), y: Float(ty), view: View(), direction: dir, currentScreen: Screen())
         
         let expectedMethod = UIApplicationContext.sharedInstance.getDefaultViewMethod(aView)
-        print(expectedMethod)
+        //print(" --------------- " + (expectedMethod == nil ? "" : expectedMethod!) + " --------------")
         
         let expected:NSDictionary = [
             "event": "tap",
@@ -62,9 +62,9 @@ class TapEventTests: XCTestCase {
                 "screen":[
                     "title":"",
                     "className":"",
-                    "scale":UIScreen.mainScreen().scale,
-                    "width":UIScreen.mainScreen().bounds.size.width,
-                    "height":UIScreen.mainScreen().bounds.size.height,
+                    "scale":UIScreen.main.scale,
+                    "width":UIScreen.main.bounds.size.width,
+                    "height":UIScreen.main.bounds.size.height,
                     "app":[
                         "device":"x86_64",
                         "token":"",

@@ -19,12 +19,12 @@ class EventManager {
     //var delegate: EventHandler?
 
     /// Queue for managing events
-    lazy private var _eventQueue:NSOperationQueue = NSOperationQueue()
+    lazy fileprivate var _eventQueue:OperationQueue = OperationQueue()
     
-    private init() {
+    fileprivate init() {
         _eventQueue.maxConcurrentOperationCount = 1
         _eventQueue.name = "at_eventQueue"
-        _eventQueue.qualityOfService = NSQualityOfService.Background
+        _eventQueue.qualityOfService = QualityOfService.background
     }
     
     /**
@@ -32,22 +32,22 @@ class EventManager {
      
      - parameter event: An event to be added to queue to be sent to socket server
      */
-    func addEvent(event: NSOperation) {
+    func addEvent(_ event: Operation) {
         _eventQueue.addOperation(event)
     }
     
     /**
      lastEvent : Get the last event in queue
      */
-    func lastEvent() -> NSOperation? {
+    func lastEvent() -> Operation? {
         return _eventQueue.operations.last
     }
     
     /**
      lastScreenEvent : Get the last screen event in queue
      */
-    func lastScreenEvent() -> NSOperation? {
-        for op in _eventQueue.operations.reverse() {
+    func lastScreenEvent() -> Operation? {
+        for op in _eventQueue.operations.reversed() {
             if op is ScreenOperation {
                 return op
             }
@@ -59,8 +59,8 @@ class EventManager {
     /**
      lastGestureEvent : Get the last gesture event in queue
      */
-    func lastGestureEvent() -> NSOperation? {
-        for op in _eventQueue.operations.reverse() {
+    func lastGestureEvent() -> Operation? {
+        for op in _eventQueue.operations.reversed() {
             if op is GestureOperation {
                 return op
             }

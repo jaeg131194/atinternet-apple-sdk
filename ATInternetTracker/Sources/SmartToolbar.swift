@@ -11,9 +11,9 @@ import UIKit
 import AVFoundation
 
 /* localizable texts */
-let disconnectedText = NSLocalizedString("DISCONNECTED", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content")
-let pendingText = NSLocalizedString("PENDING", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content")
-let connectedText = NSLocalizedString("CONNECTED", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content")
+let disconnectedText = NSLocalizedString("DISCONNECTED", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content")
+let pendingText = NSLocalizedString("PENDING", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content")
+let connectedText = NSLocalizedString("CONNECTED", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content")
 
 /// A movable toolbar to managed the pairing
 class SmartToolbar: UIView {
@@ -22,13 +22,13 @@ class SmartToolbar: UIView {
     var windowConstraintTop: NSLayoutConstraint?
     var windowConstraintHeight: NSLayoutConstraint?
     var windowConstraintWidth: NSLayoutConstraint?
-    var currentPointInWindow: CGPoint = CGPointZero
+    var currentPointInWindow: CGPoint = CGPoint.zero
     var alreadyCalled = false
     var externalBorder = SmartViewIgnored()
     var recorder = SmartViewIgnored()
     var photo = SmartImageViewIgnored()
     var timer = UILabel()
-    var nsTimer = NSTimer()
+    var nsTimer = Timer()
     var connexion = UILabel()
     var hours: Int   = 0
     var minutes: Int = 0
@@ -50,16 +50,16 @@ class SmartToolbar: UIView {
     var TEXT_PADDING: CGFloat = 7.0
     
     convenience init() {
-        self.init(frame: CGRectZero, scaling: 1.0)
+        self.init(frame: CGRect.zero, scaling: 1.0)
     }
     
     convenience init(scaling: CGFloat) {
-        self.init(frame: CGRectZero, scaling: scaling)
+        self.init(frame: CGRect.zero, scaling: scaling)
     }
     
     
     init(frame: CGRect, scaling: CGFloat) {
-        if let window = UIApplication.sharedApplication().keyWindow {
+        if let window = UIApplication.shared.keyWindow {
             refWindow = window
         } else {
             refWindow = nil
@@ -72,7 +72,7 @@ class SmartToolbar: UIView {
     }
     
     override init(frame: CGRect) {
-        if let window = UIApplication.sharedApplication().keyWindow {
+        if let window = UIApplication.shared.keyWindow {
             refWindow = window
         } else {
             refWindow = nil
@@ -83,7 +83,7 @@ class SmartToolbar: UIView {
         self.configureDesign()
     }
     
-    func scale(scaling: CGFloat) {
+    func scale(_ scaling: CGFloat) {
         PHOTO_SIZE_WIDTH *= scaling
         PHOTO_SIZE_HEIGHT *= scaling
         SEPARATOR_SIZE *= scaling
@@ -101,143 +101,143 @@ class SmartToolbar: UIView {
     /**
      Build all the subviews with contraints
      */
-    private func buildSubviews() {
-        let imgPhoto = UIImage(named: "flat_photo", inBundle: NSBundle(forClass: Tracker.self), compatibleWithTraitCollection: nil)
+    fileprivate func buildSubviews() {
+        let imgPhoto = UIImage(named: "flat_photo", in: Bundle(for: Tracker.self), compatibleWith: nil)
         photo = SmartImageViewIgnored(image: imgPhoto)
-        photo.userInteractionEnabled = true
+        photo.isUserInteractionEnabled = true
         self.addSubview(photo)
         photo.translatesAutoresizingMaskIntoConstraints = false
         self.addConstraint(NSLayoutConstraint(
             item: photo,
-            attribute: .Right,
-            relatedBy: .Equal,
+            attribute: .right,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Right,
+            attribute: .right,
             multiplier: 1,
             constant: -PADDING))
         self.addConstraint(NSLayoutConstraint(
             item: photo,
-            attribute: .CenterY,
-            relatedBy: .Equal,
+            attribute: .centerY,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .CenterY,
+            attribute: .centerY,
             multiplier: 1,
             constant: 0))
         self.addConstraint(NSLayoutConstraint(
             item: photo,
-            attribute: .Width,
-            relatedBy: .Equal,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Width,
+            attribute: .width,
             multiplier: 0,
             constant: PHOTO_SIZE_WIDTH))
         self.addConstraint(NSLayoutConstraint(
             item: photo,
-            attribute: .Height,
-            relatedBy: .Equal,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Height,
+            attribute: .height,
             multiplier: 0,
             constant: PHOTO_SIZE_HEIGHT))
         let whiteSeperator = UIView()
-        whiteSeperator.backgroundColor = UIColor.whiteColor()
+        whiteSeperator.backgroundColor = UIColor.white
         whiteSeperator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(whiteSeperator)
         self.addConstraint(NSLayoutConstraint(item: whiteSeperator,
-            attribute: .Right,
-            relatedBy: .Equal,
+            attribute: .right,
+            relatedBy: .equal,
             toItem: photo,
-            attribute: .Left,
+            attribute: .left,
             multiplier: 1,
             constant: -PADDING))
         self.addConstraint(NSLayoutConstraint(item: whiteSeperator,
-            attribute: .CenterY,
-            relatedBy: .Equal,
+            attribute: .centerY,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .CenterY,
+            attribute: .centerY,
             multiplier: 1,
             constant: 0))
         self.addConstraint(NSLayoutConstraint(item: whiteSeperator,
-            attribute: .Width,
-            relatedBy: .Equal,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Width,
+            attribute: .width,
             multiplier: 0,
             constant: SEPARATOR_SIZE))
         self.addConstraint(NSLayoutConstraint(item: whiteSeperator,
-            attribute: .Height,
-            relatedBy: .Equal,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Height,
+            attribute: .height,
             multiplier: SEPARATOR_SIZE,
             constant: 0))
         externalBorder = SmartViewIgnored()
-        externalBorder.backgroundColor = UIColor.clearColor()
+        externalBorder.backgroundColor = UIColor.clear
         externalBorder.layer.borderWidth = 2
-        externalBorder.layer.borderColor = UIColor.whiteColor().CGColor
+        externalBorder.layer.borderColor = UIColor.white.cgColor
         externalBorder.translatesAutoresizingMaskIntoConstraints = false
         externalBorder.layer.cornerRadius = EXTERNALBORDER_SIZE/2
         self.addSubview(externalBorder)
         self.addConstraint(NSLayoutConstraint(item: externalBorder,
-            attribute: .Height,
-            relatedBy: .Equal,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Height,
+            attribute: .height,
             multiplier: 0,
             constant: EXTERNALBORDER_SIZE))
         self.addConstraint(NSLayoutConstraint(item: externalBorder,
-            attribute: .Width,
-            relatedBy: .Equal,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Width,
+            attribute: .width,
             multiplier: 0,
             constant: EXTERNALBORDER_SIZE))
         self.addConstraint(NSLayoutConstraint(item: externalBorder,
-            attribute: .Left,
-            relatedBy: .Equal,
+            attribute: .left,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .Left,
+            attribute: .left,
             multiplier: 1,
             constant: PADDING))
         self.addConstraint(NSLayoutConstraint(item: externalBorder,
-            attribute: .CenterY,
-            relatedBy: .Equal,
+            attribute: .centerY,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .CenterY,
+            attribute: .centerY,
             multiplier: 1,
             constant: 0))
         
         recorder = SmartViewIgnored()
         externalBorder.addSubview(recorder)
         recorder.layer.cornerRadius = RECORDER_SIZE/2 + RECORDER_SIZE_MODIFIER/2
-        recorder.backgroundColor = UIColor.redColor()
+        recorder.backgroundColor = UIColor.red
         recorder.translatesAutoresizingMaskIntoConstraints = false
         externalBorder.addConstraint(NSLayoutConstraint(item: recorder,
-            attribute: .CenterY,
-            relatedBy: .Equal,
+            attribute: .centerY,
+            relatedBy: .equal,
             toItem: externalBorder,
-            attribute: .CenterY,
+            attribute: .centerY,
             multiplier: 1,
             constant: 0))
         externalBorder.addConstraint(NSLayoutConstraint(item: recorder,
-            attribute: .CenterX,
-            relatedBy: .Equal,
+            attribute: .centerX,
+            relatedBy: .equal,
             toItem: externalBorder,
-            attribute: .CenterX,
+            attribute: .centerX,
             multiplier: 1,
             constant: 0))
         let widthConstraint = NSLayoutConstraint(item: recorder,
-            attribute: .Width,
-            relatedBy: .Equal,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: externalBorder,
-            attribute: .Width,
+            attribute: .width,
             multiplier: 0,
             constant: RECORDER_SIZE+RECORDER_SIZE_MODIFIER)
         let heightConstraint = NSLayoutConstraint(item: recorder,
-            attribute: .Height,
-            relatedBy: .Equal,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: externalBorder,
-            attribute: .Height,
+            attribute: .height,
             multiplier: 0,
             constant: RECORDER_SIZE+RECORDER_SIZE_MODIFIER)
         widthConstraint.identifier = "recorder_width"
@@ -247,63 +247,63 @@ class SmartToolbar: UIView {
         
         connexion = UILabel()
         connexion.text = disconnectedText
-        connexion.textColor = UIColor.whiteColor()
+        connexion.textColor = UIColor.white
         connexion.font = UIFont(name: "OpenSans", size: 12*scaling)
         connexion.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(connexion)
         self.addConstraint(NSLayoutConstraint(
             item: connexion,
-            attribute: .Left,
-            relatedBy: .Equal,
+            attribute: .left,
+            relatedBy: .equal,
             toItem: externalBorder,
-            attribute: .Right,
+            attribute: .right,
             multiplier: 1,
             constant: PADDING))
         self.addConstraint(NSLayoutConstraint(
             item: connexion,
-            attribute: .Right,
-            relatedBy: .Equal,
+            attribute: .right,
+            relatedBy: .equal,
             toItem: whiteSeperator,
-            attribute: .Left,
+            attribute: .left,
             multiplier: 1,
             constant: -PADDING))
         self.addConstraint(NSLayoutConstraint(
             item: connexion,
-            attribute: .CenterY,
-            relatedBy: .Equal,
+            attribute: .centerY,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .CenterY,
+            attribute: .centerY,
             multiplier: 1,
             constant: -TEXT_PADDING))
         
         timer = UILabel()
         timer.text = "00 : 00 : 00"
-        timer.textColor = UIColor.whiteColor()
+        timer.textColor = UIColor.white
         timer.font = UIFont(name: "OpenSans", size: 15*scaling)
         timer.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(timer)
         self.addConstraint(NSLayoutConstraint(
             item: timer,
-            attribute: .Left,
-            relatedBy: .Equal,
+            attribute: .left,
+            relatedBy: .equal,
             toItem: externalBorder,
-            attribute: .Right,
+            attribute: .right,
             multiplier: 1,
             constant: PADDING))
         self.addConstraint(NSLayoutConstraint(
             item: timer,
-            attribute: .Right,
-            relatedBy: .Equal,
+            attribute: .right,
+            relatedBy: .equal,
             toItem: whiteSeperator,
-            attribute: .Left,
+            attribute: .left,
             multiplier: 1,
             constant: -PADDING))
         self.addConstraint(NSLayoutConstraint(
             item: timer,
-            attribute: .CenterY,
-            relatedBy: .Equal,
+            attribute: .centerY,
+            relatedBy: .equal,
             toItem: self,
-            attribute: .CenterY,
+            attribute: .centerY,
             multiplier: 1,
             constant: +TEXT_PADDING))
     }
@@ -311,7 +311,7 @@ class SmartToolbar: UIView {
     /**
      We have to reset the view if the user call display() more than once to avoid multiple instance
      */
-    private func reinit() {
+    fileprivate func reinit() {
         self.removeFromSuperview()
         refWindow?.removeConstraints([windowConstraintLeft!, windowConstraintHeight!, windowConstraintTop!, windowConstraintWidth!])
     }
@@ -327,34 +327,34 @@ class SmartToolbar: UIView {
         alreadyCalled = true
         refWindow?.addSubview(self)
         windowConstraintLeft = NSLayoutConstraint(item: self
-            , attribute: NSLayoutAttribute.Left
-            , relatedBy: NSLayoutRelation.Equal
+            , attribute: NSLayoutAttribute.left
+            , relatedBy: NSLayoutRelation.equal
             , toItem: refWindow
-            , attribute: NSLayoutAttribute.Left
+            , attribute: NSLayoutAttribute.left
             , multiplier: 1
             , constant: refWindow!.frame.width/2 - WIDTH/2)
         
         windowConstraintTop = NSLayoutConstraint(item: self
-            , attribute: NSLayoutAttribute.Top
-            , relatedBy: NSLayoutRelation.Equal
+            , attribute: NSLayoutAttribute.top
+            , relatedBy: NSLayoutRelation.equal
             , toItem: refWindow
-            , attribute: NSLayoutAttribute.Top
+            , attribute: NSLayoutAttribute.top
             , multiplier: 1
             , constant: refWindow!.frame.height - HEIGHT - HEIGHT/2)
         
         windowConstraintHeight = NSLayoutConstraint(item: self
-            , attribute: NSLayoutAttribute.Height
-            , relatedBy: NSLayoutRelation.Equal
+            , attribute: NSLayoutAttribute.height
+            , relatedBy: NSLayoutRelation.equal
             , toItem: refWindow
-            , attribute: NSLayoutAttribute.Height
+            , attribute: NSLayoutAttribute.height
             , multiplier: 0
             , constant: HEIGHT)
         
         windowConstraintWidth = NSLayoutConstraint(item: self
-            , attribute: NSLayoutAttribute.Width
-            , relatedBy: NSLayoutRelation.Equal
+            , attribute: NSLayoutAttribute.width
+            , relatedBy: NSLayoutRelation.equal
             , toItem: refWindow
-            , attribute: NSLayoutAttribute.Width
+            , attribute: NSLayoutAttribute.width
             , multiplier: 0
             , constant: WIDTH)
         
@@ -365,10 +365,10 @@ class SmartToolbar: UIView {
     /**
      Design stuff
      */
-    private func configureDesign () {
+    fileprivate func configureDesign () {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.layer.masksToBounds = false;
-        self.layer.shadowOffset = CGSizeMake(1, 1)
+        self.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.layer.shadowRadius = 3
         self.layer.shadowOpacity = 0.3
         self.layer.cornerRadius = 4
@@ -390,14 +390,14 @@ class SmartToolbar: UIView {
      Start the timer that triggers the clock
      */
     func startTimer() {
-        nsTimer = NSTimer(timeInterval: 1.0, target: self, selector: #selector(SmartToolbar.start(_:)), userInfo: nil, repeats: true)
-        NSRunLoop.mainRunLoop().addTimer(nsTimer, forMode: NSRunLoopCommonModes)
+        nsTimer = Timer(timeInterval: 1.0, target: self, selector: #selector(SmartToolbar.start(_:)), userInfo: nil, repeats: true)
+        RunLoop.main.add(nsTimer, forMode: RunLoopMode.commonModes)
     }
     
     /**
      Start the Clock
      */
-    func start(t: NSTimer) {
+    func start(_ t: Timer) {
         seconds += 1
         if seconds == 59 {
             seconds = 0
@@ -419,7 +419,7 @@ class SmartToolbar: UIView {
      
      - returns: an int on 2 digits
      */
-    func timerFormatter(i: Int) -> String{
+    func timerFormatter(_ i: Int) -> String{
         if i < 10 {
             return "0\(i)"
         } else {
@@ -432,7 +432,7 @@ class SmartToolbar: UIView {
      
      - parameter msg: the text
      */
-    func setConnectionText(msg: String) {
+    func setConnectionText(_ msg: String) {
         connexion.text = msg
     }
     
@@ -442,12 +442,12 @@ class SmartToolbar: UIView {
      - parameter viewToAnimate: The view to scale
      - parameter onComplete:    Thing to do after the animation
      */
-    func onClickAnimation(viewToAnimate: UIView, onComplete: ()->()) {
-        UIView.animateWithDuration(0.1, animations: {
-            viewToAnimate.transform = CGAffineTransformMakeScale(0.9, 0.9)
+    func onClickAnimation(_ viewToAnimate: UIView, onComplete: @escaping ()->()) {
+        UIView.animate(withDuration: 0.1, animations: {
+            viewToAnimate.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         }){ Bool in
-            UIView.animateWithDuration(0.1, animations: { () -> Void in
-                viewToAnimate.transform = CGAffineTransformMakeScale(1, 1)
+            UIView.animate(withDuration: 0.1, animations: { () -> Void in
+                viewToAnimate.transform = CGAffineTransform(scaleX: 1, y: 1)
             }) { Bool in onComplete() }
         }
     }
@@ -461,7 +461,7 @@ class SmartToolbar: UIView {
      
      - returns: The RGB UIColor
      */
-    func createColor(r: CGFloat, g: CGFloat, b: CGFloat) -> UIColor {
+    func createColor(_ r: CGFloat, g: CGFloat, b: CGFloat) -> UIColor {
         return UIColor.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
     }
     
@@ -480,7 +480,7 @@ class SmartToolBarController {
     init(socket: SocketSender, networkManager: LiveNetworkManager) {
         self.networkManager = networkManager
         self.socket = socket
-        self.toolbar = SmartToolbar(frame: CGRectZero, scaling: 1.15)
+        self.toolbar = SmartToolbar(frame: CGRect.zero, scaling: 1.15)
         toolbar.display()
         self.addRecognizers()
     }
@@ -491,31 +491,31 @@ class SmartToolBarController {
     @objc func onClickScreenshot() {
         screenshotClickSound()
         self.toolbar.onClickAnimation(toolbar.photo, onComplete:{})
-        let base64 = UIApplication.sharedApplication()
+        let base64 = UIApplication.shared
             .keyWindow?.screenshot([self.toolbar])?
             .toBase64()!
-            .stringByReplacingOccurrencesOfString("\n", withString: "")
-            .stringByReplacingOccurrencesOfString("\r", withString: "")
+            .replacingOccurrences(of: "\n", with: "")
+            .replacingOccurrences(of: "\r", with: "")
         socket.sendMessage(ScreenshotUpdated(screenshot: base64, screen: Screen()).description)
         screenshotAnimation()
     }
     
     func screenshotClickSound() -> () {
-        let path = NSBundle(forClass: Tracker.self).pathForResource("camera-sound", ofType: "mp3")
+        let path = Bundle(for: Tracker.self).path(forResource: "camera-sound", ofType: "mp3")
         var soundID: SystemSoundID = 0
-        AudioServicesCreateSystemSoundID(NSURL(fileURLWithPath: path!) as CFURLRef, &soundID)
+        AudioServicesCreateSystemSoundID(URL(fileURLWithPath: path!) as CFURL, &soundID)
         AudioServicesPlaySystemSound(soundID)
     }
     
     func screenshotAnimation() -> () {
         let v = UIView(frame: toolbar.refWindow!.frame)
-        v.backgroundColor = UIColor.whiteColor()
+        v.backgroundColor = UIColor.white
         v.alpha = 0.0
         toolbar.refWindow?.addSubview(v)
-        UIView.animateWithDuration(0.2, animations: {
+        UIView.animate(withDuration: 0.2, animations: {
             v.alpha = 0.5
         }){ (Bool) in
-            UIView.animateWithDuration(0.2, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 v.alpha = 0
             }){ (Bool) in
                 v.removeFromSuperview()
@@ -540,16 +540,16 @@ class SmartToolBarController {
     
     func disconnectedToPending() {
         toolbar.setConnectionText(pendingText)
-        toolbar.recorder.backgroundColor = UIColor.whiteColor()
+        toolbar.recorder.backgroundColor = UIColor.white
     }
     
     func pendingToDisconnected() {
         toolbar.stopTimer()
         toolbar.setConnectionText(disconnectedText)
-        toolbar.recorder.backgroundColor = UIColor.redColor()
+        toolbar.recorder.backgroundColor = UIColor.red
     }
     
-    func getConstaintFromIdentifier(view: UIView, identifier: String) -> NSLayoutConstraint? {
+    func getConstaintFromIdentifier(_ view: UIView, identifier: String) -> NSLayoutConstraint? {
         return view.constraints.filter({$0.identifier == identifier}).first
     }
     
@@ -559,8 +559,8 @@ class SmartToolBarController {
         widthConstraint?.constant = (widthConstraint?.constant)! - toolbar.RECORDER_SQUARE_MODIFIER
         heightConstraint?.constant = (heightConstraint?.constant)! - toolbar.RECORDER_SQUARE_MODIFIER
         
-        self.toolbar.recorder.backgroundColor = UIColor.redColor()
-        UIView.animateWithDuration(ANIMATION_DURATION, animations: {
+        self.toolbar.recorder.backgroundColor = UIColor.red
+        UIView.animate(withDuration: ANIMATION_DURATION, animations: {
             self.toolbar.externalBorder.layoutIfNeeded()
         })
         
@@ -569,7 +569,7 @@ class SmartToolBarController {
         animation.fromValue = self.toolbar.recorder.layer.cornerRadius
         animation.toValue = 3.0
         animation.duration = ANIMATION_DURATION
-        self.toolbar.recorder.layer.addAnimation(animation, forKey: "cornerRadius")
+        self.toolbar.recorder.layer.add(animation, forKey: "cornerRadius")
         self.toolbar.recorder.layer.cornerRadius = 3.0
         
         toolbar.setConnectionText(connectedText)
@@ -585,8 +585,8 @@ class SmartToolBarController {
         widthConstraint?.constant = (widthConstraint?.constant)! + toolbar.RECORDER_SQUARE_MODIFIER
         heightConstraint?.constant = (heightConstraint?.constant)! + toolbar.RECORDER_SQUARE_MODIFIER
         
-        self.toolbar.recorder.backgroundColor = UIColor.redColor()
-        UIView.animateWithDuration(ANIMATION_DURATION, animations: {
+        self.toolbar.recorder.backgroundColor = UIColor.red
+        UIView.animate(withDuration: ANIMATION_DURATION, animations: {
             self.toolbar.externalBorder.layoutIfNeeded()
         })
         
@@ -595,7 +595,7 @@ class SmartToolBarController {
         animation.fromValue = self.toolbar.recorder.layer.cornerRadius
         animation.toValue = self.toolbar.RECORDER_SIZE/2 + self.toolbar.RECORDER_SIZE_MODIFIER/2
         animation.duration = ANIMATION_DURATION
-        self.toolbar.recorder.layer.addAnimation(animation, forKey: "cornerRadius")
+        self.toolbar.recorder.layer.add(animation, forKey: "cornerRadius")
         self.toolbar.recorder.layer.cornerRadius = self.toolbar.RECORDER_SIZE/2 + self.toolbar.RECORDER_SIZE_MODIFIER/2
     }
     
@@ -604,7 +604,7 @@ class SmartToolBarController {
             return
         }
         
-        if CGRectContainsRect(window.frame, toolbar.frame) {
+        if window.frame.contains(toolbar.frame) {
             return
         }
         
@@ -623,38 +623,38 @@ class SmartToolBarController {
      
      - parameter pan: the pangesture - X/Y are translated values, not absolute
      */
-    @objc func dragBar(pan: UIPanGestureRecognizer) {
-        if pan.state == .Began {
-            let trans = pan.translationInView(toolbar.refWindow)
+    @objc func dragBar(_ pan: UIPanGestureRecognizer) {
+        if pan.state == .began {
+            let trans = pan.translation(in: toolbar.refWindow)
             translate(trans.x, y: trans.y)
             toolbar.currentPointInWindow = trans
         }
-        if pan.state == .Changed {
-            let trans = pan.translationInView(toolbar.refWindow)
+        if pan.state == .changed {
+            let trans = pan.translation(in: toolbar.refWindow)
             let delta = Maths.CGPointSub(toolbar.currentPointInWindow, b: trans)
             translate(-delta.x, y: -delta.y)
             toolbar.currentPointInWindow = trans
         }
-        if pan.state == .Ended {
+        if pan.state == .ended {
             var Y = toolbar.windowConstraintTop?.constant
             var X = toolbar.windowConstraintLeft?.constant
             var shoudMove = false // true if bar is moved outside the screen
-            if Y <= 10 {
-                Y = 20
+            if Y! <= CGFloat(10.0) {
+                Y = 20.0
                 shoudMove = true
             }
-            if Y >= (toolbar.refWindow?.frame.height)!-toolbar.frame.height {
+            if Y! >= (toolbar.refWindow?.frame.height)!-toolbar.frame.height {
                 let windowHeight = toolbar.refWindow!.frame.height
                 let selfHeight   = CGFloat(toolbar.frame.height)
                 let margin = CGFloat(20)
                 Y = windowHeight - selfHeight - margin
                 shoudMove = true
             }
-            if X <= 0 {
+            if X! <= CGFloat(0) {
                 X = 10
                 shoudMove = true
             }
-            if X > (toolbar.refWindow?.frame.width)! - toolbar.frame.width {
+            if X! > (toolbar.refWindow?.frame.width)! - toolbar.frame.width {
                 let windowWidth = toolbar.refWindow!.frame.width
                 let selfWidth   = CGFloat(toolbar.frame.width)
                 X = windowWidth-selfWidth
@@ -672,8 +672,8 @@ class SmartToolBarController {
      - parameter x: x
      - parameter y: y
      */
-    private func translate(x: CGFloat, y: CGFloat) {
-        UIView.animateWithDuration(0) { () -> Void in
+    fileprivate func translate(_ x: CGFloat, y: CGFloat) {
+        UIView.animate(withDuration: 0) { () -> Void in
             self.toolbar.windowConstraintTop?.constant += y
             self.toolbar.windowConstraintLeft?.constant += x
             self.toolbar.refWindow?.layoutIfNeeded()
@@ -686,8 +686,8 @@ class SmartToolBarController {
      - parameter x: X
      - parameter y: Y
      */
-    private func moveAbs(x: CGFloat, y: CGFloat) {
-        UIView.animateWithDuration(0.2) { () -> Void in
+    fileprivate func moveAbs(_ x: CGFloat, y: CGFloat) {
+        UIView.animate(withDuration: 0.2) { () -> Void in
             self.toolbar.windowConstraintTop?.constant = y
             self.toolbar.windowConstraintLeft?.constant = x
             self.toolbar.refWindow?.layoutIfNeeded()

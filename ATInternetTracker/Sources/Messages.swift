@@ -11,11 +11,11 @@ import UIKit
 /// Device ask for a live
 class DeviceAskingForLive {
     var description: String {
-        let askForLive: NSMutableDictionary = [
+        let askForLive: [String : Any] = [
             "event": "DeviceAskedForLive",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0",
-                "name" : UIDevice.currentDevice().name
+                "name" : UIDevice.current.name
             ]
         ]
         return askForLive.toJSON()
@@ -25,7 +25,7 @@ class DeviceAskingForLive {
 /// Device refuse a live
 class DeviceRefusedLive {
     var description: String {
-        let deviceRefusedLive: NSMutableDictionary = [
+        let deviceRefusedLive: [String: Any] = [
             "event": "DeviceRefusedLive",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0"
@@ -38,7 +38,7 @@ class DeviceRefusedLive {
 /// Device abort a live
 class DeviceAbortedLiveRequest {
     var description: String {
-        let deviceAbortedLiveRequest: NSMutableDictionary = [
+        let deviceAbortedLiveRequest: [String: Any] = [
             "event": "DeviceAbortedLiveRequest",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0"
@@ -51,7 +51,7 @@ class DeviceAbortedLiveRequest {
 /// Device stop a live
 class DeviceStoppedLive {
     var description: String {
-        let deviceStoppedLive: NSMutableDictionary = [
+        let deviceStoppedLive: [String: Any] = [
             "event": "DeviceStoppedLive",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0"
@@ -64,7 +64,7 @@ class DeviceStoppedLive {
 /// Device accept the live
 class DeviceAcceptedLive {
     var description: String {
-        let deviceAcceptedLive: NSMutableDictionary = [
+        let deviceAcceptedLive: [String: Any] = [
             "event": "DeviceAcceptedLive",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0"
@@ -86,16 +86,18 @@ class ScreenshotUpdated {
     }
     
     var description: String {
-        let refreshScreenshot: NSMutableDictionary = [
+        var refreshScreenshot: [String: Any] = [
             "event": "ScreenshotUpdated",
             "data": [
                 "screenshot":self.screenshot,
                 "siteID": ATInternet.sharedInstance.defaultTracker.configuration.parameters["site"]!
             ]
         ]
-        let data = refreshScreenshot.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        refreshScreenshot.setValue(data, forKey: "data")
+        
+        var data = refreshScreenshot["data"] as! [String: Any]
+        data.append(self.currentScreen.toJSONObject)
+        refreshScreenshot.updateValue(data, forKey: "data")
+
         return refreshScreenshot.toJSON()
     }
 }

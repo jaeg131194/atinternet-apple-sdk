@@ -10,18 +10,18 @@ import UIKit
 import Foundation
 
 /// Class for sending screen event to socket server
-class ScreenOperation: NSOperation {
+class ScreenOperation: Operation {
     
     /// The screen event to be sent
     var screenEvent: ScreenEvent
     
-    var timerDuration: NSTimeInterval = 0.2
+    var timerDuration: TimeInterval = 0.2
     
     /// Timer to handle the timeout
-    var timerTotalDuration: NSTimeInterval = 0
+    var timerTotalDuration: TimeInterval = 0
     
     /// after timeout, the hit is sent
-    let TIMEOUT_OPERATION: NSTimeInterval = 5
+    let TIMEOUT_OPERATION: TimeInterval = 5
     
     /**
      ScreenOperation init
@@ -34,8 +34,8 @@ class ScreenOperation: NSOperation {
         self.screenEvent = screenEvent
     }
     
-    func handleTimer(screen: Screen) {
-        NSThread.sleepForTimeInterval(timerDuration)
+    func handleTimer(_ screen: Screen) {
+        Thread.sleep(forTimeInterval: timerDuration)
         timerTotalDuration = timerTotalDuration + timerDuration
         
         if timerTotalDuration > TIMEOUT_OPERATION {
@@ -54,15 +54,16 @@ class ScreenOperation: NSOperation {
             screenEvent.triggeredBy = UIApplicationContext.sharedInstance.previousEventSent
             
             // Wait a little in order to make this operation cancellable
-            NSThread.sleepForTimeInterval(0.2)
+            Thread.sleep(forTimeInterval: 0.2)
             
-            if self.cancelled {
+            if self.isCancelled {
                 return
             }
             
             if(tracker.enableLiveTagging) {
                 tracker.socketSender!.sendMessage(screenEvent.description)
             }
+            
             if (tracker.enableAutoTracking) {
                 if !sendScreenHit(tracker) {
                     print("hit ignored")
@@ -76,7 +77,7 @@ class ScreenOperation: NSOperation {
      
      - parameter tracker: AutoTracker
      */
-    func sendScreenHit(tracker: AutoTracker) -> Bool {
+    func sendScreenHit(_ tracker: AutoTracker) -> Bool {
         let screen = tracker.screens.add(screenEvent.screen)
         let shouldSend = mapConfiguration(screen)
         if shouldSend {
@@ -91,7 +92,7 @@ class ScreenOperation: NSOperation {
      
      - parameter screen: the screen
      */
-    func mapConfiguration(screen: Screen) -> Bool {
+    func mapConfiguration(_ screen: Screen) -> Bool {
         waitForConfigurationLoaded()
         
         if let mapping = Configuration.smartSDKMapping {
@@ -112,7 +113,7 @@ class ScreenOperation: NSOperation {
      */
     func waitForConfigurationLoaded() {
         while(!AutoTracker.isConfigurationLoaded) {
-            NSThread.sleepForTimeInterval(0.2)
+            Thread.sleep(forTimeInterval: 0.2)
         }
     }
     
@@ -121,9 +122,9 @@ class ScreenOperation: NSOperation {
      
      - parameter screen: the screen
      */
-    func handleDelegate(screen: Screen) {
+    func handleDelegate(_ screen: Screen) {
         if hasDelegate() {
-            screenEvent.viewController!.performSelector(#selector(IAutoTracker.screenWasDetected(_:)), withObject: screen)
+            screenEvent.viewController!.perform(#selector(IAutoTracker.screenWasDetected(_:)), with: screen)
             if screen.isReady {
                 return
             } else {
@@ -142,8 +143,8 @@ class ScreenOperation: NSOperation {
     func hasDelegate() -> Bool {
         var hasDelegate = false
         if let viewController = screenEvent.viewController {
-            if viewController.conformsToProtocol(IAutoTracker) {
-                if viewController.respondsToSelector(#selector(IAutoTracker.screenWasDetected(_:))) {
+            if viewController.conforms(to: IAutoTracker.self) {
+                if viewController.responds(to: #selector(IAutoTracker.screenWasDetected(_:))) {
                     hasDelegate = true
                 }
             }

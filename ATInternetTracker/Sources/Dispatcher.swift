@@ -50,9 +50,9 @@ class Dispatcher: NSObject {
     /**
     Send the built hit
     */
-    internal func dispatch(businessObjects: [BusinessObject]?) {
+    internal func dispatch(_ businessObjects: [BusinessObject]?) {
         if(businessObjects != nil) {
-            for(_, businessObject) in (businessObjects!).enumerate() {
+            for(_, businessObject) in (businessObjects!).enumerated() {
                 switch(businessObject) {
                 case let screen as AbstractScreen:
                     screen.setEvent()
@@ -60,14 +60,14 @@ class Dispatcher: NSObject {
                     var hasOrder: Bool = false
                     
                     for(_, value) in self.tracker.businessObjects {
-                        if ((value is ScreenInfo || value is InternalSearch || (value is OnAppAd && (value as! OnAppAd).action == OnAppAd.OnAppAdAction.View) || value is Order) && value.timeStamp <= screen.timeStamp) {
+                        if ((value is ScreenInfo || value is InternalSearch || (value is OnAppAd && (value as! OnAppAd).action == OnAppAd.OnAppAdAction.view) || value is Order) && value.timeStamp <= screen.timeStamp) {
 
                             if(value is Order) {
                                 hasOrder = true
                             }
                             
                             value.setEvent()
-                            self.tracker.businessObjects.removeValueForKey(value.id)
+                            self.tracker.businessObjects.removeValue(forKey: value.id)
                         }
                     }
                     
@@ -75,23 +75,23 @@ class Dispatcher: NSObject {
                         tracker.cart.setEvent()
                     }
                     
-                    self.tracker.businessObjects.removeValueForKey(businessObject.id)
+                    self.tracker.businessObjects.removeValue(forKey: businessObject.id)
                 case let gesture as Gesture:
                     businessObject.setEvent()
                     
-                    if(gesture.action == Gesture.GestureAction.Search) {
+                    if(gesture.action == Gesture.GestureAction.search) {
                         for(_, value) in self.tracker.businessObjects {
                             if (value is InternalSearch && value.timeStamp <= businessObject.timeStamp) {
                                 value.setEvent()
-                                self.tracker.businessObjects.removeValueForKey(value.id)
+                                self.tracker.businessObjects.removeValue(forKey: value.id)
                             }
                         }
                     }
                     
-                    self.tracker.businessObjects.removeValueForKey(businessObject.id)
+                    self.tracker.businessObjects.removeValue(forKey: businessObject.id)
                 default:
                     businessObject.setEvent()
-                    self.tracker.businessObjects.removeValueForKey(businessObject.id)
+                    self.tracker.businessObjects.removeValue(forKey: businessObject.id)
                     break
                 }
                 
@@ -100,7 +100,7 @@ class Dispatcher: NSObject {
                     if(value is CustomObject || value is NuggAd) {
                         if(value.timeStamp <= businessObject.timeStamp) {
                             value.setEvent()
-                            self.tracker.businessObjects.removeValueForKey(value.id)
+                            self.tracker.businessObjects.removeValue(forKey: value.id)
 
                         }
                     }
@@ -109,10 +109,10 @@ class Dispatcher: NSObject {
         }
         
         // Saves screen name and level 2 in context if hit type is Screen
-        if(Hit.getHitType(self.tracker.buffer.volatileParameters, self.tracker.buffer.persistentParameters) == Hit.HitType.Screen) {
-            TechnicalContext.screenName = Tool.appendParameterValues(HitParam.Screen.rawValue, volatileParameters: self.tracker.buffer.volatileParameters, persistentParameters: self.tracker.buffer.persistentParameters)
+        if(Hit.getHitType(self.tracker.buffer.volatileParameters, self.tracker.buffer.persistentParameters) == Hit.HitType.screen) {
+            TechnicalContext.screenName = Tool.appendParameterValues(HitParam.screen.rawValue, volatileParameters: self.tracker.buffer.volatileParameters, persistentParameters: self.tracker.buffer.persistentParameters)
             
-            let level2 = Int(Tool.appendParameterValues(HitParam.Level2.rawValue, volatileParameters: self.tracker.buffer.volatileParameters, persistentParameters: self.tracker.buffer.persistentParameters))
+            let level2 = Int(Tool.appendParameterValues(HitParam.level2.rawValue, volatileParameters: self.tracker.buffer.volatileParameters, persistentParameters: self.tracker.buffer.persistentParameters))
             
             if let optLevel2 = level2 {
                 TechnicalContext.level2 = optLevel2
@@ -128,29 +128,29 @@ class Dispatcher: NSObject {
         appendOptionWithEncoding.append = true
         appendOptionWithEncoding.encode = true
         
-        self.tracker.setParam(HitParam.JSON.rawValue, value: LifeCycle.getMetrics(), options: appendOptionWithEncoding)
+        _ = self.tracker.setParam(HitParam.json.rawValue, value: LifeCycle.getMetrics(), options: appendOptionWithEncoding)
         
         // Add crash report if available in stc variable
-        let report = Crash.compute() as! [String: AnyObject]?
+        let report = (Crash.compute() as NSDictionary?) as! [String: Any]?
         if let optReport = report {
-            self.tracker.setParam(HitParam.JSON.rawValue, value: optReport, options: appendOptionWithEncoding)
+            _ = self.tracker.setParam(HitParam.json.rawValue, value: optReport, options: appendOptionWithEncoding)
         }
         
         // Add persistent identified visitor data if required
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         
-        if let conf = self.tracker.configuration.parameters[IdentifiedVisitorHelperKey.Configuration.rawValue] {
+        if let conf = self.tracker.configuration.parameters[IdentifiedVisitorHelperKey.configuration.rawValue] {
             if conf == "true" {
-                if let num = userDefaults.objectForKey(IdentifiedVisitorHelperKey.Numeric.rawValue) as? String {
-                    self.tracker.setParam(HitParam.VisitorIdentifierNumeric.rawValue, value: num)
+                if let num = userDefaults.object(forKey: IdentifiedVisitorHelperKey.numeric.rawValue) as? String {
+                    _ = self.tracker.setParam(HitParam.visitorIdentifierNumeric.rawValue, value: num)
                 }
-                if let tex = userDefaults.objectForKey(IdentifiedVisitorHelperKey.Text.rawValue) as? String {
+                if let tex = userDefaults.object(forKey: IdentifiedVisitorHelperKey.text.rawValue) as? String {
                     let encodingOption = ParamOption()
                     encodingOption.encode = true
-                    self.tracker.setParam(HitParam.VisitorIdentifierText.rawValue, value: tex, options:encodingOption)
+                    _ = self.tracker.setParam(HitParam.visitorIdentifierText.rawValue, value: tex, options:encodingOption)
                 }
-                if let cat = userDefaults.objectForKey(IdentifiedVisitorHelperKey.Category.rawValue) as? String {
-                    self.tracker.setParam(HitParam.VisitorCategory.rawValue, value: cat)
+                if let cat = userDefaults.object(forKey: IdentifiedVisitorHelperKey.category.rawValue) as? String {
+                    _ = self.tracker.setParam(HitParam.visitorCategory.rawValue, value: cat)
                 }
             }
         }
@@ -158,7 +158,7 @@ class Dispatcher: NSObject {
         // Creation of hit builder task to execute in background thread
         let builder = Builder(tracker: self.tracker, volatileParameters: Tool.copyParamArray(self.tracker.buffer.volatileParameters), persistentParameters: Tool.copyParamArray(self.tracker.buffer.persistentParameters))
         // Remove all non persistent parameters from buffer
-        self.tracker.buffer.volatileParameters.removeAll(keepCapacity: false)
+        self.tracker.buffer.volatileParameters.removeAll(keepingCapacity: false)
         // Add hit builder task to queue
         TrackerQueue.sharedInstance.queue.addOperation(builder)
         

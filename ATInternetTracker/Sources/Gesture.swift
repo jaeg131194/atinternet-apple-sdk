@@ -42,23 +42,23 @@ public class Gesture: BusinessObject {
      - Tap:     tap event
      */
     @objc public enum GestureEventType: Int {
-        case Unknown = 0
-        case Tap = 1
-        case Swipe = 2
-        case Scroll = 3
-        case Pinch  = 4
-        case Pan    = 5
-        case Rotate = 6
-        case Refresh = 7
+        case unknown = 0
+        case tap = 1
+        case swipe = 2
+        case scroll = 3
+        case pinch  = 4
+        case pan    = 5
+        case rotate = 6
+        case refresh = 7
     }
     
     /// Gesture actions
     @objc public enum GestureAction: Int {
-        case Touch = 0
-        case Navigate = 1
-        case Download = 2
-        case Exit = 3
-        case Search = 4
+        case touch = 0
+        case navigate = 1
+        case download = 2
+        case exit = 3
+        case search = 4
     }
 
     /// Touch name
@@ -72,9 +72,9 @@ public class Gesture: BusinessObject {
     /// Level 2
     public var level2: Int = 0
     /// Action
-    public var action: GestureAction = GestureAction.Touch
+    public var action: GestureAction = GestureAction.touch
     /// Type of touch
-    internal(set) public lazy var type: GestureEventType = GestureEventType.Unknown
+    internal(set) public lazy var type: GestureEventType = GestureEventType.unknown
     /// Screen information on which the gesture has been done
     internal(set) public weak var screen: Screen?
     /// Custom objects to add to gesture hit
@@ -87,7 +87,7 @@ public class Gesture: BusinessObject {
     public var isReady: Bool = false
     #endif
     
-    internal class func getEventTypeRawValue(value: Int) -> String {
+    internal class func getEventTypeRawValue(_ value: Int) -> String {
         switch value {
         case 1:
             return "tap"
@@ -108,7 +108,7 @@ public class Gesture: BusinessObject {
         }
     }
     
-    internal class func getEventTypeIntValue(value: String) -> Int {
+    internal class func getEventTypeIntValue(_ value: String) -> Int {
         switch value {
         case "tap":
             return 1
@@ -129,7 +129,7 @@ public class Gesture: BusinessObject {
         }
     }
     
-    private func getActionRawValue(value: Int) -> String {
+    fileprivate func getActionRawValue(_ value: Int) -> String {
         switch(value) {
         case 0:
             return "A"
@@ -151,15 +151,15 @@ public class Gesture: BusinessObject {
         if(TechnicalContext.screenName != "") {
             let encodingOption = ParamOption()
             encodingOption.encode = true
-            tracker.setParam(HitParam.TouchScreen.rawValue, value: TechnicalContext.screenName, options: encodingOption)
+            _ = tracker.setParam(HitParam.touchScreen.rawValue, value: TechnicalContext.screenName, options: encodingOption)
         }
         
         if(TechnicalContext.level2 > 0) {
-            tracker.setParam(HitParam.TouchLevel2.rawValue, value: TechnicalContext.level2)
+            _ = tracker.setParam(HitParam.touchLevel2.rawValue, value: TechnicalContext.level2)
         }
         
         if level2 > 0 {
-            self.tracker.setParam("s2", value: level2)
+            _ = self.tracker.setParam("s2", value: level2)
         }
         
         for (_, value) in _customObjects {
@@ -167,15 +167,15 @@ public class Gesture: BusinessObject {
             value.setEvent()
         }
         
-        tracker.setParam("click", value: getActionRawValue(action.rawValue))
-        tracker.event.set("click", action: getActionRawValue(action.rawValue), label: buildGestureName())
+        _ = tracker.setParam("click", value: getActionRawValue(action.rawValue))
+        _ = tracker.event.set("click", action: getActionRawValue(action.rawValue), label: buildGestureName())
     }
     
     /**
     Send navigation gesture hit
     */
     public func sendNavigation() {
-        self.action = GestureAction.Navigate
+        self.action = GestureAction.navigate
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -183,7 +183,7 @@ public class Gesture: BusinessObject {
     Send exit gesture hit
     */
     public func sendExit() {
-        self.action = GestureAction.Exit
+        self.action = GestureAction.exit
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -191,7 +191,7 @@ public class Gesture: BusinessObject {
     Send download gesture hit
     */
     public func sendDownload() {
-        self.action = GestureAction.Download
+        self.action = GestureAction.download
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -200,7 +200,7 @@ public class Gesture: BusinessObject {
     */
 
     public func sendTouch() {
-        self.action = GestureAction.Touch
+        self.action = GestureAction.touch
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -208,7 +208,7 @@ public class Gesture: BusinessObject {
     Send search gesture hit
     */
     public func sendSearch() {
-        self.action = GestureAction.Search
+        self.action = GestureAction.search
         self.tracker.dispatcher.dispatch([self])
     }
        
@@ -253,7 +253,7 @@ public class Gestures: NSObject {
     - parameter touch: name
     - returns: gesture instance
     */
-    public func add(name:String) -> Gesture {
+    public func add(_ name:String) -> Gesture {
         let gesture = Gesture(tracker: tracker)
         gesture.name = name
         tracker.businessObjects[gesture.id] = gesture
@@ -267,7 +267,7 @@ public class Gestures: NSObject {
     - parameter first: chapter
     - returns: gesture instance
     */
-    public func add(name: String, chapter1: String) -> Gesture {
+    public func add(_ name: String, chapter1: String) -> Gesture {
         let gesture = Gesture(tracker: tracker)
         gesture.name = name
         gesture.chapter1 = chapter1
@@ -283,7 +283,7 @@ public class Gestures: NSObject {
     - parameter second: chapter
     - returns: gesture instance
     */
-    public func add(name: String, chapter1: String, chapter2: String) -> Gesture {
+    public func add(_ name: String, chapter1: String, chapter2: String) -> Gesture {
         let gesture = Gesture(tracker: tracker)
         gesture.name = name
         gesture.chapter1 = chapter1
@@ -301,7 +301,7 @@ public class Gestures: NSObject {
     - parameter third: chapter
     - returns: gesture instance
     */
-    public func add(name: String, chapter1: String, chapter2: String, chapter3: String) -> Gesture {
+    public func add(_ name: String, chapter1: String, chapter2: String, chapter3: String) -> Gesture {
         let gesture = Gesture(tracker: tracker)
         gesture.name = name
         gesture.chapter1 = chapter1

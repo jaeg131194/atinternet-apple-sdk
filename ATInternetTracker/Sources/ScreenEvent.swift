@@ -30,8 +30,8 @@ class ScreenEvent: CustomStringConvertible {
     weak var viewController: UIViewController?
     
     /// JSON representation of the event
-    var description:String {
-        let jsonObj:NSMutableDictionary = [
+    var description: String {
+        var jsonObj: [String: Any] = [
             "event": self.methodName,
             "data":[
                 "type" : self.type,
@@ -41,9 +41,10 @@ class ScreenEvent: CustomStringConvertible {
             ]
         ]
         
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.screen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.screen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
+        
         return jsonObj.toJSON()
     }
     

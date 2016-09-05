@@ -66,12 +66,12 @@ class CustomObjectTests: XCTestCase {
     }
     
     func testAppendStringCustomObject() {
-        stc.tracker.setParam("stc", value: "{\"legumes\":[\"tomate\",\"choux\",\"carotte\"]}")
+        _ = stc.tracker.setParam("stc", value: "{\"legumes\":[\"tomate\",\"choux\",\"carotte\"]}")
         
         let option = ParamOption()
         option.append = true
         
-        stc.tracker.setParam("stc", value: "{\"fruits\":[\"pomme\",\"poire\",\"cerise\"]}", options: option)
+        _ = stc.tracker.setParam("stc", value: "{\"fruits\":[\"pomme\",\"poire\",\"cerise\"]}", options: option)
         
         let builder = Builder(tracker: stc.tracker, volatileParameters: stc.tracker.buffer.volatileParameters, persistentParameters: stc.tracker.buffer.persistentParameters)
         let param: [(param: Param, str: String)] = builder.prepareQuery()
@@ -80,17 +80,17 @@ class CustomObjectTests: XCTestCase {
             return ($0 as (param: Param, str: String)).param.key == "stc"
             }).first!
         
-        XCTAssertTrue(p0.param.key == HitParam.JSON.rawValue, "Le paramètre doit être stc")
+        XCTAssertTrue(p0.param.key == HitParam.json.rawValue, "Le paramètre doit être stc")
         XCTAssertTrue(p0.str == "&stc=%7B%22legumes%22%3A%5B%22tomate%22%2C%22choux%22%2C%22carotte%22%5D%2C%22fruits%22%3A%5B%22pomme%22%2C%22poire%22%2C%22cerise%22%5D%7D", "Le paramètre doit être égal à &stc=%7B%22legumes%22%3A%5B%22tomate%22%2C%22choux%22%2C%22carotte%22%5D%2C%22fruits%22%3A%5B%22pomme%22%2C%22poire%22%2C%22cerise%22%5D%7D")
     }
     
     func testAppendDisctionaryCustomObject() {
-        stc.tracker.setParam("stc", value: ["legumes" : ["tomate", "choux", "carotte"]])
+        _ = stc.tracker.setParam("stc", value: ["legumes" : ["tomate", "choux", "carotte"]])
         
         let option = ParamOption()
         option.append = true
         
-        stc.tracker.setParam("stc", value: ["fruits" : ["pomme", "poire", "cerise"]], options: option)
+        _ = stc.tracker.setParam("stc", value: ["fruits" : ["pomme", "poire", "cerise"]], options: option)
 
             
         let builder = Builder(tracker: stc.tracker, volatileParameters: stc.tracker.buffer.volatileParameters, persistentParameters: stc.tracker.buffer.persistentParameters)
@@ -100,7 +100,7 @@ class CustomObjectTests: XCTestCase {
             return ($0 as (param: Param, str: String)).param.key == "stc"
             }).first!
         
-        XCTAssertTrue(p0.param.key == HitParam.JSON.rawValue, "Le paramètre doit être stc")
+        XCTAssertTrue(p0.param.key == HitParam.json.rawValue, "Le paramètre doit être stc")
         XCTAssertTrue(p0.str == "&stc=%7B%22legumes%22%3A%5B%22tomate%22%2C%22choux%22%2C%22carotte%22%5D%2C%22fruits%22%3A%5B%22pomme%22%2C%22poire%22%2C%22cerise%22%5D%7D", "Le paramètre doit être égal à &stc=%7B%22legumes%22%3A%5B%22tomate%22%2C%22choux%22%2C%22carotte%22%5D%2C%22fruits%22%3A%5B%22pomme%22%2C%22poire%22%2C%22cerise%22%5D%7D")
     }
 }

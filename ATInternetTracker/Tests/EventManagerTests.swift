@@ -20,7 +20,7 @@ class EventManagerTests: XCTestCase {
         */
         super.setUp()
         EventManager.sharedInstance.cancelAllEvents()
-        NSThread.sleepForTimeInterval(0.4)
+        Thread.sleep(forTimeInterval: 0.4)
     }
     
     override func tearDown() {
@@ -33,24 +33,24 @@ class EventManagerTests: XCTestCase {
         let sop = ScreenOperation(screenEvent: s)
         EventManager.sharedInstance.addEvent(sop)
         EventManager.sharedInstance.cancelLastScreenEvent()
-        let optOp:NSOperation? = EventManager.sharedInstance.lastEvent()
+        let optOp:Operation? = EventManager.sharedInstance.lastEvent()
         XCTAssertNotNil(optOp)
         if let op = optOp {
-            XCTAssertTrue(op.cancelled)
+            XCTAssertTrue(op.isCancelled)
         }
     }
     
     func testCancelLastScreenWhenEventIsNotScreen() {
         /// Adding an other subclass of NSOperation
-        let bo = NSBlockOperation { () -> Void in
-            NSThread.sleepForTimeInterval(2)
+        let bo = BlockOperation { () -> Void in
+            Thread.sleep(forTimeInterval: 2)
         }
         EventManager.sharedInstance.addEvent(bo)
         EventManager.sharedInstance.cancelLastScreenEvent()
-        let optOp:NSOperation? = EventManager.sharedInstance.lastEvent()
+        let optOp:Operation? = EventManager.sharedInstance.lastEvent()
         XCTAssertNotNil(optOp)
         if let op = optOp {
-            XCTAssertFalse(op.cancelled)
+            XCTAssertFalse(op.isCancelled)
         }
     }
 }

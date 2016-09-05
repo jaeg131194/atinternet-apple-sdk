@@ -51,9 +51,9 @@ class PanEventTests: XCTestCase {
                 "screen":[
                     "title":"",
                     "className":"",
-                    "scale":UIScreen.mainScreen().scale,
-                    "width":UIScreen.mainScreen().bounds.size.width,
-                    "height":UIScreen.mainScreen().bounds.size.height,
+                    "scale":UIScreen.main.scale,
+                    "width":UIScreen.main.bounds.size.width,
+                    "height":UIScreen.main.bounds.size.height,
                     "app":[
                         "device":"x86_64",
                         "token":"",

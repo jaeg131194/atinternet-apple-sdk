@@ -34,10 +34,10 @@ import Foundation
 
 /// NSUserDefaults and configuration keys for persistent identified visitor data
 enum IdentifiedVisitorHelperKey: String {
-    case Configuration = "persistIdentifiedVisitor"
-    case Numeric = "ATIdentifiedVisitorNumeric"
-    case Text = "ATIdentifiedVisitorText"
-    case Category = "ATIdentifiedVisitorCategory"
+    case configuration = "persistIdentifiedVisitor"
+    case numeric = "ATIdentifiedVisitorNumeric"
+    case text = "ATIdentifiedVisitorText"
+    case category = "ATIdentifiedVisitorCategory"
 }
  
 public class IdentifiedVisitor: NSObject {
@@ -45,7 +45,7 @@ public class IdentifiedVisitor: NSObject {
     var tracker: Tracker
     
     let option = ParamOption()
-    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let userDefaults = UserDefaults.standard
     
     /**
     IdentifiedVisitor initializer
@@ -63,9 +63,9 @@ public class IdentifiedVisitor: NSObject {
     - returns: tracker instance
     */
     @objc(setInt:)
-    public func set(visitorId: Int) -> Tracker {
-        unset()
-        save(HitParam.VisitorIdentifierNumeric.rawValue, keyPersistent: IdentifiedVisitorHelperKey.Numeric.rawValue, value: visitorId)
+    public func set(_ visitorId: Int) -> Tracker {
+        _ = unset()
+        save(HitParam.visitorIdentifierNumeric.rawValue, keyPersistent: IdentifiedVisitorHelperKey.numeric.rawValue, value: visitorId)
         
         return self.tracker
     }
@@ -77,9 +77,9 @@ public class IdentifiedVisitor: NSObject {
     - returns: tracker instance
     */
     @objc(setInt::)
-    public func set(visitorId: Int, visitorCategory: Int) -> Tracker {
-        set(visitorId)
-        save(HitParam.VisitorCategory.rawValue, keyPersistent: IdentifiedVisitorHelperKey.Category.rawValue, value: visitorCategory)
+    public func set(_ visitorId: Int, visitorCategory: Int) -> Tracker {
+        _ = set(visitorId)
+        save(HitParam.visitorCategory.rawValue, keyPersistent: IdentifiedVisitorHelperKey.category.rawValue, value: visitorCategory)
         
         return self.tracker
     }
@@ -90,9 +90,9 @@ public class IdentifiedVisitor: NSObject {
     - returns: tracker instance
     */
     @objc(setString:)
-    public func set(visitorId: String) -> Tracker {
-        unset()
-        save(HitParam.VisitorIdentifierText.rawValue, keyPersistent: IdentifiedVisitorHelperKey.Text.rawValue, value: visitorId)
+    public func set(_ visitorId: String) -> Tracker {
+        _ = unset()
+        save(HitParam.visitorIdentifierText.rawValue, keyPersistent: IdentifiedVisitorHelperKey.text.rawValue, value: visitorId)
         
         return self.tracker
     }
@@ -104,9 +104,9 @@ public class IdentifiedVisitor: NSObject {
     - returns: tracker instance
     */
     @objc(setString::)
-    public func set(visitorId: String, visitorCategory: Int) -> Tracker {
-        set(visitorId)
-        save(HitParam.VisitorCategory.rawValue, keyPersistent: IdentifiedVisitorHelperKey.Category.rawValue, value: visitorCategory)
+    public func set(_ visitorId: String, visitorCategory: Int) -> Tracker {
+        _ = set(visitorId)
+        save(HitParam.visitorCategory.rawValue, keyPersistent: IdentifiedVisitorHelperKey.category.rawValue, value: visitorCategory)
         
         return self.tracker
     }
@@ -116,12 +116,12 @@ public class IdentifiedVisitor: NSObject {
     - returns: tracker instance
     */
     public func unset() -> Tracker {
-        tracker.unsetParam(HitParam.VisitorIdentifierNumeric.rawValue)
-        tracker.unsetParam(HitParam.VisitorIdentifierText.rawValue)
-        tracker.unsetParam(HitParam.VisitorCategory.rawValue)
-        userDefaults.removeObjectForKey(IdentifiedVisitorHelperKey.Numeric.rawValue)
-        userDefaults.removeObjectForKey(IdentifiedVisitorHelperKey.Text.rawValue)
-        userDefaults.removeObjectForKey(IdentifiedVisitorHelperKey.Category.rawValue)
+        _ = tracker.unsetParam(HitParam.visitorIdentifierNumeric.rawValue)
+        _ = tracker.unsetParam(HitParam.visitorIdentifierText.rawValue)
+        _ = tracker.unsetParam(HitParam.visitorCategory.rawValue)
+        userDefaults.removeObject(forKey: IdentifiedVisitorHelperKey.numeric.rawValue)
+        userDefaults.removeObject(forKey: IdentifiedVisitorHelperKey.text.rawValue)
+        userDefaults.removeObject(forKey: IdentifiedVisitorHelperKey.category.rawValue)
         userDefaults.synchronize()
         
         return self.tracker
@@ -132,7 +132,7 @@ public class IdentifiedVisitor: NSObject {
     - parameter key: parameter name
     - parameter value: integer parameter value
     */
-    private func save(keyParameter: String, keyPersistent: String, value: Int) {
+    fileprivate func save(_ keyParameter: String, keyPersistent: String, value: Int) {
         save(keyParameter, keyPersistent: keyPersistent, value: String(value))
     }
     
@@ -141,16 +141,16 @@ public class IdentifiedVisitor: NSObject {
     - parameter key: parameter name
     - parameter value: string parameter value
     */
-    private func save(keyParameter: String, keyPersistent: String, value: String) {
-        if let conf = tracker.configuration.parameters[IdentifiedVisitorHelperKey.Configuration.rawValue] {
-            if conf.lowercaseString == "true" {
-                userDefaults.setObject(value, forKey: keyPersistent)
+    fileprivate func save(_ keyParameter: String, keyPersistent: String, value: String) {
+        if let conf = tracker.configuration.parameters[IdentifiedVisitorHelperKey.configuration.rawValue] {
+            if conf.lowercased() == "true" {
+                userDefaults.set(value, forKey: keyPersistent)
                 userDefaults.synchronize()
             } else {
-                tracker.setParam(keyParameter, value: value, options: option)
+                _ = tracker.setParam(keyParameter, value: value, options: option)
             }
         } else {
-            tracker.setParam(keyParameter, value: value, options: option)
+            _ = tracker.setParam(keyParameter, value: value, options: option)
         }
     }
 }

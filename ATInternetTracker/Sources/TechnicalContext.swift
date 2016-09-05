@@ -64,44 +64,44 @@ class TechnicalContext: NSObject {
     /// Enable or disable tracking
     class var doNotTrack: Bool {
         get {
-            let userDefaults = NSUserDefaults.standardUserDefaults()
+            let userDefaults = UserDefaults.standard
             
-            if (userDefaults.objectForKey("ATDoNotTrack") == nil) {
+            if (userDefaults.object(forKey: "ATDoNotTrack") == nil) {
                 return false
             } else {
-                return userDefaults.boolForKey("ATDoNotTrack")
+                return userDefaults.bool(forKey: "ATDoNotTrack")
             }
         } set {
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            userDefaults.setBool(newValue, forKey: "ATDoNotTrack")
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(newValue, forKey: "ATDoNotTrack")
             userDefaults.synchronize()
         }
     }
     
     /// Unique user id
-    class func userId(identifier: String?) -> String {
+    class func userId(_ identifier: String?) -> String {
         
         if(!self.doNotTrack) {
             
             let uuid: () -> String = {
-                if NSUserDefaults.standardUserDefaults().objectForKey("ATIdclient") != nil {
-                    return NSUserDefaults.standardUserDefaults().objectForKey("ATIdclient") as! String
-                } else if NSUserDefaults.standardUserDefaults().objectForKey("ATApplicationUniqueIdentifier") == nil {
-                    let UUID = NSUUID().UUIDString
-                    NSUserDefaults.standardUserDefaults().setObject(UUID, forKey: "ATApplicationUniqueIdentifier")
-                    NSUserDefaults.standardUserDefaults().synchronize()
+                if UserDefaults.standard.object(forKey: "ATIdclient") != nil {
+                    return UserDefaults.standard.object(forKey: "ATIdclient") as! String
+                } else if UserDefaults.standard.object(forKey: "ATApplicationUniqueIdentifier") == nil {
+                    let UUID = Foundation.UUID().uuidString
+                    UserDefaults.standard.set(UUID, forKey: "ATApplicationUniqueIdentifier")
+                    UserDefaults.standard.synchronize()
                     return UUID
                 } else {
-                    return NSUserDefaults.standardUserDefaults().objectForKey("ATApplicationUniqueIdentifier") as! String
+                    return UserDefaults.standard.object(forKey: "ATApplicationUniqueIdentifier") as! String
                 }
             }
             
             if let optIdentifier = identifier {
                 #if !os(watchOS)
-                switch(optIdentifier.lowercaseString)
+                switch(optIdentifier.lowercased())
                 {
                 case "idfv":
-                    return UIDevice.currentDevice().identifierForVendor!.UUIDString
+                    return UIDevice.current.identifierForVendor!.uuidString
                 default:
                     return uuid()
                 }
@@ -123,7 +123,7 @@ class TechnicalContext: NSObject {
     /// SDK Version
     class var sdkVersion: String {
         get {
-            if let optInfoDic = NSBundle(forClass: Tracker.self).infoDictionary {
+            if let optInfoDic = Bundle(for: Tracker.self).infoDictionary {
                 return optInfoDic["CFBundleShortVersionString"] as! String
             } else {
                 return ""
@@ -134,13 +134,7 @@ class TechnicalContext: NSObject {
     /// Device language (eg. en_US)
     class var language: String {
         get {
-            let locale = NSLocale.autoupdatingCurrentLocale().objectForKey(NSLocaleIdentifier) as? String
-            
-            if let optLocale = locale {
-                return optLocale.lowercaseString
-            }
-            
-            return ""
+            return Locale.autoupdatingCurrent.identifier.lowercased()
         }
     }
     
@@ -149,9 +143,9 @@ class TechnicalContext: NSObject {
         get {
             var size : Int = 0
             sysctlbyname("hw.machine", nil, &size, nil, 0)
-            var machine = [CChar](count: Int(size), repeatedValue: 0)
+            var machine = [CChar](repeating: 0, count: Int(size))
             sysctlbyname("hw.machine", &machine, &size, nil, 0)
-            return String(format: "%@", String.fromCString(machine)!.lowercaseString)
+            return String(format: "%@", String.init(cString: machine).lowercased())
         }
     }
     
@@ -159,9 +153,9 @@ class TechnicalContext: NSObject {
     class var operatingSystem: String {
         get {
             #if os(watchOS)
-            return String(format: "[%@]-[%@]", WKInterfaceDevice.currentDevice().systemName.removeSpaces().lowercaseString, WKInterfaceDevice.currentDevice().systemVersion)
+            return String(format: "[%@]-[%@]", WKInterfaceDevice.current().systemName.removeSpaces().lowercased(), WKInterfaceDevice.current().systemVersion)
             #else
-            return String(format: "[%@]-[%@]", UIDevice.currentDevice().systemName.removeSpaces().lowercaseString, UIDevice.currentDevice().systemVersion)
+            return String(format: "[%@]-[%@]", UIDevice.current.systemName.removeSpaces().lowercased(), UIDevice.current.systemVersion)
             #endif
         }
     }
@@ -169,13 +163,13 @@ class TechnicalContext: NSObject {
     /// Application localized name
     class var applicationName: String {
         get {
-            let name = NSBundle.mainBundle().infoDictionary!["CFBundleDisplayName"] as? String
+            let name = Bundle.main.infoDictionary!["CFBundleDisplayName"] as? String
             
             if let optName = name {
                 return optName
             } else {
                 
-                if let localizedDic = NSBundle.mainBundle().localizedInfoDictionary {
+                if let localizedDic = Bundle.main.localizedInfoDictionary {
                     let localizedName = localizedDic["CFBundleDisplayName"] as? String
                     
                     if let optLocalizedName = localizedName {
@@ -191,13 +185,13 @@ class TechnicalContext: NSObject {
     /// Application icon
     class var applicationIcon: String? {
         let iconImg = UIImage(named: "AppIcon60x60")
-        return iconImg?.toBase64()?.stringByReplacingOccurrencesOfString("\n", withString: "").stringByReplacingOccurrencesOfString("\r", withString: "")
+        return iconImg?.toBase64()?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
     }
     
     /// Application identifier (eg. com.atinternet.testapp)
     class var applicationIdentifier: String {
         get {
-            let identifier = NSBundle.mainBundle().infoDictionary!["CFBundleIdentifier"] as? String
+            let identifier = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String
             
             if let optIdentifier = identifier {
                 return String(format:"%@", optIdentifier)
@@ -210,7 +204,7 @@ class TechnicalContext: NSObject {
     /// Application version (eg. [5.0])
     class var applicationVersion: String {
         get {
-            let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as? String
+            let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
             
             if let optVersion = version {
                 return String(format:"%@", optVersion)
@@ -223,11 +217,11 @@ class TechnicalContext: NSObject {
     /// Local hour (eg. 23x59x59)
     class var localHour: String {
         get {
-            let hourFormatter = NSDateFormatter()
-            hourFormatter.locale = LifeCycle.locale
+            let hourFormatter = DateFormatter()
+            hourFormatter.locale = LifeCycle.locale as Locale!
             hourFormatter.dateFormat = "HH'x'mm'x'ss"
             
-            return hourFormatter.stringFromDate(NSDate())
+            return hourFormatter.string(from: Date())
         }
     }
     
@@ -235,11 +229,11 @@ class TechnicalContext: NSObject {
     class var screenResolution: String {
         get {
             #if os(watchOS)
-            let screenBounds = WKInterfaceDevice.currentDevice().screenBounds
-            let screenScale = WKInterfaceDevice.currentDevice().screenScale
+            let screenBounds = WKInterfaceDevice.current().screenBounds
+            let screenScale = WKInterfaceDevice.current().screenScale
             #else
-            let screenBounds = UIScreen.mainScreen().bounds
-            let screenScale = UIScreen.mainScreen().scale
+            let screenBounds = UIScreen.main.bounds
+            let screenScale = UIScreen.main.scale
             #endif
                 
             return String(format:"%ix%i", Int(screenBounds.size.width * screenScale), Int(screenBounds.size.height * screenScale))
@@ -269,7 +263,7 @@ class TechnicalContext: NSObject {
     #endif
     
     /// Download Source
-    class func downloadSource(tracker: Tracker) -> String {
+    class func downloadSource(_ tracker: Tracker) -> String {
         if let optDls = tracker.configuration.parameters["downloadSource"] {
             return optDls
         } else {
@@ -290,9 +284,9 @@ class TechnicalContext: NSObject {
             let reachability = Reachability.reachabilityForInternetConnection()
             
             if let optReachability = reachability {
-                if(optReachability.currentReachabilityStatus == Reachability.NetworkStatus.ReachableViaWiFi) {
+                if(optReachability.currentReachabilityStatus == Reachability.NetworkStatus.reachableViaWiFi) {
                     return ConnexionType.wifi
-                } else if(optReachability.currentReachabilityStatus == Reachability.NetworkStatus.NotReachable) {
+                } else if(optReachability.currentReachabilityStatus == Reachability.NetworkStatus.notReachable) {
                     return ConnexionType.offline
                 } else {
                     #if os(iOS)

@@ -36,15 +36,15 @@ public class CustomVar: ScreenInfo {
     
     /// Custom var types
     @objc public enum CustomVarType: Int {
-        case App = 0
-        case Screen = 1
+        case app = 0
+        case screen = 1
     }
     
     /// Custom var identifier
     var varId: Int = 1
     
     /// Custom var type
-    var type: CustomVarType = CustomVarType.App
+    var type: CustomVarType = CustomVarType.app
     
     /// Custom var value
     var value: String = ""
@@ -64,7 +64,7 @@ public class CustomVar: ScreenInfo {
     /**
      Convert CustomVar Type Enum Int values to String values
      */
-    private func getCustomVarTypeRawValue(value: Int) -> String {
+    fileprivate func getCustomVarTypeRawValue(_ value: Int) -> String {
         switch value {
         case 0:
             return "x"
@@ -84,7 +84,7 @@ public class CustomVar: ScreenInfo {
         encodingOption.encode = true
         
         let key = getCustomVarTypeRawValue(self.type.rawValue) + String(varId)
-        tracker.setParam(key, value: value, options: encodingOption)
+        _ = tracker.setParam(key, value: value, options: encodingOption)
     }
     
 }
@@ -118,7 +118,7 @@ public class CustomVars: NSObject {
     - parameter type: of custom variable (site, page)
     - returns: tracker instance
     */
-    public func add(varId: Int, value: String, type: CustomVar.CustomVarType) -> CustomVar {
+    public func add(_ varId: Int, value: String, type: CustomVar.CustomVarType) -> CustomVar {
         let customVar = CustomVar(varId: varId, value: value, type: type)
         customVar.tracker = self.tracker
         
@@ -135,13 +135,13 @@ public class CustomVars: NSObject {
      Remove a custom variable
      - parameter customVarId: the custom variable identifier
      */
-    public func remove(customVarId: String) {
+    public func remove(_ customVarId: String) {
         if(screen != nil) {
-            screen!._customVars.removeValueForKey(customVarId)
+            screen!._customVars.removeValue(forKey: customVarId)
         } else {
             for(_,value) in self.tracker.businessObjects {
                 if (value is CustomVar && (value as! CustomVar).id == customVarId) {
-                    self.tracker.businessObjects.removeValueForKey(value.id)
+                    self.tracker.businessObjects.removeValue(forKey: value.id)
                     break
                 }
             }
@@ -153,11 +153,11 @@ public class CustomVars: NSObject {
      */
     public func removeAll() {
         if(screen != nil) {
-            screen!._customVars.removeAll(keepCapacity: false)
+            screen!._customVars.removeAll(keepingCapacity: false)
         } else {
             for(_,value) in self.tracker.businessObjects {
                 if (value is CustomVar) {
-                    self.tracker.businessObjects.removeValueForKey(value.id)
+                    self.tracker.businessObjects.removeValue(forKey: value.id)
                 }
             }
         }

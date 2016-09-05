@@ -34,6 +34,15 @@ import Foundation
 import UIKit
 
 public class BackgroundTask: NSObject {
+    struct Static {
+        static var instance: BackgroundTask?
+        static var token: Int = 0
+    }
+    
+    fileprivate static var __once: () = {
+            Static.instance = BackgroundTask()
+        }()
+    
     typealias completionBlock = () -> Void
     
     /// Number of running tasks
@@ -46,20 +55,13 @@ public class BackgroundTask: NSObject {
     /**
     Private initializer (cannot instantiate BackgroundTaskManager)
     */
-    private override init() {
+    fileprivate override init() {
         
     }
     
     /// BackgroundTaskManager singleton
     class var sharedInstance: BackgroundTask {
-        struct Static {
-            static var instance: BackgroundTask?
-            static var token: dispatch_once_t = 0
-        }
-        
-        dispatch_once(&Static.token) {
-            Static.instance = BackgroundTask()
-        }
+        _ = BackgroundTask.__once
         
         return Static.instance!
     }
@@ -76,7 +78,7 @@ public class BackgroundTask: NSObject {
     
     :params: completion block to call right before task ends
     */
-    func begin(completion: (() -> Void)!) -> Int {
+    func begin(_ completion: (() -> Void)!) -> Int {
         var taskKey = 0
         
         objc_sync_enter(self)
@@ -85,7 +87,7 @@ public class BackgroundTask: NSObject {
         objc_sync_exit(self)
 
         #if !AT_EXTENSION
-        let identifier = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({
+        let identifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
             self.end(taskKey)
         })
         #else
@@ -106,19 +108,19 @@ public class BackgroundTask: NSObject {
     
     :params: ID of the task to end
     */
-    func end(key: Int) {
+    func end(_ key: Int) {
         objc_sync_enter(self.tasks)
         
         if let completionBlock = tasksCompletionBlocks[key] {
             completionBlock()
-            tasksCompletionBlocks.removeValueForKey(key)
+            tasksCompletionBlocks.removeValue(forKey: key)
         }
         
         if let taskId = tasks[key] {
             // On stoppe tous les envoi de hits offline en cours si le délais en background est expiré
             for operation in TrackerQueue.sharedInstance.queue.operations {
                 if let sender = operation as? Sender {
-                    if(!sender.executing && sender.hit.isOffline) {
+                    if(!sender.isExecuting && sender.hit.isOffline) {
                         sender.cancel()
                     }
                 }
@@ -126,11 +128,11 @@ public class BackgroundTask: NSObject {
 
             #if !AT_EXTENSION
             // On arrete la tache en arrière plan
-            UIApplication.sharedApplication().endBackgroundTask(taskId)
+            UIApplication.shared.endBackgroundTask(taskId)
             #endif
 
             tasks[key] = UIBackgroundTaskInvalid
-            tasks.removeValueForKey(key)
+            tasks.removeValue(forKey: key)
         }
         
         objc_sync_exit(self.tasks)

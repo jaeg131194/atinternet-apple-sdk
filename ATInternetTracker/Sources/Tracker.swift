@@ -41,37 +41,37 @@ import WatchKit
 
 /// Build or send status of the hit
 @objc public enum HitStatus: Int {
-    case Failed = 0
-    case Success = 1
+    case failed = 0
+    case success = 1
 }
 
 /// Standard parameters
 public enum HitParam: String {
-    case Screen = "p"
-    case Level2 = "s2"
-    case JSON = "stc"
-    case UserID = "idclient"
-    case HitType = "type"
-    case Action = "action"
-    case Touch = "click"
-    case TouchScreen = "pclick"
-    case TouchLevel2 = "s2click"
-    case VisitorIdentifierNumeric = "an"
-    case VisitorIdentifierText = "at"
-    case VisitorCategory = "ac"
-    case BackgroundMode = "bg"
-    case OnAppAdsTouch = "atc"
-    case OnAppAdsImpression = "ati"
-    case GPSLatitude = "gy"
-    case GPSLongitude = "gx"
-    case Referrer = "ref"
+    case screen = "p"
+    case level2 = "s2"
+    case json = "stc"
+    case userID = "idclient"
+    case hitType = "type"
+    case action = "action"
+    case touch = "click"
+    case touchScreen = "pclick"
+    case touchLevel2 = "s2click"
+    case visitorIdentifierNumeric = "an"
+    case visitorIdentifierText = "at"
+    case visitorCategory = "ac"
+    case backgroundMode = "bg"
+    case onAppAdsTouch = "atc"
+    case onAppAdsImpression = "ati"
+    case gpsLatitude = "gy"
+    case gpsLongitude = "gx"
+    case referrer = "ref"
 }
 
 /// Background modes
 public enum BackgroundMode {
-    case Normal
-    case Task
-    case Fetch
+    case normal
+    case task
+    case fetch
 }
 
 // MARK: - Tracker Delegate
@@ -84,7 +84,7 @@ public enum BackgroundMode {
     
     - parameter message: approval message for confidentiality
     */
-    optional func trackerNeedsFirstLaunchApproval(message: String)
+    @objc optional func trackerNeedsFirstLaunchApproval(_ message: String)
     
     /**
     Building of hit done
@@ -92,7 +92,7 @@ public enum BackgroundMode {
     - parameter status: result of hit building
     - parameter message: info about hit building
     */
-    optional func buildDidEnd(status: HitStatus, message: String)
+    @objc optional func buildDidEnd(_ status: HitStatus, message: String)
     
     /**
     Sending of hit done
@@ -100,35 +100,35 @@ public enum BackgroundMode {
     - parameter status: sending result
     - parameter message: information about sending result
     */
-    optional func sendDidEnd(status: HitStatus, message: String)
+    @objc optional func sendDidEnd(_ status: HitStatus, message: String)
     
     /**
     Saving of hit done (offline)
     
     - parameter message: information about saving result
     */
-    optional func saveDidEnd(message: String)
+    @objc optional func saveDidEnd(_ message: String)
     
     /**
     Partner call done
     
     - parameter response: the response received from the partner
     */
-    optional func didCallPartner(response: String)
+    @objc optional func didCallPartner(_ response: String)
     
     /**
     Received a warning message (does not stop hit sending)
     
     - parameter message: the warning message
     */
-    optional func warningDidOccur(message: String)
+    @objc optional func warningDidOccur(_ message: String)
     
     /**
     Received an error message (stop hit sending)
     
     - parameter message: the error message
     */
-    optional func errorDidOccur(message: String)
+    @objc optional func errorDidOccur(_ message: String)
     
 }
 
@@ -137,12 +137,12 @@ public enum BackgroundMode {
     /**
     Called when a screen has been detected
      */
-    optional func screenWasDetected(screen: Screen) -> ()
+    @objc optional func screenWasDetected(_ screen: Screen) -> ()
     
     /**
      Called when a gesture has been detected
      */
-    optional func gestureWasDetected(gesture: Gesture) -> ()
+    @objc optional func gestureWasDetected(_ gesture: Gesture) -> ()
 }
 
 #if os(iOS) && AT_SMART_TRACKER
@@ -150,15 +150,15 @@ public enum BackgroundMode {
 public class AutoTracker: Tracker {
     
     /// Private variables
-    private var _token: String?
-    private var _enableAutoTracking: Bool = false
-    private var _enableLiveTagging: Bool = false
+    fileprivate var _token: String?
+    fileprivate var _enableAutoTracking: Bool = false
+    fileprivate var _enableLiveTagging: Bool = false
     
     /// Checks whether swizzling has already been activated
     private static var eventDetectionEnabled = false
     
     static var isConfigurationLoaded = false
-    
+
     /// Screen orientation
     internal var orientation: UIDeviceOrientation?
     
@@ -212,8 +212,21 @@ public class AutoTracker: Tracker {
             enableEventDetection(_enableAutoTracking)
         }
     }
+    
+    private func fetchMappingConfig() {
+        let version = TechnicalContext.applicationVersion
+        let s3Client = ApiS3Client(token: token!, version: version, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
+        s3Client.fetchMapping { (mapping: JSON?) in
+            print("config: \(mapping)")
+            if let _ = mapping {
+                Configuration.smartSDKMapping = mapping!
+                s3Client.saveSmartSDKMapping(mapping!)
+            }
+            AutoTracker.isConfigurationLoaded = true
+        }
+    }
 
-    private func enableEventDetection(enabled: Bool) {
+    private func enableEventDetection(_ enabled: Bool) {
         if enabled == true {
             if AutoTracker.eventDetectionEnabled == false {
                 
@@ -232,7 +245,7 @@ public class AutoTracker: Tracker {
             }
             // time consuming, so last call of the init
             if enableLiveTagging {
-                self.performSelectorOnMainThread(#selector(addToolbar), withObject: nil, waitUntilDone: false)
+                self.performSelector(onMainThread: #selector(addToolbar), with: nil, waitUntilDone: false)
             }
         } else {
             if AutoTracker.eventDetectionEnabled == true && self.enableAutoTracking == false && self.enableLiveTagging == false {
@@ -252,11 +265,11 @@ public class AutoTracker: Tracker {
     }
     
     func registerCurrentOrientation() {
-        let orientation = UIApplication.sharedApplication().statusBarOrientation
-        if orientation == .Portrait || orientation == .PortraitUpsideDown {
-            UIViewControllerContext.sharedInstance.currentOrientation = UIViewControllerContext.UIViewControllerOrientation.Portrait
+        let orientation = UIApplication.shared.statusBarOrientation
+        if orientation == .portrait || orientation == .portraitUpsideDown {
+            UIViewControllerContext.sharedInstance.currentOrientation = UIViewControllerContext.UIViewControllerOrientation.portrait
         } else {
-            UIViewControllerContext.sharedInstance.currentOrientation = UIViewControllerContext.UIViewControllerOrientation.Landscape
+            UIViewControllerContext.sharedInstance.currentOrientation = UIViewControllerContext.UIViewControllerOrientation.landscape
         }
     }
     
@@ -281,19 +294,18 @@ public class AutoTracker: Tracker {
      Listen to app notifications (orientation, lifecycle ...)
      */
     private func addNotifications() {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
-        notificationCenter.addObserver(self, selector: #selector(AutoTracker.deviceOrientationDidChange(_:)), name: UIDeviceOrientationDidChangeNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AutoTracker.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AutoTracker.windowBecomeVisible(_:)), name: UIWindowDidBecomeKeyNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AutoTracker.UIApplicationWillTerminate(_:)), name: UIApplicationWillTerminateNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AutoTracker.appWillGoBg(_:)), name: UIApplicationWillResignActiveNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.deviceOrientationDidChange(_:)), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.windowBecomeVisible(_:)), name: NSNotification.Name.UIWindowDidBecomeKey, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.UIApplicationWillTerminate(_:)), name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(AutoTracker.appWillGoBg(_:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
-    func windowBecomeVisible(notification: NSNotification) {
-        if let delegate = UIApplication.sharedApplication().keyWindow {
+    func windowBecomeVisible(_ notification: NSNotification) {
+        if let delegate = UIApplication.shared.keyWindow {
             if let _ = delegate.window {
-                //print(win)
                 addToolbar("keyWindow")
             }
         }
@@ -303,16 +315,16 @@ public class AutoTracker: Tracker {
      Removes listeners
      */
     private func removeNotifications() {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
+        let notificationCenter = NotificationCenter.default
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
         notificationCenter.removeObserver(self)
     }
     
     /**
      Application is going background
      */
-    @objc func appWillGoBg(notification: NSNotification) {
-        UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler {
+    @objc func appWillGoBg(_ notification: NSNotification) {
+        UIApplication.shared.beginBackgroundTask {
             self.liveManager?.deviceStoppedLive()
         }
     }
@@ -322,40 +334,39 @@ public class AutoTracker: Tracker {
      
      - parameter notification: notification
      */
-    @objc func deviceOrientationDidChange(notification: NSNotification) {
-        let currentOrientation = UIDevice.currentDevice().orientation
+    @objc func deviceOrientationDidChange(_ notification: NSNotification) {
+        let currentOrientation = UIDevice.current.orientation
         if orientation == nil {
             orientation = currentOrientation
         } else {
-            if currentOrientation != orientation && currentOrientation != UIDeviceOrientation.FaceUp && currentOrientation != UIDeviceOrientation.FaceDown && UIViewControllerContext.sharedInstance.currentViewController != nil {
+            if currentOrientation != orientation && currentOrientation != UIDeviceOrientation.faceUp && currentOrientation != UIDeviceOrientation.faceDown && UIViewControllerContext.sharedInstance.currentViewController != nil {
                 let deviceRotation = DeviceRotationEvent(orientation: currentOrientation)
                 deviceRotation.viewController = UIViewControllerContext.sharedInstance.currentViewController
                 EventManager.sharedInstance.addEvent(DeviceRotationOperation(rotationEvent: deviceRotation))
             }
         }
         
-        if currentOrientation != UIDeviceOrientation.FaceUp && currentOrientation != UIDeviceOrientation.FaceDown {
+        if currentOrientation != UIDeviceOrientation.faceUp && currentOrientation != UIDeviceOrientation.faceDown {
             orientation = currentOrientation
         }
-        
         
         toolbar?.rotateIfNeeded()
     }
     
-    @objc func applicationDidBecomeActive(application: UIApplication) {
+    @objc func applicationDidBecomeActive(_ application: UIApplication) {
         if enableAutoTracking && token != nil && token != "" {
             fetchMappingConfig()
         }
     }
     
-    @objc func UIApplicationWillTerminate(application: UIApplication) {
+    @objc func UIApplicationWillTerminate(_ application: UIApplication) {
         if self.enableLiveTagging == true {
             self.liveManager?.deviceStoppedLive()
         }
     }
     
-    func addToolbar(age: String) {
-        if toolbar == nil && socketSender != nil && liveManager != nil && UIApplication.sharedApplication().keyWindow != nil{
+    func addToolbar(_ age: String) {
+        if toolbar == nil && socketSender != nil && liveManager != nil && UIApplication.shared.keyWindow != nil{
             toolbar = SmartToolBarController(socket:self.socketSender!, networkManager: self.liveManager!)
             self.liveManager!.toolbar = toolbar
         }
@@ -364,13 +375,12 @@ public class AutoTracker: Tracker {
     /**
      Register font for SmartTracker toolbar
      */
-    func registerFont(font: String) {
-        let fontPath = NSBundle(forClass: Tracker.self).pathForResource(font, ofType: ".ttf")
+    func registerFont(_ font: String) {
+        let fontPath = Bundle(for: Tracker.self).path(forResource: font, ofType: ".ttf")
         let dataFont = NSData(contentsOfFile: fontPath!)
-        let provider = CGDataProviderCreateWithCFData(dataFont)
-        let fontRef = CGFontCreateWithDataProvider(provider)
-        CTFontManagerRegisterGraphicsFont(fontRef!, nil)
-        assert(fontRef != nil)
+        let provider = CGDataProvider(data: dataFont!)
+        let fontRef = CGFont(provider!)
+        CTFontManagerRegisterGraphicsFont(fontRef, nil)
     }
 }
     
@@ -410,118 +420,121 @@ public class Tracker: NSObject {
     public var enableDebugger: Bool = false {
         didSet {
             if enableDebugger == true {
+                let q = DispatchQueue(label: "com.atinternet.Tracker.debuggerQueue", attributes: [])
                 
-                let q = dispatch_queue_create("com.atinternet.Tracker.debuggerQueue", DISPATCH_QUEUE_SERIAL)
-                
-                dispatch_async(q, {
-                    while(UIApplication.sharedApplication().windows.count == 0) {
-                         NSThread.sleepForTimeInterval(0.2)
+                q.async(execute: {
+                    while(UIApplication.shared.windows.count == 0) {
+                         Thread.sleep(forTimeInterval: 0.2)
                     }
                     
-                    self.performSelectorOnMainThread(#selector(self.displayDebugger), withObject: nil, waitUntilDone: false)
+                    self.performSelector(onMainThread: #selector(self.displayDebugger), with: nil, waitUntilDone: false)
                 })
-                
-                
-                
             } else {
                 Debugger.sharedInstance.deinitDebugger()
             }
         }
+    }
+    
+    /**
+     Display the debugger window
+     */
+    func displayDebugger() {
+        Debugger.sharedInstance.initDebugger()
     }
     #endif
     
     internal lazy var businessObjects: [String: BusinessObject] = [String: BusinessObject]()
     
     //MARK: Offline
-    private(set) public lazy var offline: Offline = Offline(tracker: self)
+    fileprivate(set) public lazy var offline: Offline = Offline(tracker: self)
     
     //MARK: Context Tracking
     /// Context tracking
-    private(set) public lazy var context: Context = Context(tracker: self)
+    fileprivate(set) public lazy var context: Context = Context(tracker: self)
     
     //MARK: NuggAd Tracking
     /// NuggAd tracking
-    private(set) public lazy var nuggAds: NuggAds = NuggAds(tracker: self)
+    fileprivate(set) public lazy var nuggAds: NuggAds = NuggAds(tracker: self)
     
     //MARK: GPS Tracking
     /// GPS tracking
-    @available(*, deprecated=2.5.0, message="location is now only available as a screen object property.")
-    private(set) public lazy var locations: Locations = Locations(tracker: self)
+    @available(*, deprecated: 2.5.0, message: "location is now only available as a screen object property.")
+    fileprivate(set) public lazy var locations: Locations = Locations(tracker: self)
     
     //MARK: Publisher Tracking
     /// Publisher tracking
-    private(set) public lazy var publishers: Publishers = Publishers(tracker: self)
+    fileprivate(set) public lazy var publishers: Publishers = Publishers(tracker: self)
     
     //MARK: SelfPromotion Tracking
     /// SelfPromotion tracking
-    private(set) public lazy var selfPromotions: SelfPromotions = SelfPromotions(tracker: self)
+    fileprivate(set) public lazy var selfPromotions: SelfPromotions = SelfPromotions(tracker: self)
     
     //MARK: Identified Visitor Tracking
     /// Identified visitor tracking
-    private(set) public lazy var identifiedVisitor: IdentifiedVisitor = IdentifiedVisitor(tracker: self)
+    fileprivate(set) public lazy var identifiedVisitor: IdentifiedVisitor = IdentifiedVisitor(tracker: self)
     
     //MARK: Screen Tracking
     /// Screen tracking
-    private(set) public lazy var screens: Screens = Screens(tracker: self)
+    fileprivate(set) public lazy var screens: Screens = Screens(tracker: self)
     
     //MARK: Dynamic Screen Tracking
     /// Dynamic Screen tracking
-    private(set) public lazy var dynamicScreens: DynamicScreens = DynamicScreens(tracker: self)
+    fileprivate(set) public lazy var dynamicScreens: DynamicScreens = DynamicScreens(tracker: self)
     
     //MARK: Touch Tracking
     /// Touch tracking
-    private(set) public lazy var gestures: Gestures = Gestures(tracker: self)
+    fileprivate(set) public lazy var gestures: Gestures = Gestures(tracker: self)
     
     //MARK: Custom Object Tracking
-    private(set) public lazy var customObjects: CustomObjects = CustomObjects(tracker: self)
+    fileprivate(set) public lazy var customObjects: CustomObjects = CustomObjects(tracker: self)
     
     //MARK: TV Tracking
-    private(set) public lazy var tvTracking: TVTracking = TVTracking(tracker: self)
+    fileprivate(set) public lazy var tvTracking: TVTracking = TVTracking(tracker: self)
     
     //MARK: Event Tracking
     /// Event tracking
-    private(set) lazy var event: Event = Event(tracker: self)
+    fileprivate(set) lazy var event: Event = Event(tracker: self)
     
     //MARK: CustomVar Tracking
     /// CustomVar tracking
-    @available(*, deprecated=2.5.0, message="customVars is now only available as a screen object property.")
-    private(set) public lazy var customVars: CustomVars = CustomVars(tracker: self)
+    @available(*, deprecated: 2.5.0, message: "customVars is now only available as a screen object property.")
+    fileprivate(set) public lazy var customVars: CustomVars = CustomVars(tracker: self)
     
     //MARK: Order Tracking
     /// Order tracking
-    private(set) public lazy var orders: Orders = Orders(tracker: self)
+    fileprivate(set) public lazy var orders: Orders = Orders(tracker: self)
     
     //MARK: Aisle Tracking
     /// Aisle tracking
-    @available(*, deprecated=2.5.0, message="aisles is now only available as a screen object property.")
-    private(set) public lazy var aisles: Aisles = Aisles(tracker: self)
+    @available(*, deprecated: 2.5.0, message: "aisles is now only available as a screen object property.")
+    fileprivate(set) public lazy var aisles: Aisles = Aisles(tracker: self)
     
     //MARK: Cart Tracking
     /// Cart tracking
-    private(set) public lazy var cart: Cart = Cart(tracker: self)
+    fileprivate(set) public lazy var cart: Cart = Cart(tracker: self)
     
     //MARK: Product Tracking
     /// Product tracking
-    private(set) public lazy var products: Products = Products(tracker: self)
+    fileprivate(set) public lazy var products: Products = Products(tracker: self)
     
     //MARK: Campaign Tracking
     /// Campaign tracking
-     @available(*, deprecated=2.5.0, message="campaign is now only available as a screen object property.")
-    private(set) public lazy var campaigns: Campaigns = Campaigns(tracker: self)
+     @available(*, deprecated: 2.5.0, message: "campaign is now only available as a screen object property.")
+    fileprivate(set) public lazy var campaigns: Campaigns = Campaigns(tracker: self)
     
     //MARK: Internal Search Tracking
     /// Internal Search tracking
-     @available(*, deprecated=2.5.0, message="internalSearch is now only available as a screen object property.")
-    private(set) public lazy var internalSearches: InternalSearches = InternalSearches(tracker: self)
+     @available(*, deprecated: 2.5.0, message: "internalSearch is now only available as a screen object property.")
+    fileprivate(set) public lazy var internalSearches: InternalSearches = InternalSearches(tracker: self)
     
     //MARK: Custom tree structure Tracking
     /// Custom tree structure  tracking
-    @available(*, deprecated=2.5.0, message="customTreeStructures is now only available as a screen object property.")
-    private(set) public lazy var customTreeStructures: CustomTreeStructures = CustomTreeStructures(tracker: self)
+    @available(*, deprecated: 2.5.0, message: "customTreeStructures is now only available as a screen object property.")
+    fileprivate(set) public lazy var customTreeStructures: CustomTreeStructures = CustomTreeStructures(tracker: self)
     
     //MARK: Richmedia Tracking
     /// Richmedia tracking
-    private(set) public lazy var mediaPlayers: MediaPlayers = MediaPlayers(tracker: self)
+    fileprivate(set) public lazy var mediaPlayers: MediaPlayers = MediaPlayers(tracker: self)
 
     
     //MARK: - Initializer
@@ -550,10 +563,10 @@ public class Tracker: NSObject {
         super.init()
         
         if(!LifeCycle.isInitialized) {
-            let notificationCenter = NSNotificationCenter.defaultCenter()
+            let notificationCenter = NotificationCenter.default
             
-            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationDidEnterBackground), name:"UIApplicationDidEnterBackgroundNotification", object: nil)
-            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationActive), name:"UIApplicationDidBecomeActiveNotification", object: nil)
+            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationDidEnterBackground), name:NSNotification.Name(rawValue: "UIApplicationDidEnterBackgroundNotification"), object: nil)
+            notificationCenter.addObserver(self, selector: #selector(Tracker.applicationActive), name:NSNotification.Name(rawValue: "UIApplicationDidBecomeActiveNotification"), object: nil)
             
             LifeCycle.applicationActive(self.configuration.parameters)
         }
@@ -575,13 +588,6 @@ public class Tracker: NSObject {
         LifeCycle.applicationActive(self.configuration.parameters)
     }
     
-    /**
-     Display the debugger window
-     */
-    func displayDebugger() {
-        Debugger.sharedInstance.initDebugger()
-    }
-    
     // MARK: - Configuration
     
     /// Get the current configuration (read-only)
@@ -596,31 +602,31 @@ public class Tracker: NSObject {
 
     - parameter configuration: new configuration for the tracker
     */
-    public func setConfig(configuration: [String: String], override: Bool, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setConfig(_ configuration: [String: String], override: Bool, completionHandler: ((_ isSet: Bool) -> Void)?) {
         
         var keyCount = 0
         
         if(override) {
-            self.configuration.parameters.removeAll(keepCapacity: false)
+            self.configuration.parameters.removeAll(keepingCapacity: false)
         }
         
         for (key, value) in configuration {
             keyCount = keyCount + 1
             if (!Configuration.ReadOnlyConfiguration.list.contains(key)) {
-                let configurationOperation = NSBlockOperation(block: {
+                let configurationOperation = BlockOperation(block: {
                     self.configuration.parameters[key] = value
                 })
                 
                 if(completionHandler != nil && keyCount == configuration.count) {
                     configurationOperation.completionBlock = {
-                        completionHandler!(isSet: true)
+                        completionHandler!(true)
                     }
                 }
                 
                 TrackerQueue.sharedInstance.queue.addOperation(configurationOperation)
             } else {
                 if(completionHandler != nil && keyCount == configuration.count) {
-                    completionHandler!(isSet: false)
+                    completionHandler!(false)
                 }
                 delegate?.warningDidOccur?(String(format: "Configuration %@ is read only. Value will not be updated", key))
             }
@@ -633,80 +639,80 @@ public class Tracker: NSObject {
     - parameter key: configuration parameter key
     - parameter value: configuration parameter value
     */
-    public func setConfig(key: String, value: String, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setConfig(_ key: String, value: String, completionHandler: ((_ isSet: Bool) -> Void)?) {
         if (!Configuration.ReadOnlyConfiguration.list.contains(key)) {
-            let configurationOperation = NSBlockOperation(block: {
+            let configurationOperation = BlockOperation(block: {
                 self.configuration.parameters[key] = value
             })
             
             if(completionHandler != nil) {
                 configurationOperation.completionBlock = {
-                    completionHandler!(isSet: true)
+                    completionHandler!(true)
                 }
             }
             
             TrackerQueue.sharedInstance.queue.addOperation(configurationOperation)
         } else {
             if(completionHandler != nil) {
-                completionHandler!(isSet: false)
+                completionHandler!(false)
             }
             delegate?.warningDidOccur?(String(format: "Configuration %@ is read only. Value will not be updated", key))
         }
     }
     
-    public func setLog(log: String, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setLog(_ log: String, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.Log, value: log, completionHandler: completionHandler)
     }
-    public func setSecuredLog(securedLog: String, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setSecuredLog(_ securedLog: String, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.LogSSL, value: securedLog, completionHandler: completionHandler)
     }
-    public func setDomain(domain: String, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setDomain(_ domain: String, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.Domain, value: domain, completionHandler: completionHandler)
     }
-    public func setSiteId(siteId: Int, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setSiteId(_ siteId: Int, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.Site, value: String(siteId), completionHandler: completionHandler)
     }
-    public func setOfflineMode(offlineMode: OfflineModeKey, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setOfflineMode(_ offlineMode: OfflineModeKey, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.OfflineMode, value: offlineMode.rawValue, completionHandler: completionHandler)
     }
-    public func setSecureModeEnabled(enabled: Bool, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setSecureModeEnabled(_ enabled: Bool, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.Secure, value: String(enabled), completionHandler: completionHandler)
     }
-    public func setIdentifierType(identifierType: IdentifierTypeKey, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setIdentifierType(_ identifierType: IdentifierTypeKey, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.Identifier, value: identifierType.rawValue, completionHandler: completionHandler)
     }
-    public func setHashUserIdEnabled(enabled: Bool, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setHashUserIdEnabled(_ enabled: Bool, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.HashUserId, value: String(enabled), completionHandler: completionHandler)
     }
-    public func setPlugins(pluginNames: [PluginKey], completionHandler: ((isSet: Bool) -> Void)?) {
-        let newValue = pluginNames.map({$0.rawValue}).joinWithSeparator(",")
+    public func setPlugins(_ pluginNames: [PluginKey], completionHandler: ((_ isSet: Bool) -> Void)?) {
+        let newValue = pluginNames.map({$0.rawValue}).joined(separator: ",")
         setConfig(TrackerConfigurationKeys.Plugins, value: newValue, completionHandler: completionHandler)
     }
-    public func setBackgroundTaskEnabled(enabled: Bool, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setBackgroundTaskEnabled(_ enabled: Bool, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.EnableBackgroundTask, value: String(enabled), completionHandler: completionHandler)
     }
-    public func setPixelPath(pixelPath: String, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setPixelPath(_ pixelPath: String, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.PixelPath, value: pixelPath, completionHandler: completionHandler)
     }
-    public func setPersistentIdentifiedVisitorEnabled(enabled: Bool, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setPersistentIdentifiedVisitorEnabled(_ enabled: Bool, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.PersistIdentifiedVisitor, value: String(enabled), completionHandler: completionHandler)
     }
-    public func setTvTrackingUrl(url: String, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setTvTrackingUrl(_ url: String, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.TvTrackingURL, value: url, completionHandler: completionHandler)
     }
-    public func setTvTrackingVisitDuration(visitDuration: Int, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setTvTrackingVisitDuration(_ visitDuration: Int, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.TvTrackingVisitDuration, value: String(visitDuration), completionHandler: completionHandler)
     }
-    public func setTvTrackingSpotValidityTime(time: Int, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setTvTrackingSpotValidityTime(_ time: Int, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.TvTrackingSpotValidityTime, value: String(time), completionHandler: completionHandler)
     }
-    public func setCampaignLastPersistenceEnabled(enabled: Bool, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setCampaignLastPersistenceEnabled(_ enabled: Bool, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.CampaignLastPersistence, value: String(enabled), completionHandler: completionHandler)
     }
-    public func setCampaignLifetime(lifetime: Int, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setCampaignLifetime(_ lifetime: Int, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.CampaignLifetime, value: String(lifetime), completionHandler: completionHandler)
     }
-    public func setSessionBackgroundDuration(duration: Int, completionHandler: ((isSet: Bool) -> Void)?) {
+    public func setSessionBackgroundDuration(_ duration: Int, completionHandler: ((_ isSet: Bool) -> Void)?) {
         setConfig(TrackerConfigurationKeys.SessionBackgroundDuration, value: String(duration), completionHandler: completionHandler)
     }
     
@@ -718,7 +724,7 @@ public class Tracker: NSObject {
     - parameter key: parameter key
     - parameter value: parameter value
     */
-    private func setParam(key: String, value: ()->(String), type: Param.ParamType) {
+    fileprivate func setParam(_ key: String, value: @escaping ()->(String), type: Param.ParamType) {
         // Check whether the parameter is not in read only mode
         if(!ReadOnlyParam.list.contains(key)) {
             let param = Param(key: key, value: value, type: type)
@@ -727,12 +733,12 @@ public class Tracker: NSObject {
             // Check if parameter is already set
             if(positions.count > 0) {
                 // If found, replace first parameter with new value and delete others in appropriate buffer array
-                for(index, position) in positions.enumerate() {
+                for(index, position) in positions.enumerated() {
                     if(index == 0) {
                         (position.arrayIndex == 0) ? (buffer.persistentParameters[position.index] = param)
                             : (buffer.volatileParameters[position.index] = param)
                     } else {
-                        (position.arrayIndex == 0) ? buffer.persistentParameters.removeAtIndex(position.index) : buffer.volatileParameters.removeAtIndex(position.index)
+                        _ = (position.arrayIndex == 0) ? buffer.persistentParameters.remove(at: position.index) : buffer.volatileParameters.remove(at: position.index)
                     }
                 }
             } else {
@@ -751,7 +757,7 @@ public class Tracker: NSObject {
     - parameter value: parameter value
     - parameter options: parameter options
     */
-    private func setParam(key: String, value: ()->(String), type: Param.ParamType, options: ParamOption) {
+    fileprivate func setParam(_ key: String, value: @escaping ()->(String), type: Param.ParamType, options: ParamOption) {
         // Check whether the parameter is not in read only mode
         if(!ReadOnlyParam.list.contains(key)) {
             let param = Param(key: key, value: value, type: type, options: options)
@@ -759,19 +765,19 @@ public class Tracker: NSObject {
             
             if(options.append) {
                 // Check if parameter is already set
-                for(_, position) in positions.enumerate() {
+                for(_, position) in positions.enumerated() {
                     // If new parameter is set to be persistent we move old parameters into the right buffer array
                     if(options.persistent) {
                         // If old parameter was in volatile buffer, we place it into the persistent buffer
                         if(position.arrayIndex > 0) {
                             let existingParam = buffer.volatileParameters[position.index]
-                            buffer.volatileParameters.removeAtIndex(position.index)
+                            buffer.volatileParameters.remove(at: position.index)
                             buffer.persistentParameters.append(existingParam)
                         }
                     } else {
                         if(position.arrayIndex == 0) {
                             let existingParam = buffer.persistentParameters[position.index]
-                            buffer.persistentParameters.removeAtIndex(position.index)
+                            buffer.persistentParameters.remove(at: position.index)
                             buffer.volatileParameters.append(existingParam)
                         }
                     }
@@ -782,26 +788,26 @@ public class Tracker: NSObject {
                 // Check if parameter is already set
                 if(positions.count > 0) {
                     // If found, replace first parameter with new value and delete others in appropriate buffer array
-                    for(index, position) in positions.enumerate() {
+                    for(index, position) in positions.enumerated() {
                         if(index == 0) {
                             if(position.arrayIndex == 0) {
                                 // If parameter is set to be persistent and is already persistent, we change its value. If not, we place the parameter in the volatile buffer
                                 if(options.persistent) {
                                     buffer.persistentParameters[position.index] = param
                                 } else {
-                                    buffer.persistentParameters.removeAtIndex(position.index)
+                                    buffer.persistentParameters.remove(at: position.index)
                                     buffer.volatileParameters.append(param)
                                 }
                             } else {
                                 if(options.persistent) {
-                                    buffer.volatileParameters.removeAtIndex(position.index)
+                                    buffer.volatileParameters.remove(at: position.index)
                                     buffer.persistentParameters.append(param)
                                 } else {
                                     buffer.volatileParameters[position.index] = param
                                 }
                             }
                         } else {
-                            (position.arrayIndex == 0) ? buffer.persistentParameters.removeAtIndex(position.index) : buffer.volatileParameters.removeAtIndex(position.index)
+                            _ = (position.arrayIndex == 0) ? buffer.persistentParameters.remove(at: position.index) : buffer.volatileParameters.remove(at: position.index)
                         }
                     }
                 } else {
@@ -820,8 +826,8 @@ public class Tracker: NSObject {
     - parameter key: parameter key
     - parameter value: string parameter value
     */
-    public func setParam(key: String, value: ()->(String)) -> Tracker {
-        setParam(key, value: value, type: .Closure)
+    public func setParam(_ key: String, value: @escaping ()->(String)) -> Tracker {
+        setParam(key, value: value, type: .closure)
         
         return self
     }
@@ -833,8 +839,8 @@ public class Tracker: NSObject {
     - parameter value: string parameter value
     - parameter options: parameter options
     */
-    public func setParam(key: String, value: ()->(String), options: ParamOption) -> Tracker {
-        setParam(key, value: value, type: .Closure, options: options)
+    public func setParam(_ key: String, value: @escaping ()->(String), options: ParamOption) -> Tracker {
+        setParam(key, value: value, type: .closure, options: options)
         
         return self
     }
@@ -846,12 +852,12 @@ public class Tracker: NSObject {
     - parameter value: string parameter value
     */
     @objc(setStringParam::)
-    public func setParam(key: String, value: String) -> Tracker {
+    public func setParam(_ key: String, value: String) -> Tracker {
         // If string is not JSON
         if (value.toJSONObject() == nil) {
-            setParam(key, value: {value}, type: .String)
+            setParam(key, value: {value}, type: .string)
         } else {
-            setParam(key, value: {value}, type: .JSON)
+            setParam(key, value: {value}, type: .json)
         }
         
         return self
@@ -865,12 +871,12 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setStringParam:::)
-    public func setParam(key: String, value: String, options: ParamOption) -> Tracker {
+    public func setParam(_ key: String, value: String, options: ParamOption) -> Tracker {
         // If string is not JSON
         if (value.toJSONObject() == nil) {
-            setParam(key, value: {value}, type: .String, options: options)
+            setParam(key, value: {value}, type: .string, options: options)
         } else {
-            setParam(key, value: {value}, type: .JSON, options: options)
+            setParam(key, value: {value}, type: .json, options: options)
         }
         
         return self
@@ -883,8 +889,8 @@ public class Tracker: NSObject {
     - parameter value: int parameter value
     */
     @objc(setIntParam::)
-    public func setParam(key: String, value: Int) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Integer)
+    public func setParam(_ key: String, value: Int) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .integer)
         
         return self
     }
@@ -897,8 +903,8 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setIntParam:::)
-    public func setParam(key: String, value: Int, options: ParamOption) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Integer, options: options)
+    public func setParam(_ key: String, value: Int, options: ParamOption) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .integer, options: options)
         
         return self
     }
@@ -910,8 +916,8 @@ public class Tracker: NSObject {
     - parameter value: float parameter value
     */
     @objc(setFloatParam::)
-    public func setParam(key: String, value: Float) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Float)
+    public func setParam(_ key: String, value: Float) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .float)
         
         return self
     }
@@ -924,8 +930,8 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setFloatParam:::)
-    public func setParam(key: String, value: Float, options: ParamOption) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Float, options: options)
+    public func setParam(_ key: String, value: Float, options: ParamOption) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .float, options: options)
         
         return self
     }
@@ -937,8 +943,8 @@ public class Tracker: NSObject {
     - parameter value: double parameter value
     */
     @objc(setDoubleParam::)
-    public func setParam(key: String, value: Double) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Double)
+    public func setParam(_ key: String, value: Double) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .double)
         
         return self
     }
@@ -951,8 +957,8 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setDoubleParam:::)
-    public func setParam(key: String, value: Double, options: ParamOption) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Double, options: options)
+    public func setParam(_ key: String, value: Double, options: ParamOption) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .double, options: options)
         
         return self
     }
@@ -964,8 +970,8 @@ public class Tracker: NSObject {
     - parameter value: bool parameter value
     */
     @objc(setBoolParam::)
-    public func setParam(key: String, value: Bool) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Bool)
+    public func setParam(_ key: String, value: Bool) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .bool)
         
         return self
     }
@@ -978,8 +984,8 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setBoolParam:::)
-    public func setParam(key: String, value: Bool, options: ParamOption) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Bool, options: options)
+    public func setParam(_ key: String, value: Bool, options: ParamOption) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .bool, options: options)
         
         return self
     }
@@ -991,8 +997,8 @@ public class Tracker: NSObject {
     - parameter value: array parameter value
     */
     @objc(setArrayParam::)
-    public func setParam(key: String, value: [AnyObject]) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Array)
+    public func setParam(_ key: String, value: [Any]) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .array)
         
         return self
     }
@@ -1005,8 +1011,8 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setArrayParam:::)
-    public func setParam(key: String, value: [AnyObject], options: ParamOption) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .Array, options: options)
+    public func setParam(_ key: String, value: [Any], options: ParamOption) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .array, options: options)
         
         return self
     }
@@ -1018,8 +1024,8 @@ public class Tracker: NSObject {
     - parameter value: dictionary parameter value
     */
     @objc(setDictionaryParam::)
-    public func setParam(key: String, value: [String: AnyObject]) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .JSON)
+    public func setParam(_ key: String, value: [String: Any]) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .json)
         
         return self
     }
@@ -1032,8 +1038,8 @@ public class Tracker: NSObject {
     - parameter options: parameter options
     */
     @objc(setDictionaryParam:::)
-    public func setParam(key: String, value: [String: AnyObject], options: ParamOption) -> Tracker {
-        self.handleNotStringParameterSetting(key, value: value, type: .JSON, options: options)
+    public func setParam(_ key: String, value: [String: Any], options: ParamOption) -> Tracker {
+        self.handleNotStringParameterSetting(key, value: value, type: .json, options: options)
         
         return self
     }
@@ -1045,7 +1051,7 @@ public class Tracker: NSObject {
     - parameter value: parameter value
     - parameter options: parameter options
     */
-    func handleNotStringParameterSetting(key: String, value: AnyObject, type: Param.ParamType, options: ParamOption? = nil) {
+    func handleNotStringParameterSetting(_ key: String, value: Any, type: Param.ParamType, options: ParamOption? = nil) {
         var stringValue: (value: String, success: Bool)
         if let optOptions = options {
             stringValue = Tool.convertToString(value, separator: optOptions.separator)
@@ -1069,24 +1075,24 @@ public class Tracker: NSObject {
     
     - parameter parameter: type
     */
-    public func unsetParam(param: String) {
+    public func unsetParam(_ param: String) {
         let positions = Tool.findParameterPosition(param, arrays: buffer.persistentParameters, buffer.volatileParameters)
         
         // Check if parameter is already set in buffer
         if(positions.count > 0) {
-            for(_, position) in positions.enumerate() {
+            for(_, position) in positions.enumerated() {
                 if(position.arrayIndex == 0) {
-                    buffer.persistentParameters.removeAtIndex(position.index);
+                    buffer.persistentParameters.remove(at: position.index);
                 } else {
-                    buffer.volatileParameters.removeAtIndex(position.index);
+                    buffer.volatileParameters.remove(at: position.index);
                 }
             }
         }
         
         switch param {
-        case HitParam.Level2.rawValue:
+        case HitParam.level2.rawValue:
             context._level2 = nil
-        case HitParam.BackgroundMode.rawValue:
+        case HitParam.backgroundMode.rawValue:
             context._backgroundMode = nil
         default:
             break
@@ -1109,7 +1115,7 @@ public class Tracker: NSObject {
             var products = [BusinessObject]()
             
             // Order object by timestamp
-            let sortedObjects = businessObjects.sort {
+            let sortedObjects = businessObjects.sorted {
                 a, b in return a.1.timeStamp  < b.1.timeStamp
             }
             
@@ -1121,20 +1127,20 @@ public class Tracker: NSObject {
                 
                 // Dispatch onAppAds before sending other object
                 if(!(object is OnAppAd || object is ScreenInfo || object is AbstractScreen || object is InternalSearch || object is Cart || object is Order)
-                    || (object is OnAppAd && (object as! OnAppAd).action == OnAppAd.OnAppAdAction.Touch)) {
+                    || (object is OnAppAd && (object as! OnAppAd).action == OnAppAd.OnAppAdAction.touch)) {
                     dispatchObjects(&onAppAds, customObjects: &customObjects)
                 }
                 
                 if let ad = object as? OnAppAd {
                     ///If ad impression, then add to temp list
-                    if(ad.action == OnAppAd.OnAppAdAction.View) {
+                    if(ad.action == OnAppAd.OnAppAdAction.view) {
                         onAppAds.append(ad)
                     }
                     else {
                         // Send onAppAd touch hit
                         customObjects.append(ad)
                         dispatcher.dispatch(customObjects)
-                        customObjects.removeAll(keepCapacity: false)
+                        customObjects.removeAll(keepingCapacity: false)
                     }
                 } else if object is Product {
                     products.append(object)
@@ -1156,7 +1162,7 @@ public class Tracker: NSObject {
                     var cart: Cart?
                     
                     if(salesTrackerObjects.count > 0) {
-                        for(_, value) in salesTrackerObjects.enumerate() {
+                        for(_, value) in salesTrackerObjects.enumerated() {
                             switch(value) {
                             case let crt as Cart:
                                 cart = crt
@@ -1178,24 +1184,24 @@ public class Tracker: NSObject {
                     
                     dispatcher.dispatch(onAppAds)
                     
-                    screenObjects.removeAll(keepCapacity: false)
-                    salesTrackerObjects.removeAll(keepCapacity: false)
-                    internalSearchObjects.removeAll(keepCapacity: false)
-                    onAppAds.removeAll(keepCapacity: false)
-                    customObjects.removeAll(keepCapacity: false)
+                    screenObjects.removeAll(keepingCapacity: false)
+                    salesTrackerObjects.removeAll(keepingCapacity: false)
+                    internalSearchObjects.removeAll(keepingCapacity: false)
+                    onAppAds.removeAll(keepingCapacity: false)
+                    customObjects.removeAll(keepingCapacity: false)
                 } else {
 
-                    if(object is Gesture && (object as! Gesture).action == Gesture.GestureAction.Search) {
+                    if(object is Gesture && (object as! Gesture).action == Gesture.GestureAction.search) {
                         onAppAds += internalSearchObjects
-                        internalSearchObjects.removeAll(keepCapacity: false)
+                        internalSearchObjects.removeAll(keepingCapacity: false)
                     }
                     
                     onAppAds += customObjects
                     onAppAds += [object]
                     dispatcher.dispatch(onAppAds)
                     
-                    onAppAds.removeAll(keepCapacity: false)
-                    customObjects.removeAll(keepCapacity: false)
+                    onAppAds.removeAll(keepingCapacity: false)
+                    customObjects.removeAll(keepingCapacity: false)
                 }
             }
             
@@ -1211,9 +1217,9 @@ public class Tracker: NSObject {
                 
                 dispatcher.dispatch(customObjects)
                 
-                customObjects.removeAll(keepCapacity: false)
-                internalSearchObjects.removeAll(keepCapacity: false)
-                screenObjects.removeAll(keepCapacity: false)
+                customObjects.removeAll(keepingCapacity: false)
+                internalSearchObjects.removeAll(keepingCapacity: false)
+                screenObjects.removeAll(keepingCapacity: false)
             }
             
         } else {
@@ -1224,12 +1230,12 @@ public class Tracker: NSObject {
     /**
     Dispatch objects with their customObjects
     */
-    func dispatchObjects(inout  objects: [BusinessObject], inout customObjects: [BusinessObject]) {
+    func dispatchObjects(_ objects: inout [BusinessObject], customObjects: inout [BusinessObject]) {
         if(objects.count > 0) {
             objects += customObjects
             dispatcher.dispatch(objects)
-            customObjects.removeAll(keepCapacity: false)
-            objects.removeAll(keepCapacity: false)
+            customObjects.removeAll(keepingCapacity: false)
+            objects.removeAll(keepingCapacity: false)
         }
     }
     
@@ -1261,7 +1267,7 @@ public class Tracker: NSObject {
         get {
             return TechnicalContext.doNotTrack
         } set {
-            let dotNotTrackOperation = NSBlockOperation(block: {
+            let dotNotTrackOperation = BlockOperation(block: {
                 TechnicalContext.doNotTrack = newValue
             })
             
@@ -1271,7 +1277,7 @@ public class Tracker: NSObject {
     
     // MARK: - Crash
     
-    private static var _handleCrash: Bool = false
+    fileprivate static var _handleCrash: Bool = false
     
     /// Set tracker crash handler
     /// Use only if you don't already use another crash analytics solution
@@ -1295,33 +1301,34 @@ public class Tracker: NSObject {
 // MARK: - Tracker Queue
 /// Operation queue
 class TrackerQueue: NSObject {
+    struct Static {
+        static var instance: TrackerQueue?
+        static var token: Int = 0
+    }
+    
+    private static var __once: () = {
+            Static.instance = TrackerQueue()
+        }()
     /**
     Private initializer (cannot instantiate BuilderQueue)
     */
-    private override init() {
+    fileprivate override init() {
         
     }
     
     /// TrackerQueue singleton
     class var sharedInstance: TrackerQueue {
-        struct Static {
-            static var instance: TrackerQueue?
-            static var token: dispatch_once_t = 0
-        }
-        
-        dispatch_once(&Static.token) {
-            Static.instance = TrackerQueue()
-        }
+        _ = TrackerQueue.__once
         
         return Static.instance!
     }
     
     /// Queue
-    lazy var queue: NSOperationQueue = {
-        var queue = NSOperationQueue()
+    lazy var queue: OperationQueue = {
+        var queue = OperationQueue()
         queue.name = "TrackerQueue"
         queue.maxConcurrentOperationCount = 1
-        queue.qualityOfService = NSQualityOfService.Background
+        queue.qualityOfService = QualityOfService.background
         return queue
         }()
 }

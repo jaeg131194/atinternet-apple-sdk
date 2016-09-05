@@ -11,7 +11,7 @@ import UIKit
 
 /// Factory making a different class in charge of handling different events
 class SocketEventFactory {
-    class func create(eventName: String, liveManager: LiveNetworkManager, messageData: JSON?) -> SocketEvent {
+    class func create(_ eventName: String, liveManager: LiveNetworkManager, messageData: JSON?) -> SocketEvent {
         switch eventName {
         // triggered after viewDidAppear
         case SmartSocketEvent.Screenshot.rawValue:
@@ -53,19 +53,15 @@ class SocketEvent {
         print("not handled")
     }
     
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    func delay(_ delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
 }
 
 /// Wait a bit then send a screenshot with screen information and suggested events
 class SEScreenshot: SocketEvent {
-    func makeJSONArray(values: [AnyObject]) -> [AnyObject] {
+    func makeJSONArray(_ values: [Any]) -> [Any] {
         if let events = values as? [GestureEvent] {
             return events.map( {$0.description.toJSONObject()!} )
         }
@@ -74,7 +70,7 @@ class SEScreenshot: SocketEvent {
     
     override func process() {
         delay(0.5) {
-            var controls: [AnyObject] = []
+            var controls: [Any] = []
             if let currentViewController = UIViewControllerContext.sharedInstance.currentViewController {
                 controls = self.makeJSONArray(currentViewController.getControls())
             }
@@ -87,12 +83,12 @@ class SEScreenshot: SocketEvent {
                 toIgnore.append(popup)
             }
             
-            var base64 = UIApplication.sharedApplication()
+            var base64 = UIApplication.shared
                 .keyWindow?
                 .screenshot(toIgnore)?
                 .toBase64()!
-                .stringByReplacingOccurrencesOfString("\n", withString: "")
-                .stringByReplacingOccurrencesOfString("\r", withString: "")
+                .replacingOccurrences(of: "\n", with: "")
+                .replacingOccurrences(of: "\r", with: "")
             
             assert(base64 != nil)
             let screen = Screen()
@@ -142,12 +138,12 @@ class SEInterfaceAskedForScreenshot: SocketEvent {
             if let popup = self.liveManager.currentPopupDisplayed {
                 toIgnore.append(popup)
             }
-            let base64 = UIApplication.sharedApplication()
+            let base64 = UIApplication.shared
                 .keyWindow?
                 .screenshot(toIgnore)?
                 .toBase64()!
-                .stringByReplacingOccurrencesOfString("\n", withString: "")
-                .stringByReplacingOccurrencesOfString("\r", withString: "")
+                .replacingOccurrences(of: "\n", with: "")
+                .replacingOccurrences(of: "\r", with: "")
             let currentScreen = Screen()
             self.liveManager.sender?.sendMessage(ScreenshotUpdated(screenshot: base64, screen: currentScreen).description)
         }

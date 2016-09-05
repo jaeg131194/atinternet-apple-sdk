@@ -32,13 +32,13 @@ SOFTWARE.
 
 import Foundation
 
-public class BusinessObject: NSObject {
+open class BusinessObject: NSObject {
     /// Tracker instance
     var tracker: Tracker!
     /// Screen ID
-    var id: String = NSUUID().UUIDString
+    var id: String = UUID().uuidString
     /// Creation date
-    var timeStamp: NSTimeInterval =  NSDate().timeIntervalSince1970
+    var timeStamp: TimeInterval =  Date().timeIntervalSince1970
     
     /**
     Default initializer

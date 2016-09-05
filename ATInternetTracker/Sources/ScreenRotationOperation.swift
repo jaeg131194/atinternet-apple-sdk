@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 /// Class for sending gesture event to the socket server
-class ScreenRotationOperation: NSOperation {
+class ScreenRotationOperation: Operation {
     
     /// The screen event to be sent
     var rotationEvent: ScreenRotationEvent
@@ -29,8 +29,8 @@ class ScreenRotationOperation: NSOperation {
     override func main() {
         autoreleasepool {
             // Wait a little in order to make this operation cancellable
-            NSThread.sleepForTimeInterval(0.2)
-            if !self.cancelled {
+            Thread.sleep(forTimeInterval: 0.2)
+            if !self.isCancelled {
                 //TODO: sendBuffer
                 ATInternet.sharedInstance.defaultTracker.socketSender!.sendMessage(rotationEvent.description)
             }

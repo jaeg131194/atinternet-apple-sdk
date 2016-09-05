@@ -13,7 +13,7 @@ class SmartPopUp: UIView {
     /// ok / cancel height
     let ButtonHeight:CGFloat = 40.0
     /// my frame
-    let selfRect = CGRectMake(20,20,270,120)
+    let selfRect = CGRect(x: 20,y: 20,width: 270,height: 120)
     /// cancel button
     var btnCancel:SmartButtonIgnored?
     /// ok button
@@ -42,7 +42,7 @@ class SmartPopUp: UIView {
     }
     
     func customSeparatorColor() -> UIColor {
-        return UIColor.grayColor()
+        return UIColor.gray
     }
     
     init(frame: CGRect, title: String, message: String, okTitle: String) {
@@ -54,7 +54,7 @@ class SmartPopUp: UIView {
         let addSizes = lblTitle!.frame.height + lblContent!.frame.height
         let margin: CGFloat = 15.0
         let globalSize = addSizes + margin*3 + ButtonHeight
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.width, globalSize)
+        self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: globalSize)
         self.btnCancel?.frame.origin.y = self.frame.height - ButtonHeight
         self.btnOk?.frame.origin.y = self.frame.height - ButtonHeight
         self.addHorizontalSeparator(globalSize)
@@ -70,7 +70,7 @@ class SmartPopUp: UIView {
         let addSizes = lblTitle!.frame.height + lblContent!.frame.height
         let margin: CGFloat = 15.0
         let globalSize = addSizes + margin*3 + ButtonHeight
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.width, globalSize)
+        self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: globalSize)
         self.btnCancel?.frame.origin.y = self.frame.height - ButtonHeight
         self.btnOk?.frame.origin.y = self.frame.height - ButtonHeight
         self.addVerticalSeparator(globalSize)
@@ -83,7 +83,7 @@ class SmartPopUp: UIView {
     func configure() {
         self.backgroundColor = customBackgroundColor()
         self.layer.cornerRadius = 5
-        self.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.layer.borderColor = UIColor.lightGray.cgColor
         self.layer.borderWidth = 0.5
     }
     
@@ -92,7 +92,7 @@ class SmartPopUp: UIView {
      
      - parameter action: the action to perform on touch
      */
-    func addOkAction(action: ()->()) {
+    func addOkAction(_ action: @escaping ()->()) {
         okAction = action
     }
     
@@ -101,14 +101,14 @@ class SmartPopUp: UIView {
      
      - parameter action: the action to perform on touch
      */
-    func addCancelAction(action: ()->()) {
+    func addCancelAction(_ action: @escaping ()->()) {
         cancelAction = action
     }
     
     /**
      Add a title to the popup
      */
-    func addTitleText(title: String) {
+    func addTitleText(_ title: String) {
         lblTitle = self.addText(title, f: UIFont(name: "Montserrat-Bold", size: 14)!, margin: 20)
         lblTitle!.frame.origin.y = margin
         lblTitle!.frame.origin.x = 20
@@ -119,7 +119,7 @@ class SmartPopUp: UIView {
     /**
      add a content text to the popup
      */
-    func addContentText(content: String) {
+    func addContentText(_ content: String) {
         lblContent = self.addText(content, f: UIFont(name: "OpenSans", size: 14)!, margin: 10)
         lblContent!.frame.origin.y = margin*2 + lblTitle!.frame.height
         lblContent!.frame.origin.x = 10
@@ -131,8 +131,8 @@ class SmartPopUp: UIView {
      
      - parameter selfHeight: the computed height of the popup
      */
-    func addHorizontalSeparator(selfHeight: CGFloat) {
-        let sep2 = UIView(frame: CGRectMake(0, selfHeight-ButtonHeight, selfRect.width,0.5))
+    func addHorizontalSeparator(_ selfHeight: CGFloat) {
+        let sep2 = UIView(frame: CGRect(x: 0, y: selfHeight-ButtonHeight, width: selfRect.width,height: 0.5))
         sep2.backgroundColor = customSeparatorColor()
         self.addSubview(sep2)
     }
@@ -142,8 +142,8 @@ class SmartPopUp: UIView {
      
      - parameter selfHeight: the computed height of the popup
      */
-    func addVerticalSeparator(selfHeight: CGFloat) {
-        let sep = UIView(frame: CGRectMake(selfRect.width/2, selfHeight-ButtonHeight,0.5,ButtonHeight))
+    func addVerticalSeparator(_ selfHeight: CGFloat) {
+        let sep = UIView(frame: CGRect(x: selfRect.width/2, y: selfHeight-ButtonHeight,width: 0.5,height: ButtonHeight))
         sep.backgroundColor = customSeparatorColor()
         self.addSubview(sep)
     }
@@ -152,42 +152,42 @@ class SmartPopUp: UIView {
     /**
      add the cancel button
      */
-    func addButtonCancel(cancelText: String) {
-        btnCancel = SmartButtonIgnored(type: .Custom)
+    func addButtonCancel(_ cancelText: String) {
+        btnCancel = SmartButtonIgnored(type: .custom)
         
         guard let cancel = btnCancel else {
             return
         }
         
-        let cancelRect = CGRectMake(0, 0, selfRect.width/2, ButtonHeight)
+        let cancelRect = CGRect(x: 0, y: 0, width: selfRect.width/2, height: ButtonHeight)
         cancel.backgroundColor = customBackgroundColor()
-        cancel.addTarget(self, action: #selector(SmartPopUp.normal(_:)), forControlEvents: .TouchUpInside)
-        cancel.addTarget(self, action: #selector(SmartPopUp.normal(_:)), forControlEvents: .TouchUpOutside)
-        cancel.addTarget(self, action: #selector(SmartPopUp.hightlight(_:)), forControlEvents: .TouchDown)
-        cancel.setTitle(cancelText, forState: .Normal)
-        cancel.setTitleColor(customButtonTextColor(), forState: .Normal)
+        cancel.addTarget(self, action: #selector(SmartPopUp.normal(_:)), for: .touchUpInside)
+        cancel.addTarget(self, action: #selector(SmartPopUp.normal(_:)), for: .touchUpOutside)
+        cancel.addTarget(self, action: #selector(SmartPopUp.hightlight(_:)), for: .touchDown)
+        cancel.setTitle(cancelText, for: UIControlState())
+        cancel.setTitleColor(customButtonTextColor(), for: UIControlState())
         cancel.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 14)
-        cancel.frame = CGRectMake(0,
-            selfRect.height-cancelRect.height,
-            cancelRect.width,
-            cancelRect.height)
+        cancel.frame = CGRect(x: 0,
+            y: selfRect.height-cancelRect.height,
+            width: cancelRect.width,
+            height: cancelRect.height)
         
         self.addSubview(cancel)
         cancel.layer.cornerRadius = 0.0
-        let shapePath = UIBezierPath(roundedRect: cancel.bounds, byRoundingCorners: UIRectCorner.BottomLeft, cornerRadii: CGSizeMake(5, 5))
+        let shapePath = UIBezierPath(roundedRect: cancel.bounds, byRoundingCorners: UIRectCorner.bottomLeft, cornerRadii: CGSize(width: 5, height: 5))
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = cancel.bounds
-        shapeLayer.path = shapePath.CGPath
+        shapeLayer.path = shapePath.cgPath
         cancel.layer.mask = shapeLayer
     }
     
     /* color of the button in normal state */
-    func normal(sender: UIButton) {
+    func normal(_ sender: UIButton) {
         sender.backgroundColor = customBackgroundColor()
     }
     
     /* on click */
-    func hightlight(sender: UIButton) {
+    func hightlight(_ sender: UIButton) {
         sender.backgroundColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         if sender == btnCancel {
             if let action = cancelAction {
@@ -204,62 +204,62 @@ class SmartPopUp: UIView {
     /**
      add an OK button
      */
-    func addButtonOk(okText: String) {
-        btnOk = SmartButtonIgnored(type: .Custom)
+    func addButtonOk(_ okText: String) {
+        btnOk = SmartButtonIgnored(type: .custom)
         
         guard let ok = btnOk else {
             return
         }
-        let cancelRect = CGRectMake(0, 0, selfRect.width/2, ButtonHeight)
+        let cancelRect = CGRect(x: 0, y: 0, width: selfRect.width/2, height: ButtonHeight)
         ok.backgroundColor = customBackgroundColor()
-        ok.setTitle(okText, forState: .Normal)
-        ok.setTitleColor(customButtonTextColor(), forState: .Normal)
-        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), forControlEvents: .TouchUpInside)
-        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), forControlEvents: .TouchUpOutside)
-        ok.addTarget(self, action: #selector(SmartPopUp.hightlight(_:)), forControlEvents: .TouchDown)
+        ok.setTitle(okText, for: UIControlState())
+        ok.setTitleColor(customButtonTextColor(), for: UIControlState())
+        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), for: .touchUpInside)
+        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), for: .touchUpOutside)
+        ok.addTarget(self, action: #selector(SmartPopUp.hightlight(_:)), for: .touchDown)
         ok.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 14)
-        ok.frame = CGRectMake(selfRect.width/2,
-            selfRect.height-cancelRect.height,
-            cancelRect.width,
-            cancelRect.height)
+        ok.frame = CGRect(x: selfRect.width/2,
+            y: selfRect.height-cancelRect.height,
+            width: cancelRect.width,
+            height: cancelRect.height)
         
         self.addSubview(ok)
         ok.layer.cornerRadius = 0.0
-        let shapePath = UIBezierPath(roundedRect: ok.bounds, byRoundingCorners: UIRectCorner.BottomRight, cornerRadii: CGSizeMake(5, 5))
+        let shapePath = UIBezierPath(roundedRect: ok.bounds, byRoundingCorners: UIRectCorner.bottomRight, cornerRadii: CGSize(width: 5, height: 5))
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = ok.bounds
-        shapeLayer.path = shapePath.CGPath
+        shapeLayer.path = shapePath.cgPath
         ok.layer.mask = shapeLayer
     }
     
     /**
      add an OK button
      */
-    func addSingleButtonOk(okText: String) {
-        btnOk = SmartButtonIgnored(type: .Custom)
+    func addSingleButtonOk(_ okText: String) {
+        btnOk = SmartButtonIgnored(type: .custom)
         
         guard let ok = btnOk else {
             return
         }
-        let cancelRect = CGRectMake(0, 0, selfRect.width/2, ButtonHeight)
+        let cancelRect = CGRect(x: 0, y: 0, width: selfRect.width/2, height: ButtonHeight)
         ok.backgroundColor = customBackgroundColor()
-        ok.setTitle(okText, forState: .Normal)
-        ok.setTitleColor(customButtonTextColor(), forState: .Normal)
-        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), forControlEvents: .TouchUpInside)
-        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), forControlEvents: .TouchUpOutside)
-        ok.addTarget(self, action: #selector(SmartPopUp.hightlight(_:)), forControlEvents: .TouchDown)
+        ok.setTitle(okText, for: UIControlState())
+        ok.setTitleColor(customButtonTextColor(), for: UIControlState())
+        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), for: .touchUpInside)
+        ok.addTarget(self, action: #selector(SmartPopUp.normal(_:)), for: .touchUpOutside)
+        ok.addTarget(self, action: #selector(SmartPopUp.hightlight(_:)), for: .touchDown)
         ok.titleLabel?.font = UIFont(name: "Montserrat-Regular", size: 14)
-        ok.frame = CGRectMake(0,
-                              selfRect.height-cancelRect.height,
-                              selfRect.width,
-                              ButtonHeight)
+        ok.frame = CGRect(x: 0,
+                              y: selfRect.height-cancelRect.height,
+                              width: selfRect.width,
+                              height: ButtonHeight)
         
         self.addSubview(ok)
         ok.layer.cornerRadius = 0.0
-        let shapePath = UIBezierPath(roundedRect: ok.bounds, byRoundingCorners: [UIRectCorner.BottomRight, UIRectCorner.BottomLeft], cornerRadii: CGSizeMake(5, 5))
+        let shapePath = UIBezierPath(roundedRect: ok.bounds, byRoundingCorners: [UIRectCorner.bottomRight, UIRectCorner.bottomLeft], cornerRadii: CGSize(width: 5, height: 5))
         let shapeLayer = CAShapeLayer()
         shapeLayer.frame = ok.bounds
-        shapeLayer.path = shapePath.CGPath
+        shapeLayer.path = shapePath.cgPath
         ok.layer.mask = shapeLayer
     }
     
@@ -272,20 +272,20 @@ class SmartPopUp: UIView {
      
      - returns: the proper uilabel
      */
-    func addText(s: String, f: UIFont, margin: CGFloat) -> UILabel {
-        let label = UILabel(frame: CGRectMake(0,0,selfRect.width-margin*2,50))
+    func addText(_ s: String, f: UIFont, margin: CGFloat) -> UILabel {
+        let label = UILabel(frame: CGRect(x: 0,y: 0,width: selfRect.width-margin*2,height: 50))
         label.text = s
-        label.backgroundColor = UIColor.clearColor()
+        label.backgroundColor = UIColor.clear
         label.font = f
         label.textColor = customTextColor()
-        label.textAlignment = .Center
-        label.lineBreakMode = .ByWordWrapping
+        label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         
         var y = self.selfRect.height - label.expectedheight()
         y -= CGFloat(ButtonHeight)
         
-        label.frame = CGRectMake(0,y,selfRect.width-margin*2,ceil(label.expectedheight()))
+        label.frame = CGRect(x: 0,y: y,width: selfRect.width-margin*2,height: ceil(label.expectedheight()))
         label.backgroundColor = customBackgroundColor()
         return label
     }

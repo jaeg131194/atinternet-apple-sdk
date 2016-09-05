@@ -32,7 +32,7 @@ class GestureEvent {
     lazy var currentScreen: Screen = Screen()
     
     /// Event Type
-    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.Unknown
+    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.unknown
     
     // Alias
     var title: String?

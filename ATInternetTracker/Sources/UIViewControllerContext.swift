@@ -15,8 +15,8 @@ import UIKit
 class UIViewControllerContext {
     
     enum UIViewControllerOrientation: Int {
-        case Portrait = 1
-        case Landscape = 2
+        case portrait = 1
+        case landscape = 2
     }
     
     /// A Stack of UIVIewController displayed
@@ -27,13 +27,13 @@ class UIViewControllerContext {
         return activeViewControllers.last
     }
     
-    lazy var currentOrientation: UIViewControllerOrientation = UIViewControllerOrientation.Portrait
+    lazy var currentOrientation: UIViewControllerOrientation = UIViewControllerOrientation.portrait
     var isPeekAndPoped: Bool = false
     var isPeek: Bool = false
         
     
     /// A timestamp representing the time where the last view was loaded
-    lazy var viewAppearedTime = NSDate().timeIntervalSinceNow
+    lazy var viewAppearedTime = Date().timeIntervalSinceNow
     
     /// An array representing "noise" viewcontrollers that are loaded quietly that we want to ignore
     let UIClassToIgnore = [
@@ -56,5 +56,5 @@ class UIViewControllerContext {
     /// Singleton
     static let sharedInstance = UIViewControllerContext()
     
-    private init() { }
+    fileprivate init() { }
 }

@@ -21,8 +21,8 @@ class Maths {
      
      - returns: a-b
      */
-    class func CGPointSub(a: CGPoint, b: CGPoint) -> CGPoint {
-        return CGPointMake(a.x-b.x, a.y-b.y)
+    class func CGPointSub(_ a: CGPoint, b: CGPoint) -> CGPoint {
+        return CGPoint(x: a.x-b.x, y: a.y-b.y)
     }
     
     /**
@@ -33,7 +33,7 @@ class Maths {
      
      - returns: the distance
      */
-    class func CGPointDist(a: CGPoint, b:CGPoint) -> CGFloat {
+    class func CGPointDist(_ a: CGPoint, b:CGPoint) -> CGFloat {
         return sqrt(  (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y) )
     }
     
@@ -44,7 +44,7 @@ class Maths {
      
      - returns: ??
      */
-    class func CGPointLen(a: CGPoint) -> Float {
+    class func CGPointLen(_ a: CGPoint) -> Float {
         return sqrtf(Float(a.x*a.x+a.y*a.y))
     }
     
@@ -58,7 +58,7 @@ class Maths {
      
      - returns: the angle between the 2 lines in degree 0-360
      */
-    class func angleBetween(initialP1: CGPoint, initialP2: CGPoint, finalP1: CGPoint, finalP2: CGPoint) -> CGFloat {
+    class func angleBetween(_ initialP1: CGPoint, initialP2: CGPoint, finalP1: CGPoint, finalP2: CGPoint) -> CGFloat {
         let vector1 = (initialP1.x - initialP2.x, initialP1.y - initialP2.y)
         let vector2 = (finalP1.x - finalP2.x, finalP1.y - finalP2.y)
         var angle = atan2(vector2.1, vector2.0) - atan2(vector1.1, vector1.0);

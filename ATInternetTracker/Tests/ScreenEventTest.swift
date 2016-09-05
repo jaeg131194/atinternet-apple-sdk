@@ -40,9 +40,9 @@ class ScreenEventTest: XCTestCase {
                 "screen":[
                     "title": "", // screenEvent remplit screen.name
                     "className": "HelloViewController",
-                    "scale": UIScreen.mainScreen().scale,
-                    "width": UIScreen.mainScreen().bounds.width,
-                    "height": UIScreen.mainScreen().bounds.height,
+                    "scale": UIScreen.main.scale,
+                    "width": UIScreen.main.bounds.width,
+                    "height": UIScreen.main.bounds.height,
                     "app":[
                         "device":"x86_64",
                         "token":"",
@@ -55,9 +55,9 @@ class ScreenEventTest: XCTestCase {
             ]
         ]
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(
-                se.description.dataUsingEncoding(NSUTF8StringEncoding)!,
-                options: NSJSONReadingOptions.AllowFragments
+            let json = try JSONSerialization.jsonObject(
+                with: se.description.data(using: String.Encoding.utf8)!,
+                options: JSONSerialization.ReadingOptions.allowFragments
             )
             XCTAssertEqual(json as? NSDictionary, jsonObj)
         } catch {}

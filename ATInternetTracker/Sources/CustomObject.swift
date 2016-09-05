@@ -44,7 +44,7 @@ public class CustomObject: BusinessObject {
     }
     
     @objc(initWithDictionary:)
-    init(dictionary: [String: AnyObject]) {
+    init(dictionary: [String: Any]) {
         super.init()
         
         self.json = Tool.JSONStringify(dictionary)
@@ -60,7 +60,7 @@ public class CustomObject: BusinessObject {
         option.append = true
         option.encode = true
         
-        self.tracker.setParam(HitParam.JSON.rawValue, value: json, options: option)
+        _ = self.tracker.setParam(HitParam.json.rawValue, value: json, options: option)
     }
 }
 
@@ -123,7 +123,7 @@ public class CustomObjects: NSObject {
     @- returns: the CustomObjects instance
     */
     @objc(addString:)
-    public func add(customObject: String) -> CustomObject {
+    public func add(_ customObject: String) -> CustomObject {
         let customObj = CustomObject(string: customObject)
         customObj.tracker = self.tracker
         
@@ -149,7 +149,7 @@ public class CustomObjects: NSObject {
     - returns: the CustomObjects instance
     */
     @objc(addDictionary:)
-    public func add(customObject: [String: AnyObject]) -> CustomObject {
+    public func add(_ customObject: [String: Any]) -> CustomObject {
         let customObj = CustomObject(dictionary: customObject)
         customObj.tracker = tracker
         
@@ -174,21 +174,21 @@ public class CustomObjects: NSObject {
      Remove a custom object
      - parameter customObjectId: the custom object identifier
      */
-    public func remove(customObjectId: String) {
+    public func remove(_ customObjectId: String) {
         if(screen != nil) {
-            screen!._customObjects.removeValueForKey(customObjectId)
+            screen!._customObjects.removeValue(forKey: customObjectId)
         } else if(gesture != nil) {
-            gesture!._customObjects.removeValueForKey(customObjectId)
+            gesture!._customObjects.removeValue(forKey: customObjectId)
         } else if(publisher != nil) {
-            publisher!._customObjects.removeValueForKey(customObjectId)
+            publisher!._customObjects.removeValue(forKey: customObjectId)
         } else if(selfPromotion != nil) {
-            selfPromotion!._customObjects.removeValueForKey(customObjectId)
+            selfPromotion!._customObjects.removeValue(forKey: customObjectId)
         } else if(product != nil) {
-            product!._customObjects.removeValueForKey(customObjectId)
+            product!._customObjects.removeValue(forKey: customObjectId)
         } else {
             for(_,value) in self.tracker.businessObjects {
                 if (value is CustomObject && (value as! CustomObject).id == customObjectId) {
-                    self.tracker.businessObjects.removeValueForKey(value.id)
+                    self.tracker.businessObjects.removeValue(forKey: value.id)
                     break
                 }
             }
@@ -200,19 +200,19 @@ public class CustomObjects: NSObject {
      */
     public func removeAll() {
         if(screen != nil) {
-            screen!._customObjects.removeAll(keepCapacity: false)
+            screen!._customObjects.removeAll(keepingCapacity: false)
         } else if(gesture != nil) {
-            gesture!._customObjects.removeAll(keepCapacity: false)
+            gesture!._customObjects.removeAll(keepingCapacity: false)
         } else if(publisher != nil) {
-            publisher!._customObjects.removeAll(keepCapacity: false)
+            publisher!._customObjects.removeAll(keepingCapacity: false)
         } else if(selfPromotion != nil) {
-            selfPromotion!._customObjects.removeAll(keepCapacity: false)
+            selfPromotion!._customObjects.removeAll(keepingCapacity: false)
         } else if(product != nil) {
-            product!._customObjects.removeAll(keepCapacity: false)
+            product!._customObjects.removeAll(keepingCapacity: false)
         } else {
             for(_,value) in self.tracker.businessObjects {
                 if (value is CustomObject) {
-                    self.tracker.businessObjects.removeValueForKey(value.id)
+                    self.tracker.businessObjects.removeValue(forKey: value.id)
                 }
             }
         }

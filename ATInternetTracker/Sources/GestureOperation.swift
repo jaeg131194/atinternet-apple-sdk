@@ -10,18 +10,18 @@ import UIKit
 import Foundation
 
 /// Class for sending gesture event to the socket server
-class GestureOperation: NSOperation {
+class GestureOperation: Operation {
     
     var gestureEvent: GestureEvent
     
     /// refresh the timer tick
-    var timerDuration: NSTimeInterval = 0.2
+    var timerDuration: TimeInterval = 0.2
     
     /// timer to handle the timeout
-    var timerTotalDuration: NSTimeInterval = 0
+    var timerTotalDuration: TimeInterval = 0
     
     /// after timeout, the hit is sent
-    let TIMEOUT_OPERATION: NSTimeInterval = 5
+    let TIMEOUT_OPERATION: TimeInterval = 5
     
     /**
      GestureOperation init
@@ -42,8 +42,8 @@ class GestureOperation: NSOperation {
             
             let tracker = ATInternet.sharedInstance.defaultTracker
             
-            NSThread.sleepForTimeInterval(0.2)
-            if self.cancelled {
+            Thread.sleep(forTimeInterval: 0.2)
+            if self.isCancelled {
                 return
             }
             
@@ -53,7 +53,7 @@ class GestureOperation: NSOperation {
             }
             
             if tracker.enableAutoTracking {
-                sendGestureHit(tracker)
+               _ =  sendGestureHit(tracker)
             }
         }
     }
@@ -63,13 +63,13 @@ class GestureOperation: NSOperation {
      
      - parameter tracker: AutoTracker
      */
-    func sendGestureHit(tracker: AutoTracker) -> Bool {
+    func sendGestureHit(_ tracker: AutoTracker) -> Bool {
         let gesture = tracker.gestures.add()
         if let method = gestureEvent.methodName {
             gesture.name = method
             
             if method == "handleBack:" {
-                gesture.action = .Navigate
+                gesture.action = .navigate
             }
         }
         
@@ -78,10 +78,10 @@ class GestureOperation: NSOperation {
         gesture.view = gestureEvent.view
         
         // We pause thread in order to wait if next operation is a screen. If a screen operation is added after gesture operation, then it's a navigation event
-        NSThread.sleepForTimeInterval(0.5)
+        Thread.sleep(forTimeInterval: 0.5)
         
         if let _ = EventManager.sharedInstance.lastScreenEvent() as? ScreenOperation  {
-            gesture.action = .Navigate
+            gesture.action = .navigate
         }
         
         let shouldSendHit = mapConfiguration(gesture)
@@ -89,6 +89,7 @@ class GestureOperation: NSOperation {
             handleDelegate(gesture)
             tracker.dispatcher.dispatch([gesture])
         }
+        
         return shouldSendHit
     }
     
@@ -97,9 +98,9 @@ class GestureOperation: NSOperation {
      
      - parameter gesture: the gesture
      */
-    func handleDelegate(gesture: Gesture) {
+    func handleDelegate(_ gesture: Gesture) {
         if hasDelegate() {
-            self.gestureEvent.viewController!.performSelector(#selector(IAutoTracker.gestureWasDetected(_:)), withObject: gesture)
+            self.gestureEvent.viewController!.perform(#selector(IAutoTracker.gestureWasDetected(_:)), with: gesture)
             
             if gesture.isReady {
                 return
@@ -119,8 +120,8 @@ class GestureOperation: NSOperation {
         var hasDelegate = false
         
         if let viewController = gestureEvent.viewController {
-            if viewController.conformsToProtocol(IAutoTracker) {
-                if viewController.respondsToSelector(#selector(IAutoTracker.gestureWasDetected(_:))) {
+            if viewController.conforms(to: IAutoTracker.self) {
+                if viewController.responds(to: #selector(IAutoTracker.gestureWasDetected(_:))) {
                     hasDelegate = true
                 }
             }
@@ -133,8 +134,8 @@ class GestureOperation: NSOperation {
      
      - parameter gesture: the gesture to be sent
      */
-    func handleTimer(gesture: Gesture) {
-        NSThread.sleepForTimeInterval(timerDuration)
+    func handleTimer(_ gesture: Gesture) {
+        Thread.sleep(forTimeInterval: timerDuration)
         timerTotalDuration = timerTotalDuration + timerDuration
         if timerTotalDuration > TIMEOUT_OPERATION {
             gesture.isReady = true
@@ -146,7 +147,7 @@ class GestureOperation: NSOperation {
      
      - parameter gesture: the gesture to map
      */
-    func mapConfiguration(gesture: Gesture) -> Bool {
+    func mapConfiguration(_ gesture: Gesture) -> Bool {
         waitForConfigurationLoaded()
         
         if let mapping = Configuration.smartSDKMapping {
@@ -155,20 +156,20 @@ class GestureOperation: NSOperation {
             }
             assert(gestureEvent.methodName != nil)
             
-            let eventKeyBase = Gesture.getEventTypeRawValue(gestureEvent.eventType.rawValue)+"."+gestureEvent.direction+"."+gestureEvent.methodName!
-            let position = gesture.view != nil ? "."+String(gesture.view!.position) : ""
-            let view = gesture.view != nil ? "."+gesture.view!.className : ""
-            let screen = gesture.screen != nil ? "."+gesture.screen!.className : ""
+            let eventKeyBase = Gesture.getEventTypeRawValue(gestureEvent.eventType.rawValue) + "." + gestureEvent.direction + "." + gestureEvent.methodName!
+            let position = gesture.view != nil ? "." + String(gesture.view!.position) : ""
+            let view = gesture.view != nil ? "." + gesture.view!.className : ""
+            let screen = gesture.screen != nil ? "." + gesture.screen!.className : ""
             
             /* 9 strings generated */
-            let one = eventKeyBase+position+view+screen
-            let two = eventKeyBase+position+view
-            let tree = eventKeyBase+position
-            let four = eventKeyBase+position+screen
+            let one = eventKeyBase + position + view + screen
+            let two = eventKeyBase + position + view
+            let tree = eventKeyBase + position
+            let four = eventKeyBase + position + screen
             let five = eventKeyBase
-            let six = eventKeyBase+view
-            let seven = eventKeyBase+screen
-            let height = eventKeyBase+view+screen
+            let six = eventKeyBase + view
+            let seven = eventKeyBase + screen
+            let height = eventKeyBase + view + screen
             let events = [one, two, tree, four, five, six, seven, height]
             
             for aKey in events {
@@ -191,7 +192,7 @@ class GestureOperation: NSOperation {
      */
     func waitForConfigurationLoaded() {
         while(!AutoTracker.isConfigurationLoaded) {
-            NSThread.sleepForTimeInterval(0.2)
+            Thread.sleep(forTimeInterval: 0.2)
         }
     }
 }

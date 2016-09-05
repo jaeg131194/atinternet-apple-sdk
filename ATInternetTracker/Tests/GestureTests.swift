@@ -79,7 +79,7 @@ class GestureTests: XCTestCase {
 
     func testSetNavigation() {
         gesture.name = "Back"
-        gesture.action = Gesture.GestureAction.Navigate
+        gesture.action = Gesture.GestureAction.navigate
         gesture.setEvent()
         
         XCTAssertEqual(gesture.tracker.buffer.volatileParameters.count, 5, "Le nombre de paramètres volatiles doit être égal à 5")
@@ -99,7 +99,7 @@ class GestureTests: XCTestCase {
     
     func testSetDownload() {
         gesture.name = "Download"
-        gesture.action = Gesture.GestureAction.Download
+        gesture.action = Gesture.GestureAction.download
         gesture.setEvent()
         
         XCTAssertEqual(gesture.tracker.buffer.volatileParameters.count, 5, "Le nombre de paramètres volatiles doit être égal à 5")
@@ -119,7 +119,7 @@ class GestureTests: XCTestCase {
     
     func testSetTouch() {
         gesture.name = "Touch"
-        gesture.action = Gesture.GestureAction.Touch
+        gesture.action = Gesture.GestureAction.touch
         gesture.setEvent()
         
         XCTAssertEqual(gesture.tracker.buffer.volatileParameters.count, 5, "Le nombre de paramètres volatiles doit être égal à 5")
@@ -139,7 +139,7 @@ class GestureTests: XCTestCase {
     
     func testSetExit() {
         gesture.name = "Exit"
-        gesture.action = Gesture.GestureAction.Exit
+        gesture.action = Gesture.GestureAction.exit
         gesture.setEvent()
         
         XCTAssertEqual(gesture.tracker.buffer.volatileParameters.count, 5, "Le nombre de paramètres volatiles doit être égal à 5")
@@ -180,7 +180,7 @@ class GestureTests: XCTestCase {
         screen.sendView()
         
         gesture.name = "Touch"
-        gesture.action = Gesture.GestureAction.Touch
+        gesture.action = Gesture.GestureAction.touch
         gesture.setEvent()
         
         XCTAssertEqual(gesture.tracker.buffer.volatileParameters.count, 7, "Le nombre de paramètres volatiles doit être égal à 7")

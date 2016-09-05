@@ -36,11 +36,11 @@ import Foundation
 class PluginParam: NSObject {
     
     /// Returns all the parameters which needs custom handler
-    class func list(tracker: Tracker) -> [String: Plugin.Type] {
+    class func list(_ tracker: Tracker) -> [String: Plugin.Type] {
         var dic = [String: Plugin.Type]()
         
         if let optPlugin = tracker.configuration.parameters["plugins"] {
-            if (optPlugin.rangeOfString("tvtracking") != nil) {
+            if (optPlugin.range(of: "tvtracking") != nil) {
                 dic["tvt"] = TVTrackingPlugin.self
             }
         }
@@ -91,15 +91,15 @@ class SliceReadyParam: NSObject {
 class Param: NSObject {
     /// Parameter types
     enum ParamType: Int {
-        case Integer
-        case Double
-        case Float
-        case String
-        case Bool
-        case Array
-        case JSON
-        case Closure
-        case Unknown
+        case integer
+        case double
+        case float
+        case string
+        case bool
+        case array
+        case json
+        case closure
+        case unknown
     }
     /// Parameter key (Querystring variable)
     var key: String
@@ -108,7 +108,7 @@ class Param: NSObject {
     /// Parameter options
     lazy var options: ParamOption? = ParamOption()
     /// Parameter type
-    var type: ParamType = .Unknown
+    var type: ParamType = .unknown
     /// Description (&p=v)
     var text: String {
         return String(format:"&%@=%@", key, self.value())
@@ -120,7 +120,7 @@ class Param: NSObject {
     - returns: a parameter with no key and no value
     */
     convenience override init() {
-        self.init(key: "", value: {""}, type: .Unknown);
+        self.init(key: "", value: {""}, type: .unknown);
     }
     
     /**
@@ -131,7 +131,7 @@ class Param: NSObject {
     
     - returns: a parameter
     */
-    convenience init(key: String, value:() -> String, type: ParamType) {
+    convenience init(key: String, value:@escaping () -> String, type: ParamType) {
         self.init(key: key, value: value, type: type, options: nil);
     }
     
@@ -144,7 +144,7 @@ class Param: NSObject {
     
     - returns: a parameter
     */
-    init(key: String, value:() -> String, type: ParamType, options: ParamOption?) {
+    init(key: String, value:@escaping () -> String, type: ParamType, options: ParamOption?) {
         self.key = key
         self.value = value
         self.type = type

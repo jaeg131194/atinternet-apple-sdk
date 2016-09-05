@@ -28,7 +28,7 @@ class PanEvent : GestureEvent {
     
     /// JSON description
     override var description: String {
-        let jsonObj: NSMutableDictionary = [
+        var jsonObj: [String: Any] = [
             "event": Gesture.getEventTypeRawValue(self.eventType.rawValue),
             "data":[
                 "x":-1,
@@ -36,14 +36,15 @@ class PanEvent : GestureEvent {
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
                 "methodName": self.methodName ?? defaultMethodName,
                 "direction": self.direction,
-                "isDefaultMethod": self.methodName == nil ,
+                "isDefaultMethod": self.methodName == nil,
                 "title": self.title ?? defaultMethodName
             ]
         ]
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.view.description.toJSONObject() as! [NSObject: AnyObject])
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
+        
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.view.toJSONObject)
+        data.append(self.currentScreen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
         
         return jsonObj.toJSON()
     }
@@ -58,7 +59,7 @@ class PanEvent : GestureEvent {
      - returns: a PanEvent
      */
     init(view: View, direction: PanDirection, currentScreen: Screen) {
-        super.init(type: Gesture.GestureEventType.Pan, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        super.init(type: Gesture.GestureEventType.pan, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
         self.defaultMethodName = "handlePan:"
     }
 }

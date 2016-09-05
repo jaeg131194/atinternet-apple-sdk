@@ -17,7 +17,7 @@ class PendingState: LiveNetworkState {
     func deviceAskedForLive() {}
     func interfaceAskedForLive() {
         // special patch: interface and device made a request, making "deadlock"
-        let isAsking: Bool? = self.liveManager.sender?.timer?.valid
+        let isAsking: Bool? = self.liveManager.sender?.timer?.isValid
         if isAsking ?? false {
             liveManager.sender?.stopAskingForLive()
             liveManager.toolbar?.pendingToConnected()
@@ -40,7 +40,7 @@ class PendingState: LiveNetworkState {
         liveManager.toolbar?.pendingToDisconnected()
         liveManager.networkStatus = .Disconnected
         liveManager.current = liveManager.disconnected
-        liveManager.autoReject = NSDate()
+        liveManager.autoReject = Date()
         self.liveManager.sender?.sendMessageForce(DeviceRefusedLive().description)
     }
     

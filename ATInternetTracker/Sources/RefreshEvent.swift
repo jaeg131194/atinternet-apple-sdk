@@ -14,7 +14,7 @@ class RefreshEvent : GestureEvent {
     
     /// JSON description
     override var description: String {
-        let jsonObj: NSMutableDictionary = [
+        var jsonObj: [String: Any] = [
             "event": Gesture.getEventTypeRawValue(self.eventType.rawValue),
             "data":[
                 "x":-1,
@@ -26,11 +26,12 @@ class RefreshEvent : GestureEvent {
                 "title": self.title ?? defaultMethodName
             ]
         ]
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.view.description.toJSONObject() as! [NSObject: AnyObject])
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
         
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.view.toJSONObject)
+        data.append(self.currentScreen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
+                
         return jsonObj.toJSON()
     }
     
@@ -43,7 +44,7 @@ class RefreshEvent : GestureEvent {
      - returns: TapEvent
      */
     init(method: String?, view: View, currentScreen: Screen) {
-        super.init(type: Gesture.GestureEventType.Refresh, methodName: method, view: view, direction: "down", currentScreen: currentScreen)
+        super.init(type: Gesture.GestureEventType.refresh, methodName: method, view: view, direction: "down", currentScreen: currentScreen)
         self.defaultMethodName = "handleRefresh:"
     }
 }

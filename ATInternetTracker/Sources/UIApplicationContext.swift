@@ -17,7 +17,7 @@ class UIApplicationContext {
         KLCPopup.self,
         SmartToolbar.self,
         SmartImageViewIgnored.self,
-    ];
+    ] as [Any]
     
     /**
      Enum of pinch direction
@@ -50,33 +50,33 @@ class UIApplicationContext {
      - DatePicker:       DatePicker
      */
     enum ViewType: String {
-        case Unkwown = "UIView"
-        case TableViewCell = "UITableViewCell"
-        case CollectionViewCell = "UICollectionViewCell"
-        case BackButton = "UINavigationBarBackIndicatorView"
-        case TabBarButton = "UITabBarButton"
-        case SegmentedControl = "UISegmentedControl"
-        case Slider = "UISlider"
-        case TextField = "UITextField"
-        case Stepper = "UIStepper"
-        case Button = "UIButton"
-        case Switch = "UISwitch"
-        case NavigationBar = "UINavigationBar"
-        case PageControl = "UIPageControl"
-        case DatePicker = "UIDatePicker"
+        case unknown = "UIView"
+        case tableViewCell = "UITableViewCell"
+        case collectionViewCell = "UICollectionViewCell"
+        case backButton = "UINavigationBarBackIndicatorView"
+        case tabBarButton = "UITabBarButton"
+        case segmentedControl = "UISegmentedControl"
+        case slider = "UISlider"
+        case textField = "UITextField"
+        case stepper = "UIStepper"
+        case button = "UIButton"
+        case uiswitch = "UISwitch"
+        case navigationBar = "UINavigationBar"
+        case pageControl = "UIPageControl"
+        case datePicker = "UIDatePicker"
     }
     
     /// Property to keep event type
-    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.Unknown
+    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.unknown
     
     /// Property to keep current touched view in app
     lazy var currentTouchedView : UIView? = nil
     
     /// Touch position
-    lazy var initialTouchPosition: CGPoint = CGPointZero
+    lazy var initialTouchPosition: CGPoint = CGPoint.zero
     
     /// Time of touch
-    var initalTouchTime: NSTimeInterval?
+    var initalTouchTime: TimeInterval?
     
     /// Distance between two fingers
     lazy var initialPinchDistance: CGFloat = 0.0
@@ -87,10 +87,10 @@ class UIApplicationContext {
     lazy var pinchType = PinchDirection.Unknown
     
     /// Time of previous touch
-    var previousTouchTime: NSTimeInterval?
+    var previousTouchTime: TimeInterval?
     
     /// Previous event type - not always sent
-    lazy var previousEventType: Gesture.GestureEventType = Gesture.GestureEventType.Unknown
+    lazy var previousEventType: Gesture.GestureEventType = Gesture.GestureEventType.unknown
     
     /// Previous event - that was SENT
     lazy var previousEventSent: GestureEvent? = nil
@@ -98,60 +98,60 @@ class UIApplicationContext {
     /// Singleton
     static let sharedInstance = UIApplicationContext()
     
-    private init() { }
+    fileprivate init() { }
     
     /**
      Return the default methodName for a view
      
      - returns: a default string that represent the default action on this view
      */
-    func getDefaultViewMethod(currentView: UIView?) -> String? {
+    func getDefaultViewMethod(_ currentView: UIView?) -> String? {
         guard let currentView = currentView else {
             return "handleTap:"
         }
         switch currentView.type {
-        case UIApplicationContext.ViewType.Unkwown:
+        case UIApplicationContext.ViewType.unknown:
             return nil
-        case UIApplicationContext.ViewType.TableViewCell:
+        case UIApplicationContext.ViewType.tableViewCell:
             return "handleTap:"
-        case UIApplicationContext.ViewType.CollectionViewCell:
+        case UIApplicationContext.ViewType.collectionViewCell:
             return "handleTap:"
-        case UIApplicationContext.ViewType.BackButton:
+        case UIApplicationContext.ViewType.backButton:
             return "handleBack:"
-        case UIApplicationContext.ViewType.TabBarButton:
+        case UIApplicationContext.ViewType.tabBarButton:
             return "_tabBarItemClicked:"
-        case UIApplicationContext.ViewType.SegmentedControl:
+        case UIApplicationContext.ViewType.segmentedControl:
             return nil
-        case UIApplicationContext.ViewType.Slider:
+        case UIApplicationContext.ViewType.slider:
             return nil
-        case UIApplicationContext.ViewType.TextField:
+        case UIApplicationContext.ViewType.textField:
             return "handleFocus:"
-        case UIApplicationContext.ViewType.Stepper:
+        case UIApplicationContext.ViewType.stepper:
             return nil
-        case UIApplicationContext.ViewType.Button:
+        case UIApplicationContext.ViewType.button:
             return nil
-        case UIApplicationContext.ViewType.Switch:
+        case UIApplicationContext.ViewType.uiswitch:
             return "setOn:"
-        case UIApplicationContext.ViewType.NavigationBar:
+        case UIApplicationContext.ViewType.navigationBar:
             return "handleTap:"
-        case UIApplicationContext.ViewType.PageControl:
+        case UIApplicationContext.ViewType.pageControl:
             return nil
-        case UIApplicationContext.ViewType.DatePicker:
+        case UIApplicationContext.ViewType.datePicker:
             return "handleTap:"
         }
     }
     
-    class func findMostAccurateTouchedView(view: UIView?) -> UIView? {
+    class func findMostAccurateTouchedView(_ view: UIView?) -> UIView? {
         var accurateView: UIView?
         
         if let touchedView = view {
-            if UIApplicationContext.sharedInstance.initialTouchPosition != CGPointZero {
-                let frame = touchedView.superview?.convertRect(touchedView.frame, toView: nil)
+            if UIApplicationContext.sharedInstance.initialTouchPosition != CGPoint.zero {
+                let frame = touchedView.superview?.convert(touchedView.frame, to: nil)
                 
-                if CGRectContainsPoint(frame!, UIApplicationContext.sharedInstance.initialTouchPosition) {
+                if frame!.contains(UIApplicationContext.sharedInstance.initialTouchPosition) {
                     accurateView = touchedView
                     
-                    if accurateView! is UIControl || accurateView?.type != UIApplicationContext.ViewType.Unkwown {
+                    if accurateView! is UIControl || accurateView?.type != UIApplicationContext.ViewType.unknown {
                         return accurateView
                     } else {
                         for subview in touchedView.subviews {

@@ -9,7 +9,7 @@
 import Foundation
 
 class TestGenerator {
-    class func randomViewGenerator(filterViews:(UIView) -> (Bool) = {_ in return true} ) -> UIView {
+    class func randomViewGenerator(_ filterViews:(UIView) -> (Bool) = {_ in return true} ) -> UIView {
         let allViews: [UIView] = [UIView(), UILabel(), UIButton(), UISegmentedControl(), UITextField(), UISlider(), UISwitch(), UIStepper(), UIImageView(), UITextView(), UIScrollView(), UIDatePicker(), UIWebView(), UINavigationBar(), UISearchBar()]
         let views = allViews.filter(filterViews)
         let aView = views[Int(arc4random_uniform(UInt32(views.count)))]
@@ -17,7 +17,10 @@ class TestGenerator {
         let y = CGFloat(arc4random_uniform(300))
         let w = CGFloat(arc4random_uniform(300))
         let h = CGFloat(arc4random_uniform(300))
-        aView.frame = CGRectMake(x,y,w,h)
+        aView.frame = CGRect(x: x,y: y,width: w,height: h)
+        
+        //print(" - ------- " + aView.classLabel + " --------")
+        
         return aView
     }
 }

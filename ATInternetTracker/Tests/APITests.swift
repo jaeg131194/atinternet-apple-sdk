@@ -4,14 +4,14 @@ import XCTest
 @testable import Tracker
 
 class MockStore: SimpleStorageProtocol {
-    var store: AnyObject? = nil
-    func getByName(name: String) -> AnyObject? {return store}
-    func saveByName(config: AnyObject, name: String) -> Bool {store = config; return true}
+    var store: Any? = nil
+    func getByName(_ name: String) -> Any? {return store}
+    func saveByName(_ config: Any, name: String) -> Bool {store = config; return true}
 }
 
 class MockNetwork: SimpleNetworkService {
-    func getURL(request: MappingRequest, retryCount: Int) {
-        request.onLoaded(JSON(["timestamp":123456]))
+    func getURL(_ request: MappingRequest, retryCount: Int) {
+        request.onLoaded(JSON(["timestamp": 123456]))
     }
 }
 
@@ -37,11 +37,11 @@ class APITests: XCTestCase {
                               networkService: MockNetwork())
         let url = api.getMappingURL()
 
-        XCTAssertEqual(url, NSURL(string: "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f/version/1.1"))
+        XCTAssertEqual(url, URL(string: "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f/version/1.1"))
     }
 
     func testFetchMappingIfNoMappingInMemory() {
-        let exp = expectationWithDescription("async")
+        let exp = expectation(description: "async")
         
         let api = ApiS3Client(token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
         api.fetchMapping({(apiMapping: JSON?) in
@@ -49,7 +49,7 @@ class APITests: XCTestCase {
             exp.fulfill()
         })
         
-        self.waitForExpectationsWithTimeout(5.0) { (err:NSError?) in
+        self.waitForExpectations(timeout: 0.5) { (err) in
             if let error = err {
                 print("timeout error \(error)")
             }
@@ -57,7 +57,7 @@ class APITests: XCTestCase {
     }
     
     func testFetchMappingIfCheckSumDiffer() {
-        let exp = expectationWithDescription("async")
+        let exp = expectation(description: "async")
         let ts = "123"
         let api = ApiS3Client(token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
         let fakeAPI: JSON = JSON(["timestamp":ts])
@@ -66,7 +66,8 @@ class APITests: XCTestCase {
             XCTAssertNotEqual(mapping!["timestamp"].string, ts)
             exp.fulfill()
         })
-        self.waitForExpectationsWithTimeout(5.0) { (err:NSError?) in
+        
+        self.waitForExpectations(timeout: 5.0) { (err) in
             if let error = err {
                 print("timeout error \(error)")
             }
@@ -74,7 +75,7 @@ class APITests: XCTestCase {
     }
     
     func testDontFetchMappingIfCheckSumOk() {
-        let exp = expectationWithDescription("async")
+        let exp = expectation(description: "async")
         let api = ApiS3Client(token: "X", version: "1.0", store: MockStore(), networkService: MockNetwork())
         api.fetchMapping({ (mapping:JSON?) in
             api.saveSmartSDKMapping(mapping!)
@@ -82,7 +83,7 @@ class APITests: XCTestCase {
                 exp.fulfill()
             })
         })
-        self.waitForExpectationsWithTimeout(5.0) { (err:NSError?) in
+        self.waitForExpectations(timeout: 5.0) { (err) in
             if let error = err {
                 print("timeout error \(error)")
             }

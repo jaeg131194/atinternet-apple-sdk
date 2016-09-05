@@ -40,7 +40,7 @@ public class SelfPromotion : OnAppAd {
     /// Ad format
     public var format: String?
     /// Product identifier
-    public var productId: String?   
+    public var productId: String?
     
     // Custom objects to add to self promotion hit
     public lazy var customObjects: CustomObjects = CustomObjects(selfPromotion: self)
@@ -49,7 +49,7 @@ public class SelfPromotion : OnAppAd {
     Send self promotion touch hit
     */
     public func sendTouch() {
-        self.action = OnAppAdAction.Touch
+        self.action = OnAppAdAction.touch
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -57,7 +57,7 @@ public class SelfPromotion : OnAppAd {
     Send self promotion view hit
     */
     public func sendImpression() {
-        self.action = OnAppAdAction.View
+        self.action = OnAppAdAction.view
         self.tracker.dispatcher.dispatch([self])
     }
     
@@ -81,10 +81,10 @@ public class SelfPromotion : OnAppAd {
             spot += productId
         }
         
-        let positions = Tool.findParameterPosition(HitParam.HitType.rawValue, arrays: tracker.buffer.persistentParameters, tracker.buffer.volatileParameters)
+        let positions = Tool.findParameterPosition(HitParam.hitType.rawValue, arrays: tracker.buffer.persistentParameters, tracker.buffer.volatileParameters)
         
         if(positions.count > 0) {
-            for(_, position) in positions.enumerate() {
+            for(_, position) in positions.enumerated() {
                 if(position.arrayIndex == 0) {
                     currentType = (tracker.buffer.persistentParameters[position.index] as Param).value()
                 } else {
@@ -94,28 +94,28 @@ public class SelfPromotion : OnAppAd {
         }
         
         if (currentType != "screen" && currentType != defaultType) {
-            tracker.setParam(HitParam.HitType.rawValue, value: defaultType)
+            _ = tracker.setParam(HitParam.hitType.rawValue, value: defaultType)
         }
         
         let option = ParamOption()
         option.append = true
         option.encode = true
-        self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(self.action.rawValue), value: spot, options: option)
+        _ = self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(self.action.rawValue), value: spot, options: option)
         
         for (_, value) in _customObjects {
             value.tracker = self.tracker
             value.setEvent()
         }
         
-        if(action == OnAppAdAction.Touch) {
+        if(action == OnAppAdAction.touch) {
             if(TechnicalContext.screenName != "") {
                 let encodingOption = ParamOption()
                 encodingOption.encode = true
-                tracker.setParam("patc", value: TechnicalContext.screenName, options: encodingOption)
+                _ = tracker.setParam("patc", value: TechnicalContext.screenName, options: encodingOption)
             }
             
             if(TechnicalContext.level2 > 0) {
-                tracker.setParam("s2atc", value: TechnicalContext.level2)
+                _ = tracker.setParam("s2atc", value: TechnicalContext.level2)
             }
         }
     }
@@ -159,7 +159,7 @@ public class SelfPromotionImpression: ScreenInfo {
         let option = ParamOption()
         option.append = true
         option.encode = true
-        self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(OnAppAd.OnAppAdAction.View.rawValue), value: spot, options: option)
+        _ = self.tracker.setParam(OnAppAd.getOnAppAddActionRawValue(OnAppAd.OnAppAdAction.view.rawValue), value: spot, options: option)
     }
 }
 
@@ -180,7 +180,7 @@ public class SelfPromotionImpressions: NSObject {
      @param adId identifier
      @return the Self Promotion instance
      */
-    public func add(adId: Int) -> SelfPromotionImpression {
+    public func add(_ adId: Int) -> SelfPromotionImpression {
         let selfPromo = SelfPromotionImpression(tracker: self.tracker)
         selfPromo.adId = adId
         
@@ -208,7 +208,7 @@ public class SelfPromotions: NSObject {
     - parameter adId: ad identifier
     :returnd: the SelfPromotion instance
     */
-    public func add(adId: Int) -> SelfPromotion {
+    public func add(_ adId: Int) -> SelfPromotion {
         let selfPromotion = SelfPromotion(tracker: self.tracker)
         selfPromotion.adId = adId
         
@@ -225,7 +225,7 @@ public class SelfPromotions: NSObject {
         
         for(_, object) in self.tracker.businessObjects {
             if let selfPromo = object as? SelfPromotion {
-                if(selfPromo.action == OnAppAd.OnAppAdAction.View) {
+                if(selfPromo.action == OnAppAd.OnAppAdAction.view) {
                     impressions.append(selfPromo)
                 }
             }

@@ -47,9 +47,9 @@ public class Video: RichMedia {
         if (self.duration > 86400) {
             self.duration = 86400
         }
-        self.tracker.setParam("m1", value: duration)
         
-        self.tracker.setParam("type", value: type)
+        _ = self.tracker.setParam("m1", value: duration)
+        _ = self.tracker.setParam("type", value: type)
     }
     
 }
@@ -76,7 +76,7 @@ public class Videos: NSObject {
     - parameter video: duration in seconds
     - returns: video instance
     */
-    public func add(name:String, duration: Int) -> Video {
+    public func add(_ name:String, duration: Int) -> Video {
         if let video = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A Video with the same name already exists.")
             return video
@@ -98,7 +98,7 @@ public class Videos: NSObject {
     - parameter video: duration in seconds
     - returns: video instance
     */
-    public func add(name: String, chapter1: String, duration: Int) -> Video {
+    public func add(_ name: String, chapter1: String, duration: Int) -> Video {
         if let video = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A Video with the same name already exists.")
             return video
@@ -122,7 +122,7 @@ public class Videos: NSObject {
     - parameter video: duration in seconds
     - returns: video instance
     */
-    public func add(name: String, chapter1: String, chapter2: String, duration: Int) -> Video {
+    public func add(_ name: String, chapter1: String, chapter2: String, duration: Int) -> Video {
         if let video = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A Video with the same name already exists.")
             return video
@@ -148,7 +148,7 @@ public class Videos: NSObject {
     - parameter video: duration in seconds
     - returns: video instance
     */
-    public func add(name: String, chapter1: String, chapter2: String, chapter3: String, duration: Int) -> Video {
+    public func add(_ name: String, chapter1: String, chapter2: String, chapter3: String, duration: Int) -> Video {
         if let video = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A Video with the same name already exists.")
             return video
@@ -170,13 +170,13 @@ public class Videos: NSObject {
     Remove a video
     - parameter video: name
     */
-    public func remove(name: String) {
+    public func remove(_ name: String) {
         if let timer = list[name]?.timer {
-            if timer.valid {
+            if timer.isValid {
                 list[name]!.sendStop()
             }
         }
-        self.list.removeValueForKey(name)
+        self.list.removeValue(forKey: name)
     }
     
     /**
@@ -185,11 +185,11 @@ public class Videos: NSObject {
     public func removeAll() {
         for (_, value) in self.list {
             if let timer = value.timer {
-                if timer.valid {
+                if timer.isValid {
                     value.sendStop()
                 }
             }
         }
-        self.list.removeAll(keepCapacity: false)
+        self.list.removeAll(keepingCapacity: false)
     }
 }

@@ -39,11 +39,11 @@ public class LiveAudio: RichMedia {
     
     /// Set parameters in buffer
     override func setEvent() {
-        super.broadcastMode = .Live
+        super.broadcastMode = .live
         
         super.setEvent()
         
-        self.tracker.setParam("type", value: type)
+        _ = self.tracker.setParam("type", value: type)
     }
     
 }
@@ -70,7 +70,7 @@ public class LiveAudios: NSObject {
     - parameter first: chapter
     - returns: live audio instance
     */
-    public func add(name:String) -> LiveAudio {
+    public func add(_ name:String) -> LiveAudio {
         if let audio = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A LiveAudio with the same name already exists.")
             return audio
@@ -90,7 +90,7 @@ public class LiveAudios: NSObject {
     - parameter first: chapter
     - returns: live audio instance
     */
-    public func add(name: String, chapter1: String) -> LiveAudio {
+    public func add(_ name: String, chapter1: String) -> LiveAudio {
         if let audio = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A LiveAudio with the same name already exists.")
             return audio
@@ -112,7 +112,7 @@ public class LiveAudios: NSObject {
     - parameter second: chapter
     - returns: live audio instance
     */
-    public func add(name: String, chapter1: String, chapter2: String) -> LiveAudio {
+    public func add(_ name: String, chapter1: String, chapter2: String) -> LiveAudio {
         if let audio = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A LiveAudio with the same name already exists.")
             return audio
@@ -136,7 +136,7 @@ public class LiveAudios: NSObject {
     - parameter third: chapter
     - returns: live audio instance
     */
-    public func add(name: String, chapter1: String, chapter2: String, chapter3: String) -> LiveAudio {
+    public func add(_ name: String, chapter1: String, chapter2: String, chapter3: String) -> LiveAudio {
         if let audio = self.list[name] {
             self.player.tracker.delegate?.warningDidOccur?("A LiveAudio with the same name already exists.")
             return audio
@@ -157,13 +157,13 @@ public class LiveAudios: NSObject {
     Remove a live audio
     - parameter audio: name
     */
-    public func remove(name: String) {
+    public func remove(_ name: String) {
         if let timer = list[name]?.timer {
-            if timer.valid {
+            if timer.isValid {
                 list[name]!.sendStop()
             }
         }
-        self.list.removeValueForKey(name)
+        self.list.removeValue(forKey: name)
     }
     
     /**
@@ -172,12 +172,12 @@ public class LiveAudios: NSObject {
     public func removeAll() {
         for (_, value) in self.list {
             if let timer = value.timer {
-                if timer.valid {
+                if timer.isValid {
                     value.sendStop()
                 }
             }
         }
-        self.list.removeAll(keepCapacity: false)
+        self.list.removeAll(keepingCapacity: false)
     }
     
 }

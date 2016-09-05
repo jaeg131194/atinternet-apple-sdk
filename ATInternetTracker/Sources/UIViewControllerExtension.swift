@@ -58,19 +58,19 @@ extension UIViewController {
         }
         
         do {
-            try self.jr_swizzleMethod(#selector(UIViewController.viewWillTransitionToSize(_:withTransitionCoordinator:)),
+            try self.jr_swizzleMethod(#selector(UIViewController.at_viewWillTransitionToSize(_:withTransitionCoordinator:)),
                                       withMethod: #selector(UIViewController.at_viewWillTransitionToSize(_:withTransitionCoordinator:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidAppear(_:)), withMethod: #selector(UIViewController.at_viewDidAppear(_:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidDisappear(_:)), withMethod: #selector(UIViewController.at_viewDidDisappear(_:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewWillDisappear(_:)), withMethod: #selector(UIViewController.at_viewWillDisappear(_:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidLoad), withMethod: #selector(UIViewController.at_viewDidLoad))
         } catch {
-            NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+            NSException(name: NSExceptionName(rawValue: "SwizzleException"), reason: "Impossible to find method to swizzle", userInfo: nil).raise()
         }
     }
     
-    func at_swizzle_instance(name: Selector, name2: Selector, selfClass: AnyClass) {
-        if UIViewController.swizzlers.contains({$0._class == selfClass && name.description == $0._sel1.description}) {
+    func at_swizzle_instance(_ name: Selector, name2: Selector, selfClass: AnyClass) {
+        if UIViewController.swizzlers.contains(where: {$0._class == selfClass && name.description == $0._sel1.description}) {
             return
         }
         let swizzle = Swizzler(_class: selfClass, _sel1: name, _sel2: name2)
@@ -81,26 +81,26 @@ extension UIViewController {
         method_exchangeImplementations(orig, replace)
     }
     
-    func at_previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func at_previewingContext(_ previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
         UIViewControllerContext.sharedInstance.isPeekAndPoped = true
         self.at_previewingContext(previewingContext, commitViewController: viewControllerToCommit)
     }
     
-    func at_previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func at_previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         UIViewControllerContext.sharedInstance.isPeek = true
         return self.at_previewingContext(previewingContext, viewControllerForLocation: location)
     }
     
-    func at_viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    func at_viewWillTransitionToSize(_ size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         let oldOrientation = UIViewControllerContext.sharedInstance.currentOrientation
         if size.width < size.height {
-            if oldOrientation != .Portrait {
-                UIViewControllerContext.sharedInstance.currentOrientation = .Portrait
+            if oldOrientation != .portrait {
+                UIViewControllerContext.sharedInstance.currentOrientation = .portrait
                 EventManager.sharedInstance.addEvent(ScreenRotationOperation(rotationEvent: ScreenRotationEvent(orientation: UIViewControllerContext.sharedInstance.currentOrientation)))
             }
         } else {
-            if oldOrientation != .Landscape {
-                UIViewControllerContext.sharedInstance.currentOrientation = .Landscape
+            if oldOrientation != .landscape {
+                UIViewControllerContext.sharedInstance.currentOrientation = .landscape
                 EventManager.sharedInstance.addEvent(ScreenRotationOperation(rotationEvent: ScreenRotationEvent(orientation: UIViewControllerContext.sharedInstance.currentOrientation)))
             }
         }
@@ -111,19 +111,19 @@ extension UIViewController {
         guard let previewProtocol = NSProtocolFromString("UIViewControllerPreviewingDelegate") else {
             return
         }
-        if selfClass.conformsToProtocol(previewProtocol){
+        if selfClass.conforms(to: previewProtocol){
             var mc:CUnsignedInt = 0
             var mlist = class_copyMethodList(selfClass, &mc);
             for _ in 0...mc {
-                let name = method_getName(mlist.memory)
-                mlist = mlist.successor()
-                if name.description == "previewingContext:commitViewController:" {
+                let name = method_getName(mlist?.pointee)
+                mlist = mlist?.successor()
+                if name?.description == "previewingContext:commitViewController:" {
                     let s = #selector(UIViewController.at_previewingContext(_:commitViewController:))
-                    at_swizzle_instance(name, name2: s, selfClass: selfClass)
+                    at_swizzle_instance(name!, name2: s, selfClass: selfClass)
                 }
-                if name.description == "previewingContext:viewControllerForLocation:" {
+                if name?.description == "previewingContext:viewControllerForLocation:" {
                     let s = #selector(UIViewController.at_previewingContext(_:viewControllerForLocation:))
-                    at_swizzle_instance(name, name2: s, selfClass: selfClass)
+                    at_swizzle_instance(name!, name2: s, selfClass: selfClass)
                 }
             }
         }
@@ -143,13 +143,13 @@ extension UIViewController {
      
      - parameter animated: not related
      */
-    func at_viewDidAppear(animated: Bool) {
+    func at_viewDidAppear(_ animated: Bool) {
         if shouldIgnoreViewController() {
             at_viewDidAppear(animated)
             return
         }
         
-        let now = NSDate().timeIntervalSinceNow
+        let now = Date().timeIntervalSinceNow
         let context = UIViewControllerContext.sharedInstance
         
         context.activeViewControllers.append(self)
@@ -180,7 +180,7 @@ extension UIViewController {
         
         for protocolType in context.UIProtocolToIgnore {
             if let type = protocolType {
-                if self.conformsToProtocol(type) {
+                if self.conforms(to: type) {
                     return true
                 }
             }
@@ -188,7 +188,7 @@ extension UIViewController {
         
         for classType in context.UIClassToIgnore {
             if let type = classType {
-                if self.isKindOfClass(type) {
+                if self.isKind(of: type) {
                     return true
                 }
             }
@@ -202,7 +202,7 @@ extension UIViewController {
      
      - parameter animated: animated
      */
-    func at_viewWillDisappear(animated: Bool) {
+    func at_viewWillDisappear(_ animated: Bool) {
         self.at_viewWillDisappear(animated)
         
         if UIViewControllerContext.sharedInstance.isPeek {
@@ -216,7 +216,7 @@ extension UIViewController {
         }
         
         // User did tap on back button ?
-        if self.isMovingFromParentViewController() {
+        if self.isMovingFromParentViewController {
             if let operation = EventManager.sharedInstance.lastEvent() as? GestureOperation {
                 if operation.gestureEvent.view.className == "UINavigationBar" {
                     let pendingEvent = operation.gestureEvent
@@ -237,12 +237,12 @@ extension UIViewController {
      
      - parameter animated: not related (how the VC is transitioning)
      */
-    func at_viewDidDisappear(animated: Bool) {
+    func at_viewDidDisappear(_ animated: Bool) {
         let context = UIViewControllerContext.sharedInstance
         
-        for i in (0 ..< context.activeViewControllers.count).reverse() {
+        for i in (0 ..< context.activeViewControllers.count).reversed() {
             if self == context.activeViewControllers[i] {
-                context.activeViewControllers.removeAtIndex(i)
+                context.activeViewControllers.remove(at: i)
                 break
             }
         }
@@ -271,11 +271,11 @@ extension UIViewController {
         let currentScreen = Screen()
         for aView in controls {
             let v = View(view: aView)
-            var (text,methodName,className,position) = UIApplication.sharedApplication().getTouchedViewInfo(aView)
-            let info = ATGestureRecognizer.getRecognizerInfoFromView(aView, withExpected: Gesture.getEventTypeRawValue(Gesture.GestureEventType.Tap.rawValue))
+            var (text,methodName,className,position) = UIApplication.shared.getTouchedViewInfo(aView)
+            let info = ATGestureRecognizer.getInfoFrom(aView, withExpected: Gesture.getEventTypeRawValue(Gesture.GestureEventType.tap.rawValue))
             
             if methodName == nil || (methodName != nil && methodName!.isEmpty) {
-                methodName = info["action"] as? String
+                methodName = info?["action"] as? String
                 if methodName == nil || (methodName != nil && methodName!.isEmpty) {
                     methodName = UIApplicationContext.sharedInstance.getDefaultViewMethod(aView)
                     // the object does not respond to anything
@@ -303,12 +303,12 @@ extension UIViewController {
             // In case of an UISegmentedControl we have to create X events (X=subsegment number)
             if let segmented =  aView as? UISegmentedControl {
                 let nb = segmented.numberOfSegments
-                let segments = segmented.valueForKey("segments") as! [UIView]
+                let segments = segmented.value(forKey: "segments") as! [UIView]
                 for i in 0..<nb {
                     let aTap = TapEvent(x: -1, y: -1, view: View(view: segments[i]), direction: "single", currentScreen: currentScreen)
                     aTap.methodName = tap.methodName
                     aTap.view.position = i
-                    aTap.view.text = segmented.titleForSegmentAtIndex(i) ?? ""
+                    aTap.view.text = segmented.titleForSegment(at: i) ?? ""
                     events.append(aTap)
                 }
             }
@@ -332,7 +332,7 @@ extension UIViewController {
      - parameter root:        the root uiview to be parsed
      - parameter allControls: the uicontrol array
      */
-    func getControlsInView(root: UIView, inout allControls:[UIView]) {
+    func getControlsInView(_ root: UIView, allControls:inout [UIView]) {
         if root is UIControl && !root.isInTableViewCellIgnoreControl {
             allControls.append(root)
         }

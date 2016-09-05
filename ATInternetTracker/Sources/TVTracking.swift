@@ -36,7 +36,7 @@ public class TVTracking: NSObject {
     /// Tracker instance
     var tracker: Tracker
     /// URL of campaign
-    var campaignURL: NSURL!
+    var campaignURL: URL!
     /// Visit duration
     var visitDuration: Int
     
@@ -57,7 +57,7 @@ public class TVTracking: NSObject {
             if(optTVTURL == "") {
                 tracker.delegate?.warningDidOccur?("TVTracking URL not set")
             } else {
-                let URL = NSURL(string: optTVTURL)
+                let URL = Foundation.URL(string: optTVTURL)
                 
                 if let optURL = URL {
                     self.campaignURL = optURL
@@ -88,7 +88,7 @@ public class TVTracking: NSObject {
             option.append = true
             option.persistent = true
             option.encode = true
-            self.tracker.setParam("tvt", value: true, options: option)
+            _ = self.tracker.setParam("tvt", value: true, options: option)
         } else {
             self.tracker.delegate?.warningDidOccur?("TV Tracking not enabled")
         }
@@ -101,8 +101,8 @@ public class TVTracking: NSObject {
     :params: campaign url
     - returns: tracker instance
     */
-    public func set(campaignURL: String) -> Tracker {
-        let URL = NSURL(string: campaignURL)
+    public func set(_ campaignURL: String) -> Tracker {
+        let URL = Foundation.URL(string: campaignURL)
         
         if let optURL = URL {
             self.campaignURL = optURL
@@ -119,7 +119,7 @@ public class TVTracking: NSObject {
     :params: visit duration in minutes
     - returns: tracker instance
     */
-    public func set(campaignURL: String, visitDuration: Int) -> Tracker {
+    public func set(_ campaignURL: String, visitDuration: Int) -> Tracker {
         self.visitDuration = visitDuration
         
         return set(campaignURL)

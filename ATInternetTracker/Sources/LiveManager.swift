@@ -39,7 +39,7 @@ class LiveNetworkManager: LiveNetworkState {
     var current: LiveNetworkState?
     var networkStatus: NetworkStatus = .Disconnected
     var currentPopupDisplayed: KLCPopup?
-    var autoReject: NSDate?
+    var autoReject: Date?
     let COOLDOWN = 3.0
     
     var sender: SocketSender?
@@ -96,11 +96,11 @@ class LiveNetworkManager: LiveNetworkState {
     func showPairingPopup() {
         self.currentPopupDisplayed?.dismiss(true)
         let texts = getTexts()
-        let p = SmartPopUp(frame: CGRectZero, title: texts["ASK_PAIRING_TITLE"]!, message: texts["ASK_PAIRING_TEXT"]!, okTitle: texts["CONFIRM"]!, cancelTitle: texts["CANCEL"]!)
+        let p = SmartPopUp(frame: CGRect.zero, title: texts["ASK_PAIRING_TITLE"]!, message: texts["ASK_PAIRING_TEXT"]!, okTitle: texts["CONFIRM"]!, cancelTitle: texts["CANCEL"]!)
         self.currentPopupDisplayed = KLCPopup(contentView: p,
-                             showType: KLCPopupShowType.BounceInFromTop,
-                             dismissType: KLCPopupDismissType.BounceOutToBottom,
-                             maskType: KLCPopupMaskType.Dimmed,
+                             showType: KLCPopupShowType.bounceInFromTop,
+                             dismissType: KLCPopupDismissType.bounceOutToBottom,
+                             maskType: KLCPopupMaskType.dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
@@ -120,11 +120,11 @@ class LiveNetworkManager: LiveNetworkState {
     func showAbortedPopup() {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
-        let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_CANCELED_TITLE"]!, message: texts["INFO_PAIRING_CANCELED_TEXT"]!, okTitle: texts["CONFIRM"]!)
+        let p = SmartPopUp(frame: CGRect.zero, title: texts["INFO_PAIRING_CANCELED_TITLE"]!, message: texts["INFO_PAIRING_CANCELED_TEXT"]!, okTitle: texts["CONFIRM"]!)
         self.currentPopupDisplayed = KLCPopup(contentView: p,
-                             showType: KLCPopupShowType.BounceInFromTop,
-                             dismissType: KLCPopupDismissType.BounceOutToBottom,
-                             maskType: KLCPopupMaskType.Dimmed,
+                             showType: KLCPopupShowType.bounceInFromTop,
+                             dismissType: KLCPopupDismissType.bounceOutToBottom,
+                             maskType: KLCPopupMaskType.dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
@@ -137,11 +137,11 @@ class LiveNetworkManager: LiveNetworkState {
     func showStoppedPopup() {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
-        let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_STOPPED_TITLE"]!, message: texts["INFO_PAIRING_STOPPED_TEXT"]!, okTitle: texts["CONFIRM"]!)
+        let p = SmartPopUp(frame: CGRect.zero, title: texts["INFO_PAIRING_STOPPED_TITLE"]!, message: texts["INFO_PAIRING_STOPPED_TEXT"]!, okTitle: texts["CONFIRM"]!)
         self.currentPopupDisplayed = KLCPopup(contentView: p,
-                             showType: KLCPopupShowType.BounceInFromTop,
-                             dismissType: KLCPopupDismissType.BounceOutToBottom,
-                             maskType: KLCPopupMaskType.Dimmed,
+                             showType: KLCPopupShowType.bounceInFromTop,
+                             dismissType: KLCPopupDismissType.bounceOutToBottom,
+                             maskType: KLCPopupMaskType.dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
@@ -154,11 +154,11 @@ class LiveNetworkManager: LiveNetworkState {
     func showRefusedPopup() {
         let texts = getTexts()
         self.currentPopupDisplayed?.dismiss(true)
-        let p = SmartPopUp(frame: CGRectZero, title: texts["INFO_PAIRING_REFUSED_TITLE"]!, message: texts["INFO_PAIRING_REFUSED_TEXT"]!, okTitle: texts["CONFIRM"]!)
+        let p = SmartPopUp(frame: CGRect.zero, title: texts["INFO_PAIRING_REFUSED_TITLE"]!, message: texts["INFO_PAIRING_REFUSED_TEXT"]!, okTitle: texts["CONFIRM"]!)
         self.currentPopupDisplayed = KLCPopup(contentView: p,
-                             showType: KLCPopupShowType.BounceInFromTop,
-                             dismissType: KLCPopupDismissType.BounceOutToBottom,
-                             maskType: KLCPopupMaskType.Dimmed,
+                             showType: KLCPopupShowType.bounceInFromTop,
+                             dismissType: KLCPopupDismissType.bounceOutToBottom,
+                             maskType: KLCPopupMaskType.dimmed,
                              dismissOnBackgroundTouch: false,
                              dismissOnContentTouch: false)
         p.addOkAction { () -> () in
@@ -170,16 +170,16 @@ class LiveNetworkManager: LiveNetworkState {
     
     func getTexts() -> [String:String] {
         return [
-            "ASK_PAIRING_TITLE": NSLocalizedString("ASK_PAIRING_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
-            "ASK_PAIRING_TEXT" : NSLocalizedString("ASK_PAIRING_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "CONFIRM": NSLocalizedString("CONFIRM", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "CANCEL": NSLocalizedString("CANCEL", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "INFO_PAIRING_CANCELED_TEXT": NSLocalizedString("INFO_PAIRING_CANCELED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "INFO_PAIRING_CANCELED_TITLE": NSLocalizedString("INFO_PAIRING_CANCELED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
-            "INFO_PAIRING_STOPPED_TITLE": NSLocalizedString("INFO_PAIRING_STOPPED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre"),
-            "INFO_PAIRING_STOPPED_TEXT": NSLocalizedString("INFO_PAIRING_STOPPED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "INFO_PAIRING_REFUSED_TEXT": NSLocalizedString("INFO_PAIRING_REFUSED_TEXT", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "content"),
-            "INFO_PAIRING_REFUSED_TITLE": NSLocalizedString("INFO_PAIRING_REFUSED_TITLE", tableName: nil, bundle: NSBundle(forClass: Tracker.self), value: "", comment: "titre")
+            "ASK_PAIRING_TITLE": NSLocalizedString("ASK_PAIRING_TITLE", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "titre"),
+            "ASK_PAIRING_TEXT" : NSLocalizedString("ASK_PAIRING_TEXT", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content"),
+            "CONFIRM": NSLocalizedString("CONFIRM", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content"),
+            "CANCEL": NSLocalizedString("CANCEL", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content"),
+            "INFO_PAIRING_CANCELED_TEXT": NSLocalizedString("INFO_PAIRING_CANCELED_TEXT", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content"),
+            "INFO_PAIRING_CANCELED_TITLE": NSLocalizedString("INFO_PAIRING_CANCELED_TITLE", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "titre"),
+            "INFO_PAIRING_STOPPED_TITLE": NSLocalizedString("INFO_PAIRING_STOPPED_TITLE", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "titre"),
+            "INFO_PAIRING_STOPPED_TEXT": NSLocalizedString("INFO_PAIRING_STOPPED_TEXT", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content"),
+            "INFO_PAIRING_REFUSED_TEXT": NSLocalizedString("INFO_PAIRING_REFUSED_TEXT", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "content"),
+            "INFO_PAIRING_REFUSED_TITLE": NSLocalizedString("INFO_PAIRING_REFUSED_TITLE", tableName: nil, bundle: Bundle(for: Tracker.self), value: "", comment: "titre")
         ]
     }
 }

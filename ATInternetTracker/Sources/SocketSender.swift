@@ -15,7 +15,7 @@ public class SocketSender {
     var socket: SRWebSocket?
     
     /// askforlive
-    var timer: NSTimer?
+    var timer: Timer?
     
     /// askforlive every RECONNECT_INTERVAL
     let RECONNECT_INTERVAL: Double = 2.0
@@ -72,8 +72,8 @@ public class SocketSender {
             return
         }
         print(URL)
-        let url = NSURL(string: URL)
-        socket = SRWebSocket(URL:url)
+        let url = Foundation.URL(string: URL)
+        socket = SRWebSocket(url:url)
         socket?.delegate = socketHandler
         socket?.open()
     }
@@ -92,7 +92,7 @@ public class SocketSender {
      
      - returns: the state of the connexion
      */
-    private func isConnected() -> Bool {
+    fileprivate func isConnected() -> Bool {
         return (socket != nil) && (socket?.readyState == SRReadyState.OPEN)
     }
     
@@ -120,7 +120,7 @@ public class SocketSender {
      
      - parameter json: the message as a String (JSON formatted)
      */
-    func sendMessage(json: String) {
+    func sendMessage(_ json: String) {
         let eventName = JSON.parse(json)["event"].string
         print(eventName)
         // keep a ref to the last screen
@@ -142,7 +142,7 @@ public class SocketSender {
      
      - parameter json: the message
      */
-    func sendMessageForce(json: String) {
+    func sendMessageForce(_ json: String) {
         if isConnected() {
             socket?.send(json)
         }
@@ -153,9 +153,9 @@ public class SocketSender {
      */
     func startAskingForLive() {
         timer?.invalidate()
-        timer = NSTimer(timeInterval: RECONNECT_INTERVAL, target: self, selector: #selector(SocketSender.sendAskingForLive), userInfo: nil, repeats: true)
+        timer = Timer(timeInterval: RECONNECT_INTERVAL, target: self, selector: #selector(SocketSender.sendAskingForLive), userInfo: nil, repeats: true)
         timer?.fire()
-        NSRunLoop.mainRunLoop().addTimer(timer!, forMode: NSRunLoopCommonModes)
+        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
     }
     
     /**
@@ -175,9 +175,9 @@ public class SocketSender {
     /**
      Send the first message (act as a FIFO)
      */
-    private func sendFirst() {
+    fileprivate func sendFirst() {
         let msg = queue.first
         socket?.send(msg)
-        self.queue.removeAtIndex(0)
+        self.queue.remove(at: 0)
     }
 }

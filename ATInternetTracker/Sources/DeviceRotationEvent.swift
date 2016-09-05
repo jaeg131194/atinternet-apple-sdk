@@ -22,11 +22,11 @@ class DeviceRotationEvent {
     /// current screen
     lazy var currentScreen: Screen = Screen()
     
-    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.Rotate
+    lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.rotate
     
     /// JSON description
     var description: String {
-        let jsonObj: NSMutableDictionary = [
+        var jsonObj: [String: Any] = [
             "event": "deviceRotation",
             "data":[
                 "name": self.currentScreen.name,
@@ -37,9 +37,11 @@ class DeviceRotationEvent {
                 "triggeredBy": ""
             ]
         ]
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
+        
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.currentScreen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
+
         return jsonObj.toJSON()
     }
     

@@ -22,8 +22,8 @@ class RotatorTest: XCTestCase {
     }
 
     func testInit() {
-        let p0 = CGPointMake(0,0)
-        let p1 = CGPointMake(30,30)
+        let p0 = CGPoint(x: 0,y: 0)
+        let p1 = CGPoint(x: 30,y: 30)
         let rotator = Rotator(p1: p0, p2: p1)
         XCTAssertNil(rotator.initialRotation)
         XCTAssertFalse(rotator.isValidRotation())
@@ -35,12 +35,12 @@ class RotatorTest: XCTestCase {
     }
     
     func testIsRotation() {
-        let p0 = CGPointMake(0,0)
-        let p1 = CGPointMake(30,30)
+        let p0 = CGPoint(x: 0,y: 0)
+        let p1 = CGPoint(x: 30,y: 30)
         
         let rotator = Rotator(p1: p0, p2: p1)
-        rotator.setCurrentPoints(CGPointMake(-10,0), p2: CGPointMake(40,20))
-        rotator.setCurrentPoints(CGPointMake(0,30), p2: CGPointMake(30,-20))
+        rotator.setCurrentPoints(CGPoint(x: -10,y: 0), p2: CGPoint(x: 40,y: 20))
+        rotator.setCurrentPoints(CGPoint(x: 0,y: 30), p2: CGPoint(x: 30,y: -20))
         print(rotator.getCurrentRotation())
         XCTAssertTrue(rotator.isValidRotation())
     }

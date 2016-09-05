@@ -11,9 +11,9 @@ import Foundation
 class App {
     static var token: String? = ATInternet.sharedInstance.defaultTracker.token
     
-    var toJSONObject: NSDictionary {
+    var toJSONObject: [String: Any] {
         let s = Screen()
-        let jsonObj: NSDictionary = [
+        let jsonObj: [String: Any] = [
             "event":"app",
             "data" :[
                 "appIcon": TechnicalContext.applicationIcon ?? "",

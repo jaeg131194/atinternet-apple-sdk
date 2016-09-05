@@ -10,18 +10,18 @@ import UIKit
 import Foundation
 
 /// Class for sending gesture event to the socket server
-class DeviceRotationOperation: NSOperation {
+class DeviceRotationOperation: Operation {
     
     /// The screen event to be sent
     var rotationEvent: DeviceRotationEvent
     
     /// timer to handle the timeout
-    var timerTotalDuration: NSTimeInterval = 0
+    var timerTotalDuration: TimeInterval = 0
     
     /// after timeout, the hit is sent
-    let TIMEOUT_OPERATION: NSTimeInterval = 5
+    let TIMEOUT_OPERATION: TimeInterval = 5
     
-    var timerDuration: NSTimeInterval = 0.2
+    var timerDuration: TimeInterval = 0.2
     
     /**
      RotationOperation init
@@ -38,8 +38,8 @@ class DeviceRotationOperation: NSOperation {
         autoreleasepool {
             let tracker = ATInternet.sharedInstance.defaultTracker
             
-            NSThread.sleepForTimeInterval(0.2)
-            if self.cancelled {
+            Thread.sleep(forTimeInterval: 0.2)
+            if self.isCancelled {
                 return
             }
             
@@ -54,13 +54,13 @@ class DeviceRotationOperation: NSOperation {
      
      - parameter tracker: AutoTracker
      */
-    func sendRotationHit(tracker: AutoTracker) {
+    func sendRotationHit(_ tracker: AutoTracker) {
         let rotationGesture = tracker.gestures.add()
         rotationGesture.name = rotationEvent.methodName
         
         rotationGesture.screen = rotationEvent.currentScreen
         rotationGesture.type = rotationEvent.eventType
-        rotationGesture.customObjects.add(["deviceOrientation":tracker.orientation!.rawValue, "interfaceOrientation":UIApplication.sharedApplication().statusBarOrientation.rawValue])
+        _ = rotationGesture.customObjects.add(["deviceOrientation":tracker.orientation!.rawValue, "interfaceOrientation": UIApplication.shared.statusBarOrientation.rawValue])
         
         handleDelegate(rotationGesture)
         tracker.dispatcher.dispatch([rotationGesture])
@@ -71,9 +71,9 @@ class DeviceRotationOperation: NSOperation {
      
      - parameter gesture: the gesture
      */
-    func handleDelegate(gesture: Gesture) {
+    func handleDelegate(_ gesture: Gesture) {
         if hasDelegate() {
-            self.rotationEvent.viewController!.performSelector(#selector(IAutoTracker.gestureWasDetected(_:)), withObject: gesture)
+            self.rotationEvent.viewController!.perform(#selector(IAutoTracker.gestureWasDetected(_:)), with: gesture)
             
             if gesture.isReady {
                 return
@@ -93,8 +93,8 @@ class DeviceRotationOperation: NSOperation {
         var hasDelegate = false
         
         if let viewController = self.rotationEvent.viewController {
-            if viewController.conformsToProtocol(IAutoTracker) {
-                if viewController.respondsToSelector(#selector(IAutoTracker.gestureWasDetected(_:))) {
+            if viewController.conforms(to: IAutoTracker.self) {
+                if viewController.responds(to: #selector(IAutoTracker.gestureWasDetected(_:))) {
                     hasDelegate = true
                 }
             }
@@ -107,8 +107,8 @@ class DeviceRotationOperation: NSOperation {
      
      - parameter gesture: the gesture to be sent
      */
-    func handleTimer(gesture: Gesture) {
-        NSThread.sleepForTimeInterval(timerDuration)
+    func handleTimer(_ gesture: Gesture) {
+        Thread.sleep(forTimeInterval: timerDuration)
         timerTotalDuration = timerTotalDuration + timerDuration
         if timerTotalDuration > TIMEOUT_OPERATION {
             gesture.isReady = true

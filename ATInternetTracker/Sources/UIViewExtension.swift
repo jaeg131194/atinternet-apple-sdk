@@ -17,7 +17,7 @@ extension UIView {
         for p in properties {
             let cp = class_getProperty(object_getClass(self), p)
             if cp != nil {
-                if let title = self.valueForKey(p) {
+                if let title = self.value(forKey: p) {
                     return title as? String
                 }
             }
@@ -114,7 +114,7 @@ extension UIView {
     var hasActiveGestureRecognizer: Bool {
         if let recognizers = self.gestureRecognizers {
             for recognizer in recognizers {
-                if(recognizer.state == UIGestureRecognizerState.Changed || (recognizer is UITapGestureRecognizer && recognizer.state == UIGestureRecognizerState.Possible))
+                if(recognizer.state == UIGestureRecognizerState.changed || (recognizer is UITapGestureRecognizer && recognizer.state == UIGestureRecognizerState.possible))
                 {
                     return true;
                 }
@@ -147,34 +147,34 @@ extension UIView {
     /// Gets the type of UIView
     var type: UIApplicationContext.ViewType {
         if self.isInTableViewCell {
-            return UIApplicationContext.ViewType.TableViewCell
+            return UIApplicationContext.ViewType.tableViewCell
         } else if self.isInCollectionViewCell {
-            return UIApplicationContext.ViewType.CollectionViewCell
+            return UIApplicationContext.ViewType.collectionViewCell
         }
-        else if(self.isKindOfClass(NSClassFromString("_UINavigationBarBackIndicatorView")!)) {
-            return UIApplicationContext.ViewType.BackButton
-        } else if(self.isKindOfClass(NSClassFromString("UITabBarButton")!)) {
-            return UIApplicationContext.ViewType.TabBarButton
-        } else if(self.isKindOfClass(NSClassFromString("UISegmentedControl")!)) {
-            return UIApplicationContext.ViewType.SegmentedControl
-        } else if(self.isKindOfClass(NSClassFromString("UISlider")!)) {
-            return UIApplicationContext.ViewType.Slider
-        } else if(self.isKindOfClass(NSClassFromString("UITextField")!)) {
-            return UIApplicationContext.ViewType.TextField
-        } else if(self.isKindOfClass(NSClassFromString("UIStepper")!)) {
-            return UIApplicationContext.ViewType.Stepper
-        } else if(self.isKindOfClass(NSClassFromString("UIButton")!)) {
-            return UIApplicationContext.ViewType.Button
-        } else if(self.isKindOfClass(NSClassFromString("UISwitch")!)) {
-            return UIApplicationContext.ViewType.Switch
-        } else if(self.isKindOfClass(NSClassFromString("UINavigationBar")!)) {
-            return UIApplicationContext.ViewType.NavigationBar
-        } else if(self.isKindOfClass(NSClassFromString("UIPageControl")!)) {
-            return UIApplicationContext.ViewType.PageControl
-        } else if(self.isKindOfClass(NSClassFromString("UIDatePicker")!)) {
-            return UIApplicationContext.ViewType.DatePicker
+        else if(self.isKind(of: NSClassFromString("_UINavigationBarBackIndicatorView")!)) {
+            return UIApplicationContext.ViewType.backButton
+        } else if(self.isKind(of: NSClassFromString("UITabBarButton")!)) {
+            return UIApplicationContext.ViewType.tabBarButton
+        } else if(self.isKind(of: NSClassFromString("UISegmentedControl")!)) {
+            return UIApplicationContext.ViewType.segmentedControl
+        } else if(self.isKind(of: NSClassFromString("UISlider")!)) {
+            return UIApplicationContext.ViewType.slider
+        } else if(self.isKind(of: NSClassFromString("UITextField")!)) {
+            return UIApplicationContext.ViewType.textField
+        } else if(self.isKind(of: NSClassFromString("UIStepper")!)) {
+            return UIApplicationContext.ViewType.stepper
+        } else if(self.isKind(of: NSClassFromString("UIButton")!)) {
+            return UIApplicationContext.ViewType.button
+        } else if(self.isKind(of: NSClassFromString("UISwitch")!)) {
+            return UIApplicationContext.ViewType.uiswitch
+        } else if(self.isKind(of: NSClassFromString("UINavigationBar")!)) {
+            return UIApplicationContext.ViewType.navigationBar
+        } else if(self.isKind(of: NSClassFromString("UIPageControl")!)) {
+            return UIApplicationContext.ViewType.pageControl
+        } else if(self.isKind(of: NSClassFromString("UIDatePicker")!)) {
+            return UIApplicationContext.ViewType.datePicker
         } else {
-            return UIApplicationContext.ViewType.Unkwown
+            return UIApplicationContext.ViewType.unknown
         }
     }
     
@@ -186,7 +186,7 @@ extension UIView {
      
      - returns: Text
      */
-    func findText(p:CGPoint) -> String? {
+    func findText(_ p:CGPoint) -> String? {
         if let text = self.textValue {
             return text
         }
@@ -202,17 +202,17 @@ extension UIView {
      
      - returns: Dictionary containing UIView text
      */
-    func rFindText(view: UIView, p: CGPoint, info: [String: String]) -> [String: String] {
+    func rFindText(_ view: UIView, p: CGPoint, info: [String: String]) -> [String: String] {
         var info = info
         var title:String?
         for subview in view.subviews {
-            let frame = subview.superview?.convertRect(subview.frame, toView: view.window?.rootViewController?.view)
+            let frame = subview.superview?.convert(subview.frame, to: view.window?.rootViewController?.view)
             title = subview.textValue
-            if title != nil && CGRectContainsPoint(frame!, p) {
+            if title != nil && frame!.contains(p) {
                 info["title"] = title
             } else {
                 info = rFindText(subview, p: p, info: info)
-                if info["title"] != nil && CGRectContainsPoint(frame!, p) {
+                if info["title"] != nil && frame!.contains(p) {
                     return info
                 }
             }
@@ -224,20 +224,20 @@ extension UIView {
      screenshot function: Take a screenshot
      - returns: the self UIImage representation
      */
-    func screenshot (ignoreViews: [UIView]? = nil) -> UIImage? {
-        let visibleViews = ignoreViews?.filter({!$0.hidden})
+    func screenshot (_ ignoreViews: [UIView]? = nil) -> UIImage? {
+        let visibleViews = ignoreViews?.filter({!$0.isHidden})
         visibleViews?.forEach({ (v: UIView) in
-            v.hidden = true
+            v.isHidden = true
         })
         
-        let optWindow = UIApplication.sharedApplication().keyWindow
+        let optWindow = UIApplication.shared.keyWindow
         var optImage: UIImage?
         
         if let window = optWindow {
-            if !CGRectEqualToRect(window.frame, CGRectZero) {
+            if !window.frame.equalTo(CGRect.zero) {
                 UIGraphicsBeginImageContextWithOptions(window.bounds.size, true, window.screen.scale)
-                if !window.drawViewHierarchyInRect(window.bounds, afterScreenUpdates: true) {
-                    window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+                if !window.drawHierarchy(in: window.bounds, afterScreenUpdates: true) {
+                    window.layer.render(in: UIGraphicsGetCurrentContext()!)
                 }
                 optImage = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
@@ -246,11 +246,11 @@ extension UIView {
         
         // if the view is not the current UIWindows, crop the screenshot to match the size of the view
         if self != optWindow {
-            optImage = optImage?.crop(self.convertRect(self.bounds, toView: nil))
+            optImage = optImage?.crop(self.convert(self.bounds, to: nil))
         }
         
         visibleViews?.forEach({ (v: UIView) in
-            v.hidden = false
+            v.isHidden = false
         })
         
         return optImage

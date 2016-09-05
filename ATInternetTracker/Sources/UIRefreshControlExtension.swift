@@ -14,7 +14,7 @@ extension UIRefreshControl {
      *  Singleton
      */
     struct Static {
-        static var token:dispatch_once_t = 0
+        static var token: String = UUID().uuidString
     }
     
     
@@ -27,7 +27,7 @@ extension UIRefreshControl {
             return
         }
         
-        dispatch_once(&Static.token) { () -> Void in
+        DispatchQueue.once(token: Static.token) {
             // Get the "- (id)initWithFrame:" method.
             let original = class_getInstanceMethod(self, #selector(UIRefreshControl.init as () -> UIRefreshControl))
             // Get the "- (id)swizzled_initWithFrame:" method.
@@ -38,7 +38,7 @@ extension UIRefreshControl {
                 try self.jr_swizzleMethod(#selector(UIRefreshControl.beginRefreshing), withMethod: #selector(UIRefreshControl.at_beginRefreshing))
                 try self.jr_swizzleMethod(#selector(UIView.init(frame:)), withMethod: #selector(UIRefreshControl.at_initWithFrame(_:)))
             } catch {
-                NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+                NSException(name: NSExceptionName(rawValue: "SwizzleException"), reason: "Impossible to find method to swizzle", userInfo: nil).raise()
             }
         }
     }
@@ -51,7 +51,7 @@ extension UIRefreshControl {
             return
         }
         
-        dispatch_once(&Static.token) { () -> Void in
+        DispatchQueue.once(token: Static.token) {
             // Get the "- (id)initWithFrame:" method.
             let original = class_getInstanceMethod(self, #selector(UIRefreshControl.init as () -> UIRefreshControl))
             // Get the "- (id)swizzled_initWithFrame:" method.
@@ -62,13 +62,13 @@ extension UIRefreshControl {
                 try self.jr_swizzleMethod(#selector(UIRefreshControl.at_beginRefreshing), withMethod: #selector(UIRefreshControl.beginRefreshing))
                 try self.jr_swizzleMethod(#selector(UIRefreshControl.at_initWithFrame(_:)), withMethod: #selector(UIView.init(frame:)))
             } catch {
-                NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+                NSException(name: NSExceptionName(rawValue: "SwizzleException"), reason: "Impossible to find method to swizzle", userInfo: nil).raise()
             }
         }
     }
     
-    func at_init() -> AnyObject {
-        self.addTarget(self, action: #selector(UIRefreshControl.at_refresh), forControlEvents: UIControlEvents.ValueChanged)
+    func at_init() -> Any {
+        self.addTarget(self, action: #selector(UIRefreshControl.at_refresh), for: UIControlEvents.valueChanged)
         return self.at_init()
     }
     
@@ -76,21 +76,21 @@ extension UIRefreshControl {
         let lastOperation = EventManager.sharedInstance.lastEvent() as? GestureOperation
         
         if let operation = lastOperation {
-            if operation.gestureEvent.eventType == Gesture.GestureEventType.Scroll  {
+            if operation.gestureEvent.eventType == Gesture.GestureEventType.scroll  {
                 let gesture = operation.gestureEvent as! ScrollEvent
                 operation.cancel()
                 gesture.view.className = self.classLabel
                 gesture.view.path = self.path
                 gesture.direction = "down"
-                gesture.eventType = Gesture.GestureEventType.Refresh
+                gesture.eventType = Gesture.GestureEventType.refresh
                 
                 if let screenshot = self.screenshot() {
                     if let b64 = screenshot.toBase64() {
-                        gesture.view.screenshot = b64.stringByReplacingOccurrencesOfString("\n", withString: "").stringByReplacingOccurrencesOfString("\r", withString: "")
+                        gesture.view.screenshot = b64.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
                     }
                 }
                 
-                let (_,mehodName,_,_) = UIApplication.sharedApplication().getTouchedViewInfo(self)
+                let (_,mehodName,_,_) = UIApplication.shared.getTouchedViewInfo(self)
                 if let method = mehodName {
                     gesture.methodName = method
                 }
@@ -98,7 +98,7 @@ extension UIRefreshControl {
             }
         }
         else {
-            let (_,methodName,_,_) = UIApplication.sharedApplication().getTouchedViewInfo(self)
+            let (_,methodName,_,_) = UIApplication.shared.getTouchedViewInfo(self)
             let selfView = View(view: self)
             let currentScreen = Screen()
             let refreshEvent = RefreshEvent(method: methodName, view: selfView, currentScreen: currentScreen)
@@ -106,7 +106,7 @@ extension UIRefreshControl {
         }
     }
     
-    func at_initWithFrame(frame: CGRect) {
+    func at_initWithFrame(_ frame: CGRect) {
         self.at_initWithFrame(frame)
     }
     

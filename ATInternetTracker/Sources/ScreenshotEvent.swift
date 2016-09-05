@@ -17,11 +17,11 @@ class ScreenshotEvent: CustomStringConvertible {
     /// Base64 Screenshot - can be a hardcoded one if we detect that the screenshot is broken
     let screenshot: String?
     /// the suggested events on the screen
-    let suggestedEvents: [AnyObject]
+    let suggestedEvents: [Any]
     
     /// JSON formatting
-    var description:String {
-        let jsonObj:NSMutableDictionary = [
+    var description: String {
+        var jsonObj: [String: Any] = [
             "event": self.methodName,
             "data":[
                 "screenshot":screenshot ?? "",
@@ -29,10 +29,11 @@ class ScreenshotEvent: CustomStringConvertible {
             ]
         ]
         
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.screen.description.toJSONObject() as! [NSObject: AnyObject])
-        data.setValue(suggestedEvents, forKey: "tree")
-        jsonObj.setValue(data, forKey: "data")
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.screen.toJSONObject)
+        data["tree"] = self.suggestedEvents
+        jsonObj.updateValue(data, forKey: "data")
+        
         return jsonObj.toJSON()
     }
     
@@ -45,7 +46,7 @@ class ScreenshotEvent: CustomStringConvertible {
      
      - returns: the ScreenshotEvent
      */
-    init(screen: Screen, screenshot: String?, suggestedEvents: [AnyObject]) {
+    init(screen: Screen, screenshot: String?, suggestedEvents: [Any]) {
         self.screen = screen
         self.screenshot = screenshot
         self.suggestedEvents = suggestedEvents

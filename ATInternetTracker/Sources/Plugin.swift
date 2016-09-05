@@ -60,6 +60,6 @@ class Plugin: NSObject {
         self.response = "{}"
         self.tracker = tracker
         self.paramKey = "stc"
-        self.responseType = Param.ParamType.JSON
+        self.responseType = Param.ParamType.json
     }
 }

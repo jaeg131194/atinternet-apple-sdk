@@ -25,7 +25,7 @@ class SwipeEvent : GestureEvent {
     
     /// JSON description
     override var description: String {
-        let jsonObj: NSMutableDictionary = [
+        var jsonObj: [String: Any] = [
             "event": Gesture.getEventTypeRawValue(self.eventType.rawValue),
             "data":[
                 "x":-1,
@@ -37,10 +37,11 @@ class SwipeEvent : GestureEvent {
                 "title": self.title ?? defaultMethodName
             ]
         ]
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.view.description.toJSONObject() as! [NSObject: AnyObject])
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
+        
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.view.toJSONObject)
+        data.append(self.currentScreen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
         
         return jsonObj.toJSON()
     }
@@ -57,7 +58,7 @@ class SwipeEvent : GestureEvent {
      - returns: TapEvent
      */
     init(view: View, direction: SwipeDirection, currentScreen: Screen) {
-        super.init(type: Gesture.GestureEventType.Swipe, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
+        super.init(type: Gesture.GestureEventType.swipe, methodName: nil, view: view, direction: direction.rawValue, currentScreen: currentScreen)
         self.defaultMethodName = "handleSwipe:"
     }
 }

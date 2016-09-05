@@ -33,8 +33,6 @@ SOFTWARE.
 import UIKit
 import XCTest
 
-import Tracker
-
 class ConfigurationTests: XCTestCase {
     
     // Configuration définie

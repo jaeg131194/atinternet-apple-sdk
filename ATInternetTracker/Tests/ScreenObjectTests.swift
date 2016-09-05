@@ -32,9 +32,9 @@ class ScreenObjectTests: XCTestCase {
             "screen":[
                 "title": "UIViewController", // className
                 "className": "UIViewController",
-                "scale": UIScreen.mainScreen().scale,
-                "width": UIScreen.mainScreen().bounds.width,
-                "height": UIScreen.mainScreen().bounds.height,
+                "scale": UIScreen.main.scale,
+                "width": UIScreen.main.bounds.width,
+                "height": UIScreen.main.bounds.height,
                 "app":[
                     "device":"x86_64",
                     "token":"",

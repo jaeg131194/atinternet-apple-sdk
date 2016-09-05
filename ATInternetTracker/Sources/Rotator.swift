@@ -40,7 +40,7 @@ class Rotator {
      - parameter p1: p1
      - parameter p2: p2
      */
-    func setCurrentPoints(p1: CGPoint, p2: CGPoint) {
+    func setCurrentPoints(_ p1: CGPoint, p2: CGPoint) {
         currentPoints = (p1, p2)
         if initialRotation == nil {
             initialRotation = getCurrentRotation()

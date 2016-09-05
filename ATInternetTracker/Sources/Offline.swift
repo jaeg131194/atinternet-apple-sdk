@@ -87,14 +87,14 @@ public class Offline: NSObject {
     - returns: number of deleted hits (-1 if an error occured)
     */
     @objc(deleteOlderThanInt:)
-    public func delete(olderThan: Int) -> Int {
+    public func delete(_ olderThan: Int) -> Int {
         let storage = Storage.sharedInstance
         
-        let now = NSDate()
-        let dateComponent = NSDateComponents()
+        let now = Date()
+        var dateComponent = DateComponents()
         dateComponent.day = -olderThan
         
-        let past = NSCalendar.currentCalendar().dateByAddingComponents(dateComponent, toDate: now, options: NSCalendarOptions(rawValue: 0))
+        let past = Calendar.current.date(byAdding: dateComponent, to: now)
         
         return storage.delete(past!)
     }
@@ -107,7 +107,7 @@ public class Offline: NSObject {
     - returns: number of deleted hits (-1 if an error occured)
     */
     @objc(deleteOlderThanDate:)
-    public func delete(olderThan: NSDate) -> Int {
+    public func delete(_ olderThan: Date) -> Int {
         return Storage.sharedInstance.delete(olderThan)
     }
     

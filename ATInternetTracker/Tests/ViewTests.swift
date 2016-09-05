@@ -67,10 +67,12 @@ class ViewTests: XCTestCase {
     }
     
     func testInitViewWhenContextInitialized2() {
-        let testView = UITextView(frame: CGRectMake(10,20,100,150))
+        
+        
+        let testView = UITextView(frame: CGRect(x: 10, y: 20, width: 100, height: 150))
         testView.text = "Testing text"
         UIApplicationContext.sharedInstance.currentTouchedView = testView
-        UIApplicationContext.sharedInstance.initialTouchPosition = CGPointMake(11, 21)
+        UIApplicationContext.sharedInstance.initialTouchPosition = CGPoint(x: 11, y: 21)
         let v = View()
         let jsonObj = v.description.toJSONObject()
         let expectedJsonObj:NSDictionary = [

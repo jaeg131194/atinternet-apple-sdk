@@ -41,7 +41,7 @@ class CustomVarTests: XCTestCase {
     func testSetCustomVarSite() {
         let screen = customVars.tracker.screens.add("Home")
         screen.setEvent()
-        customVar = customVars.add(123, value: "coucou", type: .App)
+        customVar = customVars.add(123, value: "coucou", type: .app)
         customVar.setEvent()
         
         XCTAssertEqual(customVars.tracker.buffer.volatileParameters.count, 5, "Le nombre de paramètres volatiles doit être égal à 5")
@@ -61,7 +61,7 @@ class CustomVarTests: XCTestCase {
     func testSetCustomVarPage() {
         let screen = customVars.tracker.screens.add("Home")
         screen.setEvent()
-        customVar = customVars.add(123, value: "coucou", type: .Screen)
+        customVar = customVars.add(123, value: "coucou", type: .screen)
         customVar.setEvent()
         
         XCTAssertEqual(customVars.tracker.buffer.volatileParameters.count, 5, "Le nombre de paramètres volatiles doit être égal à 5")

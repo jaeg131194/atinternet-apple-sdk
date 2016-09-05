@@ -36,14 +36,14 @@ public class OnAppAd: BusinessObject {
     
     /// Action types
     @objc public enum OnAppAdAction: Int {
-        case View = 0
-        case Touch = 1
+        case view = 0
+        case touch = 1
     }
     
     /// Action
-    public var action: OnAppAdAction = OnAppAdAction.View
+    public var action: OnAppAdAction = OnAppAdAction.view
     
-    internal class func getOnAppAddActionRawValue(value: Int) -> String {
+    internal class func getOnAppAddActionRawValue(_ value: Int) -> String {
         switch value {
         case 1:
             return "atc"

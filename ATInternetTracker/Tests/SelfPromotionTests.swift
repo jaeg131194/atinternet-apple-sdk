@@ -41,7 +41,7 @@ class SelfPromotionTests: XCTestCase {
     
     func testInitSelfPromo() {
         XCTAssertTrue(selfPromo.adId == 0, "L'id de la pub doit être égal à 0")
-        XCTAssertTrue(selfPromo.action == OnAppAd.OnAppAdAction.View, "L'action par défaut doit être view")
+        XCTAssertTrue(selfPromo.action == OnAppAd.OnAppAdAction.view, "L'action par défaut doit être view")
     }
     
     func testSetSelfPromoView() {
@@ -127,7 +127,7 @@ class SelfPromotionTests: XCTestCase {
     
     func testSetPublisherTouch() {
         selfPromo.adId = 1
-        selfPromo.action = OnAppAd.OnAppAdAction.Touch
+        selfPromo.action = OnAppAd.OnAppAdAction.touch
         selfPromo.setEvent()
         
         XCTAssertEqual(selfPromo.tracker.buffer.volatileParameters.count, 2, "Le nombre de paramètres volatiles doit être égal à 2")
@@ -139,7 +139,7 @@ class SelfPromotionTests: XCTestCase {
     }
     
     func testSetFullPublisherTouch() {
-        selfPromo.action = OnAppAd.OnAppAdAction.Touch
+        selfPromo.action = OnAppAd.OnAppAdAction.touch
         selfPromo.adId = 2
         selfPromo.productId = "productId"
         selfPromo.format = "format"

@@ -22,7 +22,7 @@ class DisconnectedState: LiveNetworkState {
     }
     func interfaceAskedForLive() {
         if let reject = liveManager.autoReject {
-            let elapsed = NSDate().timeIntervalSinceDate(reject)
+            let elapsed = Date().timeIntervalSince(reject as Date)
             guard elapsed > liveManager.COOLDOWN else {
                 return
             }

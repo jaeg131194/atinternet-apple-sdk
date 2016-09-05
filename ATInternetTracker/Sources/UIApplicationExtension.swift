@@ -15,7 +15,7 @@ extension UIApplication {
      *  Singleton
      */
     struct Static {
-        static var token:dispatch_once_t    = 0
+        static let token: String = UUID().uuidString
         static let HorizontalSwipeDragMin   = 50.0
         static let VerticalSwipeDragMax     = 50.0
         static let MaxMoveTimeInterval      = 0.7
@@ -28,11 +28,12 @@ extension UIApplication {
      in swift you have to init the swizzling from this method
      */
     public class func at_swizzle() {
-        dispatch_once(&Static.token) { () -> Void in
+        
+        DispatchQueue.once(token: Static.token) {
             do {
                 try self.jr_swizzleMethod(#selector(UIApplication.sendEvent(_:)), withMethod: #selector(UIApplication.at_sendEvent(_:)))
             } catch {
-                NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+                NSException(name: NSExceptionName(rawValue: "SwizzleException"), reason: "Impossible to find method to swizzle", userInfo: nil).raise()
             }
         }
     }
@@ -41,11 +42,11 @@ extension UIApplication {
      Unswizzle method
      */
     public class func at_unswizzle() {
-        dispatch_once(&Static.token) { () -> Void in
+        DispatchQueue.once(token: Static.token) {
             do {
                 try self.jr_swizzleMethod(#selector(UIApplication.at_sendEvent(_:)), withMethod: #selector(UIApplication.sendEvent(_:)))
             } catch {
-                NSException(name: "SwizzleException", reason: "Impossible to find method to swizzle", userInfo: nil).raise()
+                NSException(name: NSExceptionName(rawValue: "SwizzleException"), reason: "Impossible to find method to swizzle", userInfo: nil).raise()
             }
         }
     }
@@ -55,7 +56,7 @@ extension UIApplication {
      
      - parameter event: UIEvent
      */
-    func at_sendEvent(event: UIEvent) {
+    func at_sendEvent(_ event: UIEvent) {
         // sometimes we need to wait the end of the event in order
         // to get a correct capture (uiswitch, uislider...)
         if shouldSendNow() {
@@ -73,7 +74,7 @@ extension UIApplication {
      
      - parameter event: the UIEvent from sendEvent:
      */
-    func queueEvent(event: UIEvent) {
+    func queueEvent(_ event: UIEvent) {
         let gestureEvent = gestureFromEvent(event)
         
         if let gesture = gestureEvent {
@@ -91,11 +92,11 @@ extension UIApplication {
      
      - parameter gesture: Gesture event
      */
-    func fillWithScreenshot(gesture: GestureEvent) {
+    func fillWithScreenshot(_ gesture: GestureEvent) {
         let optImage = UIApplicationContext.sharedInstance.currentTouchedView?.screenshot()
         if let image = optImage {
             if let b64 = image.toBase64() {
-                gesture.view.screenshot = b64.stringByReplacingOccurrencesOfString("\n", withString: "").stringByReplacingOccurrencesOfString("\r", withString: "")
+                gesture.view.screenshot = b64.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
             }
         }
     }
@@ -108,13 +109,13 @@ extension UIApplication {
     func shouldSendNow() -> Bool {
         let ctx = UIApplicationContext.sharedInstance
         if let view = ctx.currentTouchedView {
-            if  view.type == UIApplicationContext.ViewType.Button ||
-                view.type == UIApplicationContext.ViewType.TableViewCell ||
-                view.type == UIApplicationContext.ViewType.TextField ||
-                view.type == UIApplicationContext.ViewType.NavigationBar ||
-                view.type == UIApplicationContext.ViewType.BackButton ||
-                view.type == UIApplicationContext.ViewType.CollectionViewCell ||
-                view.type == UIApplicationContext.ViewType.Unkwown
+            if  view.type == UIApplicationContext.ViewType.button ||
+                view.type == UIApplicationContext.ViewType.tableViewCell ||
+                view.type == UIApplicationContext.ViewType.textField ||
+                view.type == UIApplicationContext.ViewType.navigationBar ||
+                view.type == UIApplicationContext.ViewType.backButton ||
+                view.type == UIApplicationContext.ViewType.collectionViewCell ||
+                view.type == UIApplicationContext.ViewType.unknown
             {
                 return true
             }
@@ -131,63 +132,62 @@ extension UIApplication {
      
      - returns: GestureEvent detected
      */
-    func gestureFromEvent(event: UIEvent) -> GestureEvent? {
-        guard let touches = event.allTouches() else {
+    func gestureFromEvent(_ event: UIEvent) -> GestureEvent? {
+        guard let touches = event.allTouches else {
             return nil
         }
         
-        if event.type == UIEventType.Touches {
+        if event.type == UIEventType.touches {
             let appContext = UIApplicationContext.sharedInstance
             
             guard let touch = touches.first else {
                 return nil
             }
             
-            if touch.phase == UITouchPhase.Began {
+            if touch.phase == UITouchPhase.began {
                 initContext(touches)
                 if isDoubleTap(touches) {
                     EventManager.sharedInstance.cancelLastEvent()
                 }
             }
-            else if touch.phase == UITouchPhase.Moved {
+            else if touch.phase == UITouchPhase.moved {
                 if touches.count == 1 {
-                    let currentPos = touch.locationInView(nil)
+                    let currentPos = touch.location(in: nil)
                     let xDelta = fabs(appContext.initialTouchPosition.x - currentPos.x)
                     let yDelta = fabs(appContext.initialTouchPosition.y - currentPos.y)
                     
                     if  isSwipe(xDelta, yDelta: yDelta) {
-                        appContext.eventType = Gesture.GestureEventType.Swipe
+                        appContext.eventType = Gesture.GestureEventType.swipe
                     }
                     else if isScroll(xDelta, yDelta: yDelta) {
-                        appContext.eventType = Gesture.GestureEventType.Scroll
+                        appContext.eventType = Gesture.GestureEventType.scroll
                     }
                     else if isTap(xDelta, yDelta: yDelta) {
-                       appContext.eventType = Gesture.GestureEventType.Tap
+                       appContext.eventType = Gesture.GestureEventType.tap
                     }
                     else {
                         if #available(iOS 9.0, *) {
                             if touch.force/touch.maximumPossibleForce > 0.5 {
-                                appContext.eventType = Gesture.GestureEventType.Tap
+                                appContext.eventType = Gesture.GestureEventType.tap
                                 print("P33K")
                             }
                         } else {
-                            print("[warning] unknown gesture")
-                            appContext.eventType = Gesture.GestureEventType.Unknown
+                            appContext.eventType = Gesture.GestureEventType.unknown
                         }
                     }
                 } else if touches.count == 2 {
-                    if isRotation(touches) {
-                        appContext.eventType = Gesture.GestureEventType.Rotate
+                    if isRotation(touches as NSSet) {
+                        appContext.eventType = Gesture.GestureEventType.rotate
                     } else {
-                        appContext.eventType = Gesture.GestureEventType.Pinch
+                        appContext.eventType = Gesture.GestureEventType.pinch
                     }
                 }
             }
-            else if touch.phase == UITouchPhase.Ended {
+            else if touch.phase == UITouchPhase.ended {
                 assert(appContext.currentTouchedView != nil)
                 
                 // sometimes we have unwanted taps or double taps moves after pinch/rotation
-                if((appContext.previousEventType == Gesture.GestureEventType.Pinch || appContext.previousEventType == Gesture.GestureEventType.Rotate) && appContext.initalTouchTime! - appContext.previousTouchTime! < 0.1) {
+                if((appContext.previousEventType == Gesture.GestureEventType.pinch || appContext.previousEventType == Gesture.GestureEventType.rotate) && appContext.initalTouchTime! - appContext.previousTouchTime! < 0.1) {
                     //clearContext()
                     return nil
                 }
@@ -207,7 +207,7 @@ extension UIApplication {
                 methodName = infoMethodName
                 
                 /// Try to get a more precise event type by looking at target/action from gesturerecognizers attached to the current view
-                if let info = ATGestureRecognizer.getRecognizerInfo(touches, eventType: Gesture.getEventTypeRawValue(appContext.eventType.rawValue)) {
+                if let info = ATGestureRecognizer.getInfo(touches, eventType: Gesture.getEventTypeRawValue(appContext.eventType.rawValue)) {
                     if((info["eventType"]) != nil) {
                         eventType = Gesture.GestureEventType(rawValue: Gesture.getEventTypeIntValue(info["eventType"] as! String))!
                     }
@@ -226,7 +226,7 @@ extension UIApplication {
                 }
                 
                 if let segmentedControl = appContext.currentTouchedView as? UISegmentedControl {
-                    let segs = segmentedControl.valueForKey("segments") as! [UIView]
+                    let segs = segmentedControl.value(forKey: "segments") as! [UIView]
                     appContext.currentTouchedView = segs[position!]
                 }
                 
@@ -236,17 +236,17 @@ extension UIApplication {
                 }
                 
                 switch eventType {
-                case Gesture.GestureEventType.Tap :
+                case Gesture.GestureEventType.tap :
                     gestureEvent = logTap(touch, method: methodName)
-                case Gesture.GestureEventType.Swipe :
+                case Gesture.GestureEventType.swipe :
                     gestureEvent = logSwipe(touch, method: methodName)
-                case Gesture.GestureEventType.Pan:
+                case Gesture.GestureEventType.pan:
                     gestureEvent = logPan(touch, method: methodName)
-                case Gesture.GestureEventType.Scroll:
+                case Gesture.GestureEventType.scroll:
                     gestureEvent = logScroll(touch, method: nil)
-                case Gesture.GestureEventType.Rotate:
+                case Gesture.GestureEventType.rotate:
                     gestureEvent = logRotation(methodName)
-                case Gesture.GestureEventType.Pinch:
+                case Gesture.GestureEventType.pinch:
                     if(touches.count == 2) {
                         appContext.pinchType = getPinchType(touches)
                     }
@@ -283,7 +283,7 @@ extension UIApplication {
      
      - returns: return true if double tap determined
      */
-    func isDoubleTap(touches: Set<UITouch>) -> Bool {
+    func isDoubleTap(_ touches: Set<UITouch>) -> Bool {
         return touches.count == 1 && touches.first!.tapCount == 2
     }
     
@@ -294,11 +294,11 @@ extension UIApplication {
      
      - returns: true if the context thinks a rotation is happening
      */
-    func isRotation(touches: NSSet) -> Bool {
+    func isRotation(_ touches: NSSet) -> Bool {
         let appContext = UIApplicationContext.sharedInstance
         let t = Array(touches)
-        let currP1 = t[0].locationInView(nil)
-        let currP2 = t[1].locationInView(nil)
+        let currP1 = (t[0] as AnyObject).location(in: nil)
+        let currP2 = (t[1] as AnyObject).location(in: nil)
         appContext.rotationObject?.setCurrentPoints(currP1, p2: currP2)
         if let obj = appContext.rotationObject {
             return obj.isValidRotation()
@@ -316,11 +316,11 @@ extension UIApplication {
      
      - returns: true if it's detected as a swipe
      */
-    func isSwipe(xDelta: CGFloat, yDelta: CGFloat) -> Bool {
+    func isSwipe(_ xDelta: CGFloat, yDelta: CGFloat) -> Bool {
         let appContext = UIApplicationContext.sharedInstance
         if  Double(xDelta) >= UIApplication.Static.HorizontalSwipeDragMin &&
             Double(yDelta) <= UIApplication.Static.VerticalSwipeDragMax {
-                let now = NSDate().timeIntervalSinceNow
+                let now = Date().timeIntervalSinceNow
                 if now - appContext.initalTouchTime! <= UIApplication.Static.MaxMoveTimeInterval {
                     return true
                 }
@@ -328,7 +328,7 @@ extension UIApplication {
         return false
     }
     
-    func isTap(xDelta: CGFloat, yDelta: CGFloat) -> Bool {
+    func isTap(_ xDelta: CGFloat, yDelta: CGFloat) -> Bool {
         return (xDelta == 0 && yDelta == 0)
     }
     
@@ -340,12 +340,12 @@ extension UIApplication {
      
      - returns: true if it's a scroll
      */
-    func isScroll(xDelta: CGFloat, yDelta: CGFloat) -> Bool {
+    func isScroll(_ xDelta: CGFloat, yDelta: CGFloat) -> Bool {
         let appContext = UIApplicationContext.sharedInstance
         
         if  Double(xDelta) <= UIApplication.Static.HorizontalSwipeDragMin &&
             Double(yDelta) >= UIApplication.Static.VerticalSwipeDragMax {
-                let now = NSDate().timeIntervalSinceNow
+                let now = Date().timeIntervalSinceNow
                 if now - appContext.initalTouchTime! <= UIApplication.Static.MaxMoveTimeInterval {
                     return true
                 }
@@ -360,12 +360,12 @@ extension UIApplication {
      
      - returns: Pinch Direction
      */
-    func getPinchType(touches: Set<UITouch>) -> UIApplicationContext.PinchDirection {
+    func getPinchType(_ touches: Set<UITouch>) -> UIApplicationContext.PinchDirection {
         let t = Array(touches)
         var pinchType = UIApplicationContext.PinchDirection.Unknown
         let appContext = UIApplicationContext.sharedInstance
         
-        let finalDist = Maths.CGPointDist(t[0].locationInView(nil), b: t[1].locationInView(nil))
+        let finalDist = Maths.CGPointDist(t[0].location(in: nil), b: t[1].location(in: nil))
         let initialDist = appContext.initialPinchDistance
         
         if  Double(fabs(finalDist - initialDist)) > UIApplication.Static.PinchDragMin &&
@@ -387,11 +387,11 @@ extension UIApplication {
      
      - parameter touches: touces
      */
-    func initContext(touches: Set<UITouch>) {
+    func initContext(_ touches: Set<UITouch>) {
         if let touch = touches.first {
             let appContext = UIApplicationContext.sharedInstance
-            appContext.eventType = Gesture.GestureEventType.Tap
-            appContext.initialTouchPosition = touch.locationInView(nil)
+            appContext.eventType = Gesture.GestureEventType.tap
+            appContext.initialTouchPosition = touch.location(in: nil)
             appContext.initalTouchTime = touch.timestamp
             appContext.initialPinchDistance = 0
             let touchedView = getTouchedView(touches);
@@ -403,16 +403,16 @@ extension UIApplication {
             }
             if touches.count == 2 {
                 let t = Array(touches)
-                appContext.eventType = Gesture.GestureEventType.Pinch
-                appContext.initialPinchDistance = Maths.CGPointDist(t[0].locationInView(nil), b: t[1].locationInView(nil))
-                appContext.initialTouchPosition = t[0].locationInView(nil)
-                appContext.rotationObject = Rotator(p1: t[0].locationInView(nil), p2: t[1].locationInView(nil))
+                appContext.eventType = Gesture.GestureEventType.pinch
+                appContext.initialPinchDistance = Maths.CGPointDist(t[0].location(in: nil), b: t[1].location(in: nil))
+                appContext.initialTouchPosition = t[0].location(in: nil)
+                appContext.rotationObject = Rotator(p1: t[0].location(in: nil), p2: t[1].location(in: nil))
             }
         }
     }
     
     /* check is we should ignore the event */
-    func shouldIgnoreView(optView: UIView?) -> Bool {
+    func shouldIgnoreView(_ optView: UIView?) -> Bool {
         guard let view = optView else {
             return true
         }
@@ -430,8 +430,8 @@ extension UIApplication {
         let appContext = UIApplicationContext.sharedInstance
         appContext.previousTouchTime = appContext.initalTouchTime
         appContext.previousEventType = appContext.eventType
-        appContext.initialTouchPosition = CGPointZero
-        appContext.initalTouchTime = NSDate().timeIntervalSinceNow
+        appContext.initialTouchPosition = CGPoint.zero
+        appContext.initalTouchTime = Date().timeIntervalSinceNow
         appContext.initialPinchDistance = 0
         appContext.rotationObject = nil
     }
@@ -443,7 +443,7 @@ extension UIApplication {
      
      - returns: TapEvent
      */
-    func logTap(touch: UITouch, method: String?) -> TapEvent {
+    func logTap(_ touch: UITouch, method: String?) -> TapEvent {
         let appContext = UIApplicationContext.sharedInstance
         
         let p = appContext.initialTouchPosition
@@ -462,9 +462,9 @@ extension UIApplication {
      
      - returns: SwipeEvent
      */
-    func logSwipe(touch: UITouch, method: String?) -> SwipeEvent {
+    func logSwipe(_ touch: UITouch, method: String?) -> SwipeEvent {
         let appContext = UIApplicationContext.sharedInstance
-        let p = touch.locationInView(nil)
+        let p = touch.location(in: nil)
         let swipe = SwipeEvent(view: View(), direction:appContext.initialTouchPosition.x < p.x ? SwipeEvent.SwipeDirection.Right : SwipeEvent.SwipeDirection.Left, currentScreen: Screen())
         
         if let methodName = method {
@@ -481,7 +481,7 @@ extension UIApplication {
      
      - returns: RotationEvent
      */
-    func logRotation(method: String?) -> RotationEvent {
+    func logRotation(_ method: String?) -> RotationEvent {
         let appContext = UIApplicationContext.sharedInstance
         let finalAngle = appContext.rotationObject?.getCurrentRotation()
         let initialAngle = appContext.rotationObject?.initialRotation
@@ -500,14 +500,14 @@ extension UIApplication {
      
      - returns: PanEvent
      */
-    func logPan(touch: UITouch, method: String?) -> PanEvent {
+    func logPan(_ touch: UITouch, method: String?) -> PanEvent {
         let appContext = UIApplicationContext.sharedInstance
-        let p = touch.locationInView(nil)
+        let p = touch.location(in: nil)
         var direction = PanEvent.PanDirection.Left
         
-        if(appContext.eventType == Gesture.GestureEventType.Swipe) {
+        if(appContext.eventType == Gesture.GestureEventType.swipe) {
             direction = appContext.initialTouchPosition.x < p.x ? PanEvent.PanDirection.Right : PanEvent.PanDirection.Left
-        } else if(appContext.eventType == Gesture.GestureEventType.Scroll) {
+        } else if(appContext.eventType == Gesture.GestureEventType.scroll) {
             direction = appContext.initialTouchPosition.y < p.y ? PanEvent.PanDirection.Up : PanEvent.PanDirection.Down
         }
         
@@ -527,9 +527,9 @@ extension UIApplication {
      
      - returns: ScrollEvent
      */
-    func logScroll(touch: UITouch, method: String?) -> ScrollEvent {
+    func logScroll(_ touch: UITouch, method: String?) -> ScrollEvent {
         let appContext = UIApplicationContext.sharedInstance
-        let p = touch.locationInView(nil)
+        let p = touch.location(in: nil)
         let optTouchedView = appContext.currentTouchedView
         
         if let touchedView = optTouchedView {
@@ -554,7 +554,7 @@ extension UIApplication {
      
      - returns: PinchEvent
      */
-    func logPinch(touch: UITouch, method: String?) -> PinchEvent {
+    func logPinch(_ touch: UITouch, method: String?) -> PinchEvent {
         let appContext = UIApplicationContext.sharedInstance
         let pinch = PinchEvent(view: View(), direction:(appContext.pinchType == UIApplicationContext.PinchDirection.In) ? PinchEvent.PinchDirection.In : PinchEvent.PinchDirection.Out , currentScreen: Screen())
         
@@ -572,7 +572,7 @@ extension UIApplication {
      
      - returns: UIView?
      */
-    func getTouchedView(touches: Set<UITouch>) -> UIView? {
+    func getTouchedView(_ touches: Set<UITouch>) -> UIView? {
         for touch in touches {
             if let view = touch.view {
                 
@@ -596,7 +596,7 @@ extension UIApplication {
         if let cell = c {
             let col = self.collectionViewForCell(cell)
             if let collection = col {
-                return collection.indexPathForCell(cell)?.row
+                return (collection.indexPath(for: cell) as IndexPath?)?.row
             }
         }
         return nil
@@ -609,9 +609,9 @@ extension UIApplication {
      
      - returns: the collectionViewCell
      */
-    func collectionViewForCell(cell: UICollectionViewCell) -> UICollectionView?{
+    func collectionViewForCell(_ cell: UICollectionViewCell) -> UICollectionView?{
         var superView = cell.superview
-        while superView != nil && !superView!.isKindOfClass(UICollectionView.self) {
+        while superView != nil && !superView!.isKind(of: UICollectionView.self) {
             superView = superView?.superview
         }
         
@@ -628,7 +628,7 @@ extension UIApplication {
         if let cell = c {
             let t = self.tableViewForCell(cell)
             if let table = t {
-                return table.indexPathForCell(cell)?.row
+                return (table.indexPath(for: cell) as IndexPath?)?.row
             }
         }
         return nil
@@ -641,9 +641,9 @@ extension UIApplication {
      
      - returns: the tableViewCell
      */
-    func tableViewForCell(cell: UITableViewCell) -> UITableView? {
+    func tableViewForCell(_ cell: UITableViewCell) -> UITableView? {
         var superView = cell.superview
-        while superView != nil && !superView!.isKindOfClass(UITableView.self) {
+        while superView != nil && !superView!.isKind(of: UITableView.self) {
             superView = superView?.superview
         }
         
@@ -657,7 +657,7 @@ extension UIApplication {
      
      - returns: text, method and className
      */
-    func getTouchedViewInfo(object: AnyObject) -> (text: String?, method: String?, className: String?, position: Int?) {
+    func getTouchedViewInfo(_ object: Any) -> (text: String?, method: String?, className: String?, position: Int?) {
         var text: String?
         var method: String?
         var className: String?
@@ -668,7 +668,7 @@ extension UIApplication {
         }
         
         if let view = object as? UIView {
-            if view.type == UIApplicationContext.ViewType.TableViewCell {
+            if view.type == UIApplicationContext.ViewType.tableViewCell {
                 let cell = view.parentTableViewCell!
                 if let textLabel = cell.textLabel {
                     if let cellText = textLabel.textValue {
@@ -679,7 +679,7 @@ extension UIApplication {
                 if let index = getIndexPathForTableCell() {
                     position = index
                 }
-            } else if view.type == UIApplicationContext.ViewType.CollectionViewCell {
+            } else if view.type == UIApplicationContext.ViewType.collectionViewCell {
                 let cell = view.parentCollectionViewCell!
                 if let cellText = cell.contentView.textValue {
                     text = cellText
@@ -689,13 +689,13 @@ extension UIApplication {
                     position = index
                 }
                 
-            } else if view.type == UIApplicationContext.ViewType.BackButton {
+            } else if view.type == UIApplicationContext.ViewType.backButton {
                 text = "handleBack:"
                 method = "handleBack:"
-            } else if view.type == UIApplicationContext.ViewType.NavigationBar {
+            } else if view.type == UIApplicationContext.ViewType.navigationBar {
                 text = view.textValue
                 className = "UINavigationBar"
-            } else if view.type == UIApplicationContext.ViewType.TextField  {
+            } else if view.type == UIApplicationContext.ViewType.textField  {
                 let textField = view as! UITextField
                 
                 if let fieldText = textField.text {
@@ -711,7 +711,7 @@ extension UIApplication {
                         text = placeHolder
                     }
                 }
-            } else if view.type == UIApplicationContext.ViewType.Button  {
+            } else if view.type == UIApplicationContext.ViewType.button  {
                 let button = view as! UIButton
                 
                 if let title = button.currentTitle {
@@ -726,40 +726,43 @@ extension UIApplication {
                 }
                 
                 let classType:AnyClass? = NSClassFromString("UINavigationButton")
-                if view.isKindOfClass(classType!) {
+                if view.isKind(of: classType!) {
                     position = getPositionFromNavigationBar(view)
                 }
                 
-            } else if view.type == UIApplicationContext.ViewType.SegmentedControl  {
+            } else if view.type == UIApplicationContext.ViewType.segmentedControl  {
                 let segment = view as! UISegmentedControl
-                text = segment.titleForSegmentAtIndex(segment.selectedSegmentIndex)
+                text = segment.titleForSegment(at: segment.selectedSegmentIndex)
                 position = segment.selectedSegmentIndex
                 className = "UISegment"
-            } else if view.type == UIApplicationContext.ViewType.Slider  {
+            } else if view.type == UIApplicationContext.ViewType.slider  {
                 let slider = view as! UISlider
                 
                 text = String(slider.value)
-            } else if view.type == UIApplicationContext.ViewType.Stepper  {
+            } else if view.type == UIApplicationContext.ViewType.stepper  {
                 let stepper = view as! UIStepper
                 
                 text = String(stepper.value)
             }
         } else if let barButton = object as? UIBarButtonItem {
-            let view = barButton.valueForKey("view") as! UIView
+            let view = barButton.value(forKey: "view") as! UIView
             var barButtonContainer = view.superview
             
             if let title = barButton.title {
                 text = title
             }
-            method = NSStringFromSelector(barButton.action)
+            method = NSStringFromSelector(barButton.action!)
             if barButtonContainer is UIToolbar {
                 position = getPositionFromUIToolbarButton(barButton)
             }
         }
         
         if let control = object as? UIControl {
-            for target in control.allTargets() {
-                if target.isKindOfClass(NSClassFromString("UIBarButtonItem")!)  {
+            for target in control.allTargets {
+                
+                let tar = target as NSObject
+                
+                if tar.isKind(of: NSClassFromString("UIBarButtonItem")!)  {
                     let barButtonInfo = getTouchedViewInfo(target as! UIBarButtonItem)
                     if let title = barButtonInfo.text {
                         text = title
@@ -774,7 +777,7 @@ extension UIApplication {
                             position = pos
                         }
                     }
-                } else if target.isKindOfClass(NSClassFromString("UITabBar")!)  {
+                } else if tar.isKind(of: NSClassFromString("UITabBar")!)  {
                     let tabBar = target as! UITabBar
                     
                     let (idx, title) = getItemFromButton(tabBar, currentButton: object as! UIControl)
@@ -785,8 +788,8 @@ extension UIApplication {
                     method = "_tabBarItemClicked:"
                     className = "UITabBarController"
                 } else {
-                    if let actions = control.actionsForTarget(target, forControlEvent: control.allControlEvents()) {
-                        func getAction(actions: [String]) -> String? {
+                    if let actions = control.actions(forTarget: target, forControlEvent: control.allControlEvents) {
+                        func getAction(_ actions: [String]) -> String? {
                             return actions.filter({$0 != "at_refresh"}).first
                         }
                         if let action = getAction(actions) {
@@ -812,7 +815,7 @@ extension UIApplication {
      
      - returns: the position in its parent's subviews array
      */
-    func getPositionInSuperView(obj: AnyObject) -> Int {
+    func getPositionInSuperView(_ obj: Any) -> Int {
         let defaultValue = -1
         guard let view = obj as? UIView else {
             return defaultValue
@@ -833,13 +836,13 @@ extension UIApplication {
      
      - returns: (index, title) tuple
      */
-    func getItemFromButton(tabBar: UITabBar, currentButton: UIControl) -> (Int?, String?) {
+    func getItemFromButton(_ tabBar: UITabBar, currentButton: UIControl) -> (Int?, String?) {
         guard let tabBarItems = tabBar.items else {
             return (nil, nil)
         }
-        for (idx, item) in tabBarItems.enumerate() {
+        for (idx, item) in tabBarItems.enumerated() {
             if item.at_hasProperty("view") {
-                if currentButton == item.valueForKey("view") as! UIControl {
+                if currentButton == item.value(forKey: "view") as! UIControl {
                     let text = item.title
                     return (idx, text)
                 }
@@ -856,26 +859,26 @@ extension UIApplication {
      
      - returns: the position
      */
-    func getPositionFromUIToolbarButton(barButton: UIBarButtonItem) -> Int {
-        if let embedView = barButton.valueForKey("view") as? UIView {
+    func getPositionFromUIToolbarButton(_ barButton: UIBarButtonItem) -> Int {
+        if let embedView = barButton.value(forKey: "view") as? UIView {
             if let parent = embedView.superview {
                 let subs = parent.subviews
-                let buttonArray = subs.filter({$0.isKindOfClass(NSClassFromString("UIToolbarButton")!)})
-                return buttonArray.indexOf(embedView) ?? -1
+                let buttonArray = subs.filter({$0.isKind(of: NSClassFromString("UIToolbarButton")!)})
+                return buttonArray.index(of: embedView) ?? -1
             }
         }
         return -1
     }
     
-    func getPositionFromNavigationBar(view: UIView) -> Int {
+    func getPositionFromNavigationBar(_ view: UIView) -> Int {
         let classType:AnyClass? = NSClassFromString("UINavigationButton")
-        if view.isKindOfClass(classType!) {
+        if view.isKind(of: classType!) {
             let navBar = view.superview as! UINavigationBar
-            var navButtons = navBar.subviews.filter({ $0.isKindOfClass(classType!) })
-            navButtons.sortInPlace({ (button1: UIView, button2: UIView) -> Bool in
+            var navButtons = navBar.subviews.filter({ $0.isKind(of: classType!) })
+            navButtons.sort(by: { (button1: UIView, button2: UIView) -> Bool in
                 button1.frame.origin.x < button2.frame.origin.x
             })
-            return navButtons.indexOf(view) ?? -1
+            return navButtons.index(of: view) ?? -1
         }
         return -1
     }

@@ -69,26 +69,26 @@ public class Buffer: NSObject {
         
         // Add SDK version
         let sdkVersion = TechnicalContext.sdkVersion
-        self.persistentParameters.append(Param(key: "vtag", value: {sdkVersion}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "vtag", value: {sdkVersion}, type: .string, options: persistentOption))
         // Add Platform type
         #if os(iOS)
-        self.persistentParameters.append(Param(key: "ptag", value: {"ios"}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "ptag", value: {"ios"}, type: .string, options: persistentOption))
         #elseif os(watchOS)
-        self.persistentParameters.append(Param(key: "ptag", value: {"watchos"}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "ptag", value: {"watchos"}, type: .string, options: persistentOption))
         #else
-        self.persistentParameters.append(Param(key: "ptag", value: {"tvos"}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "ptag", value: {"tvos"}, type: .string, options: persistentOption))
         #endif
         // Add device language
-        self.persistentParameters.append(Param(key: "lng", value: {TechnicalContext.language}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "lng", value: {TechnicalContext.language}, type: .string, options: persistentOption))
         // Add device information
         let device = "[apple]-[" + TechnicalContext.device + "]"
-        self.persistentParameters.append(Param(key: "mfmd", value: {device}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "mfmd", value: {device}, type: .string, options: persistentOption))
         // Add OS information
         let operatingSystem = TechnicalContext.operatingSystem
-        self.persistentParameters.append(Param(key: "os", value: {operatingSystem}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "os", value: {operatingSystem}, type: .string, options: persistentOption))
         // Add application identifier
         let applicationIdentifier = TechnicalContext.applicationIdentifier
-        self.persistentParameters.append(Param(key: "apid", value: {applicationIdentifier}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "apid", value: {applicationIdentifier}, type: .string, options: persistentOption))
         // Add application version
         var applicationVersion = TechnicalContext.applicationVersion
         
@@ -96,22 +96,22 @@ public class Buffer: NSObject {
             applicationVersion = "[" + applicationVersion + "]"
         }
         
-        self.persistentParameters.append(Param(key: "apvr", value: {applicationVersion}, type: .String, options: persistentOptionWithEncoding))
+        self.persistentParameters.append(Param(key: "apvr", value: {applicationVersion}, type: .string, options: persistentOptionWithEncoding))
         // Add local hour
-        self.persistentParameters.append(Param(key: "hl", value: {TechnicalContext.localHour}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "hl", value: {TechnicalContext.localHour}, type: .string, options: persistentOption))
         // Add screen resolution
-        self.persistentParameters.append(Param(key: "r", value: {TechnicalContext.screenResolution}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "r", value: {TechnicalContext.screenResolution}, type: .string, options: persistentOption))
         #if os(iOS)
         // Add carrier
-        self.persistentParameters.append(Param(key: "car", value: {TechnicalContext.carrier}, type: .String, options: persistentOptionWithEncoding))
+        self.persistentParameters.append(Param(key: "car", value: {TechnicalContext.carrier}, type: .string, options: persistentOptionWithEncoding))
         #endif
         // Add connexion information
-        self.persistentParameters.append(Param(key: "cn", value: {TechnicalContext.connectionType.rawValue}, type: .String, options: persistentOptionWithEncoding))
+        self.persistentParameters.append(Param(key: "cn", value: {TechnicalContext.connectionType.rawValue}, type: .string, options: persistentOptionWithEncoding))
         // Add time stamp for cache
-        self.persistentParameters.append(Param(key: "ts", value: {String(format:"%f", NSDate().timeIntervalSince1970 )}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "ts", value: {String(format:"%f", Date().timeIntervalSince1970 )}, type: .string, options: persistentOption))
         // Add download SDK source
-        self.persistentParameters.append(Param(key: "dls", value: {TechnicalContext.downloadSource(self.tracker)}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "dls", value: {TechnicalContext.downloadSource(self.tracker)}, type: .string, options: persistentOption))
         // Add unique user id
-        self.persistentParameters.append(Param(key: "idclient", value: {TechnicalContext.userId(self.tracker.configuration.parameters["identifier"])}, type: .String, options: persistentOption))
+        self.persistentParameters.append(Param(key: "idclient", value: {TechnicalContext.userId(self.tracker.configuration.parameters["identifier"])}, type: .string, options: persistentOption))
     }
 }

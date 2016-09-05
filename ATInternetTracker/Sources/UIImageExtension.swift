@@ -17,16 +17,16 @@ extension UIImage {
      
      - returns: The cropped image
      */
-    func crop(rect: CGRect) -> UIImage? {
-        let rectangle = CGRectMake(rect.origin.x * self.scale,
-            rect.origin.y*self.scale,
-            rect.size.width*self.scale,
-            rect.size.height*self.scale);
+    func crop(_ rect: CGRect) -> UIImage? {
+        let rectangle = CGRect(x: rect.origin.x * self.scale,
+            y: rect.origin.y*self.scale,
+            width: rect.size.width*self.scale,
+            height: rect.size.height*self.scale);
         
-        let imageRef = CGImageCreateWithImageInRect(self.CGImage, rectangle);
+        let imageRef = self.cgImage?.cropping(to: rectangle);
         
         if let image = imageRef {
-            let result = UIImage(CGImage: image, scale: self.scale, orientation: self.imageOrientation)
+            let result = UIImage(cgImage: image, scale: self.scale, orientation: self.imageOrientation)
             return result;
         }
         else {
@@ -40,6 +40,6 @@ extension UIImage {
      - returns: The base64 representation of the image
      */
     func toBase64 () -> String? {
-        return UIImageJPEGRepresentation(self, 0.25)?.base64EncodedStringWithOptions(NSDataBase64EncodingOptions.EncodingEndLineWithLineFeed)
+        return UIImageJPEGRepresentation(self, 0.25)?.base64EncodedString(options: Data.Base64EncodingOptions.endLineWithLineFeed)
     }
 }

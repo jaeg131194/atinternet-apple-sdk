@@ -30,19 +30,19 @@ SOFTWARE.
 import Foundation
 
 public enum OfflineModeKey: String {
-    case Always = "always"
-    case Never = "never"
-    case Required = "required"
+    case always = "always"
+    case never = "never"
+    case required = "required"
 }
 
 public enum PluginKey: String {
-    case TvTracking = "tvtracking"
-    case NuggAd = "nuggad"
+    case tvTracking = "tvtracking"
+    case nuggAd = "nuggad"
 }
 
 public enum IdentifierTypeKey: String {
-    case UUID = "uuid"
-    case IDFV = "idfv"
+    case uuid = "uuid"
+    case idfv = "idfv"
 }
 
 public class TrackerConfigurationKeys {
@@ -63,7 +63,7 @@ public class TrackerConfigurationKeys {
     public static let Site = "site"
     public static let Secure = "secure"
     public static let Identifier = "identifier"
-    static let DownloadSource = "downloadSource"
+    public static let DownloadSource = "downloadSource"
     public static let Plugins = "plugins"
     public static let AutoTracking = "enableAutoTracking"
     public static let AutoTrackerToken = "autoTrackerToken"
@@ -97,8 +97,8 @@ class Configuration: NSObject {
     */
     override init() {
         super.init()
-        let bundle = NSBundle(forClass: object_getClass(self))
-        let path = bundle.pathForResource("DefaultConfiguration", ofType: "plist")
+        let bundle = Bundle(for: object_getClass(self))
+        let path = bundle.path(forResource: "DefaultConfiguration", ofType: "plist")
         if let optPath = path {
             let defaultConf = NSDictionary(contentsOfFile: optPath)
             if let optDefaultConf = defaultConf as? [String: String] {

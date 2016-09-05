@@ -32,12 +32,11 @@ SOFTWARE.
 
 import UIKit
 import XCTest
-import Tracker
 
 class CrashTests: XCTestCase {
 
     func testCompute() {
-        let report = Crash.compute() as! [String: AnyObject]?
+        let report = (Crash.compute() as NSDictionary?) as! [String: Any]?
         if let _ = report {
             XCTAssert(false, "Il ne doit pas y'avoir de données relatives à un crash")
         }

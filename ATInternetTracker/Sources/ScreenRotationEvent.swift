@@ -25,7 +25,7 @@ class ScreenRotationEvent {
     
     /// JSON description
     var description: String {
-        let jsonObj: NSMutableDictionary = [
+        var jsonObj: [String: Any] = [
             "event": "screenRotation",
             "data":[
                 "name": self.currentScreen.name,
@@ -36,9 +36,11 @@ class ScreenRotationEvent {
                 "triggeredBy": ""
             ]
         ]
-        let data = jsonObj.objectForKey("data")?.mutableCopy() as! NSMutableDictionary
-        data.addEntriesFromDictionary(self.currentScreen.description.toJSONObject() as! [NSObject: AnyObject])
-        jsonObj.setValue(data, forKey: "data")
+        
+        var data = jsonObj["data"] as! [String: Any]
+        data.append(self.currentScreen.toJSONObject)
+        jsonObj.updateValue(data, forKey: "data")
+
         return jsonObj.toJSON()
     }
 

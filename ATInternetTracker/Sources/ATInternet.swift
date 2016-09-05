@@ -40,6 +40,14 @@ import UIKit
 /// Makes it easy to manage trackers instances
 public class ATInternet: NSObject {
     
+    struct Static {
+        static var instance: ATInternet?
+    }
+    
+    fileprivate static var __once: () = {
+            Static.instance = ATInternet()
+        }()
+    
     #if os(iOS) && AT_SMART_TRACKER
     /// First tracker that was initialized
     public var defaultTracker: AutoTracker {
@@ -48,7 +56,7 @@ public class ATInternet: NSObject {
                 self.trackers = [String: Tracker]()
             }
             
-            if(self.trackers.indexForKey("defaultTracker") != nil) {
+            if(self.trackers.index(forKey: "defaultTracker") != nil) {
                 return self.trackers["defaultTracker"]! as! AutoTracker
             } else {
                 let tracker = AutoTracker()
@@ -68,25 +76,18 @@ public class ATInternet: NSObject {
     #endif
     
     /// List of all initialized trackers
-    private var trackers: [String: Tracker]!
+    fileprivate var trackers: [String: Tracker]!
     
     /**
     Default initializer
     */
-    private override init() {
+    fileprivate override init() {
         
     }
     
     /// Singleton
     public class var sharedInstance: ATInternet {
-        struct Static {
-            static var instance: ATInternet?
-            static var token: dispatch_once_t = 0
-        }
-        
-        dispatch_once(&Static.token) {
-            Static.instance = ATInternet()
-        }
+        _ = ATInternet.__once
         
         return Static.instance!
     }
@@ -95,12 +96,12 @@ public class ATInternet: NSObject {
     Method to access or create an instance of a tracker
     - parameter name: name of the tracker
     */
-    public func tracker(name: String) -> Tracker {
+    public func tracker(_ name: String) -> Tracker {
         if(self.trackers == nil) {
             self.trackers = [String: Tracker]()
         }
         
-        if(self.trackers.indexForKey(name) != nil) {
+        if(self.trackers.index(forKey: name) != nil) {
             return self.trackers[name]!
         } else {
             let tracker = Tracker()
@@ -115,12 +116,12 @@ public class ATInternet: NSObject {
     - parameter name: name of the tracker
     - parameter configuration: configuration to use for the tracker
     */
-    public func tracker(name: String, configuration: [String: String]) -> Tracker {
+    public func tracker(_ name: String, configuration: [String: String]) -> Tracker {
         if(self.trackers == nil) {
             self.trackers = [String: Tracker]()
         }
         
-        if(self.trackers.indexForKey(name) != nil) {
+        if(self.trackers.index(forKey: name) != nil) {
             return self.trackers[name]!
         } else {
             let tracker = Tracker(configuration: configuration)
