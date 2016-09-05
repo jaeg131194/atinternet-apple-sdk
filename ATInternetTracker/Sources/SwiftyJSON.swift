@@ -125,13 +125,15 @@ public struct JSON {
         self.init(dictionary)
     }
     
-    /// fileprivate object
+    /// Private object
     fileprivate var rawArray: [Any] = []
     fileprivate var rawDictionary: [String : Any] = [:]
     fileprivate var rawString: String = ""
     fileprivate var rawNumber: NSNumber = 0
     fileprivate var rawNull: NSNull = NSNull()
+    /// Private type
     fileprivate var _type: Type = .null
+    /// prviate error
     fileprivate var _error: NSError? = nil
     
     /// Object in JSON
@@ -221,7 +223,7 @@ public func <(lhs: JSONIndex, rhs: JSONIndex) -> Bool {
 }
 
 
-extension JSON: Collection {
+extension JSON: Collection{
     
     public typealias Index = JSONIndex
     
@@ -457,7 +459,7 @@ extension JSON: Swift.ExpressibleByFloatLiteral {
 extension JSON: Swift.ExpressibleByDictionaryLiteral {
     
     public init(dictionaryLiteral elements: (String, Any)...) {
-        self.init(elements.reduce([String : Any](minimumCapacity: elements.count)){(dictionary: [String : Any], element:(String, Any)) -> [String : Any] in
+        self.init(elements.reduce([String : AnyObject](minimumCapacity: elements.count)){(dictionary: [String : Any], element:(String, Any)) -> [String : Any] in
             var d = dictionary
             d[element.0] = element.1
             return d
@@ -608,7 +610,7 @@ extension JSON {
         return self.dictionary ?? [:]
     }
     
-    //Optional [String : Any]
+    //Optional [String : AnyObject]
     public var dictionaryObject: [String : Any]? {
         get {
             switch self.type {
@@ -697,7 +699,7 @@ extension JSON {
             case .string:
                 return self.object as? String ?? ""
             case .number:
-                return (self.object as AnyObject).stringValue
+                return String(describing: self.object)
             case .bool:
                 return (self.object as? Bool).map { String($0) } ?? ""
             default:
@@ -767,7 +769,7 @@ extension JSON {
         }
     }
     public func exists() -> Bool{
-        if let errorValue = error, errorValue.code == ErrorNotExist{
+        if let errorValue = error , errorValue.code == ErrorNotExist{
             return false
         }
         return true
@@ -792,7 +794,7 @@ extension JSON {
             }
         }
         set {
-            self.object = newValue?.absoluteString ?? NSNull()
+            self.object = newValue?.absoluteString as AnyObject? ?? NSNull()
         }
     }
 }
@@ -1157,10 +1159,6 @@ fileprivate let trueNumber = NSNumber(value: true)
 fileprivate let falseNumber = NSNumber(value: false)
 fileprivate let trueObjCType = String(cString: trueNumber.objCType)
 fileprivate let falseObjCType = String(cString: falseNumber.objCType)
-
-
-//A C++ bool or a C99 _Bool
-//Do Not Know Why self.objCType is "B", maybe a bug.
 fileprivate let cppBoolType = "B"
 
 // MARK: - NSNumber: Comparable
@@ -1168,9 +1166,7 @@ fileprivate let cppBoolType = "B"
 extension NSNumber {
     var isBool:Bool {
         get {
-            
             let objCType = String(cString: self.objCType)
-            
             if (self.compare(trueNumber) == ComparisonResult.orderedSame && (objCType == trueObjCType || objCType == cppBoolType))
                 || (self.compare(falseNumber) == ComparisonResult.orderedSame && (objCType == falseObjCType || objCType == cppBoolType)){
                 return true
