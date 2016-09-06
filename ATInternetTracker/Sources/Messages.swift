@@ -15,7 +15,8 @@ class DeviceAskingForLive {
             "event": "DeviceAskedForLive",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0",
-                "name" : UIDevice.current.name
+                "name" : UIDevice.currentDevice().name,
+                "version": TechnicalContext.applicationVersion.isEmpty ? "" : TechnicalContext.applicationVersion
             ]
         ]
         return askForLive.toJSON()
@@ -99,5 +100,20 @@ class ScreenshotUpdated {
         refreshScreenshot.updateValue(data, forKey: "data")
 
         return refreshScreenshot.toJSON()
+    }
+}
+
+/// Device send its version
+class DeviceVersion {
+    var description: String {
+        var deviceVersion: [String: Any] = [
+            "event": "DeviceVersion",
+            "data": [
+                "token": ATInternet.sharedInstance.defaultTracker.token ?? "0",
+                "version": TechnicalContext.applicationVersion.isEmpty ? "" : TechnicalContext.applicationVersion
+            ]
+        ]
+
+        return deviceVersion.toJSON()
     }
 }

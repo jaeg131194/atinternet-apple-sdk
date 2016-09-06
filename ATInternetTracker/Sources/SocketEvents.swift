@@ -18,7 +18,7 @@ class SocketEventFactory {
             return SEScreenshot(liveManager: liveManager, messageData: messageData)
         // interface requesting a live session
         case SmartSocketEvent.InterfaceAskedForLive.rawValue:
-            return SEInterfaceAskedForLive(liveManager: liveManager)
+            return SEInterfaceAskedForLive(liveManager: liveManager, messageData: messageData)
         // device decline live (loop from self due to the dispatch broadcast)
         case SmartSocketEvent.InterfaceRefusedLive.rawValue:
             return SEInterfaceRefusedLive(liveManager: liveManager)
@@ -109,6 +109,11 @@ class SEScreenshot: SocketEvent {
 /// The BO is asking for a live - display a popup to the user
 class SEInterfaceAskedForLive: SocketEvent {
     override func process() {
+        let currentVersion = TechnicalContext.applicationVersion.isEmpty ? "" : TechnicalContext.applicationVersion
+        if self.messageData != nil && self.messageData!["version"].string != nil && self.messageData!["version"].string != currentVersion {
+            liveManager.sender?.sendMessageForce(DeviceVersion().description)
+            return
+        }
         self.liveManager.interfaceAskedForLive()
     }
 }

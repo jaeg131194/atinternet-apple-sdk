@@ -155,11 +155,38 @@ class GestureOperation: Operation {
                 gestureEvent.methodName = gestureEvent.defaultMethodName
             }
             assert(gestureEvent.methodName != nil)
-            
-            let eventKeyBase = Gesture.getEventTypeRawValue(gestureEvent.eventType.rawValue) + "." + gestureEvent.direction + "." + gestureEvent.methodName!
-            let position = gesture.view != nil ? "." + String(gesture.view!.position) : ""
-            let view = gesture.view != nil ? "." + gesture.view!.className : ""
-            let screen = gesture.screen != nil ? "." + gesture.screen!.className : ""
+
+            let eventType = Gesture.getEventTypeRawValue(gestureEvent.eventType.rawValue)
+            let eventKeyBase = eventType+"."+gestureEvent.direction+"."+gestureEvent.methodName!
+                let position = gesture.view != nil ? "."+String(gesture.view!.position) : ""
+            let view = gesture.view != nil ? "."+gesture.view!.className : ""
+            let screen = gesture.screen != nil ? "."+gesture.screen!.className : ""
+
+            class Rule {
+                var rule: String
+                var value: String
+                init(rule: String, value: Int) {
+                    self.rule = rule
+                    self.value = Gesture.getEventTypeRawValue(value)
+                }
+            }
+
+            let rules = [
+                Rule(rule: "ignoreTap", value: Gesture.GestureEventType.Tap.rawValue),
+            Rule(rule: "ignoreSwipe", value: Gesture.GestureEventType.Swipe.rawValue),
+            Rule(rule: "ignoreScroll", value: Gesture.GestureEventType.Scroll.rawValue),
+            Rule(rule: "ignorePinch", value: Gesture.GestureEventType.Pinch.rawValue),
+            Rule(rule: "ignorePan", value: Gesture.GestureEventType.Pan.rawValue),
+            Rule(rule: "ignoreRefresh", value: Gesture.GestureEventType.Refresh.rawValue),
+        ]
+
+            for oKey in rules {
+                if let shouldIgnore = mapping["configuration"]["rules"][oKey.rule].bool {
+                    if eventType == oKey.value && shouldIgnore {
+                        return false
+                    }
+                }
+            }
             
             /* 9 strings generated */
             let one = eventKeyBase + position + view + screen

@@ -61,9 +61,12 @@ class DeviceRotationOperation: Operation {
         rotationGesture.screen = rotationEvent.currentScreen
         rotationGesture.type = rotationEvent.eventType
         _ = rotationGesture.customObjects.add(["deviceOrientation":tracker.orientation!.rawValue, "interfaceOrientation": UIApplication.shared.statusBarOrientation.rawValue])
-        
-        handleDelegate(rotationGesture)
-        tracker.dispatcher.dispatch([rotationGesture])
+
+        let shouldSendHit = mapConfiguration(rotationGesture)
+        if shouldSendHit {
+            handleDelegate(rotationGesture)
+            tracker.dispatcher.dispatch([rotationGesture])
+        }
     }
     
     /**
@@ -112,6 +115,43 @@ class DeviceRotationOperation: Operation {
         timerTotalDuration = timerTotalDuration + timerDuration
         if timerTotalDuration > TIMEOUT_OPERATION {
             gesture.isReady = true
+        }
+    }
+
+    /**
+     Map the gesture attributes if a LiveTagging configuration is given
+
+     - parameter gesture: the gesture to map
+     */
+    func mapConfiguration(_ gesture: Gesture) -> Bool {
+        waitForConfigurationLoaded()
+
+        if let mapping = Configuration.smartSDKMapping {
+            let eventType = Gesture.getEventTypeRawValue(rotationEvent.eventType.rawValue)
+            class Rule {
+                var rule: String
+                var value: String
+                init(rule: String, value: Int) {
+                    self.rule = rule
+                    self.value = Gesture.getEventTypeRawValue(value)
+                }
+            }
+            let rule = Rule(rule: "ignoreRotate", value: Gesture.GestureEventType.Rotate.rawValue)
+            if let shouldIgnore = mapping["configuration"]["rules"][rule.rule].bool {
+                if eventType == rule.value && shouldIgnore {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    /**
+     Wait for the configuration
+     */
+    func waitForConfigurationLoaded() {
+        while(!AutoTracker.isConfigurationLoaded) {
+            NSThread.sleepForTimeInterval(0.2)
         }
     }
 }
