@@ -108,10 +108,7 @@ class DeviceVersion {
     var description: String {
         var deviceVersion: [String: Any] = [
             "event": "DeviceVersion",
-            "data": [
-                "token": ATInternet.sharedInstance.defaultTracker.token ?? "0",
-                "version": TechnicalContext.applicationVersion.isEmpty ? "" : TechnicalContext.applicationVersion
-            ]
+            "data": App().toJSONObject["data"]!
         ]
 
         return deviceVersion.toJSON()
