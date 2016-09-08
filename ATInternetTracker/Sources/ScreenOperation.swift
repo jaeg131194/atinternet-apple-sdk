@@ -96,8 +96,8 @@ class ScreenOperation: Operation {
         waitForConfigurationLoaded()
         
         if let mapping = Configuration.smartSDKMapping {
-            if let shouldTag = mapping["configuration"]["screens"][screen.className]["ignoreElement"].bool {
-                if !shouldTag {
+            if let shouldIgnore = mapping["configuration"]["screens"][screen.className]["ignoreElement"].bool {
+                if shouldIgnore {
                     return false
                 }
             }

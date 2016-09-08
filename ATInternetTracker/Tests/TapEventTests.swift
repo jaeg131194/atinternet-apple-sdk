@@ -76,6 +76,7 @@ class TapEventTests: XCTestCase {
                 ]
             ]
         ]
+        
         XCTAssertEqual(te.description.toJSONObject() as? NSDictionary, expected)
     }
 }

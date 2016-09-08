@@ -58,7 +58,7 @@ extension UIViewController {
         }
         
         do {
-            try self.jr_swizzleMethod(#selector(UIViewController.at_viewWillTransitionToSize(_:withTransitionCoordinator:)),
+            try self.jr_swizzleMethod(#selector(UIViewController.viewWillTransition(to:with:)),
                                       withMethod: #selector(UIViewController.at_viewWillTransitionToSize(_:withTransitionCoordinator:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidAppear(_:)), withMethod: #selector(UIViewController.at_viewDidAppear(_:)))
             try self.jr_swizzleMethod(#selector(UIViewController.viewDidDisappear(_:)), withMethod: #selector(UIViewController.at_viewDidDisappear(_:)))
