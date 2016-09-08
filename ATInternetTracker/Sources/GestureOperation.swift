@@ -172,12 +172,12 @@ class GestureOperation: Operation {
             }
 
             let rules = [
-                Rule(rule: "ignoreTap", value: Gesture.GestureEventType.Tap.rawValue),
-            Rule(rule: "ignoreSwipe", value: Gesture.GestureEventType.Swipe.rawValue),
-            Rule(rule: "ignoreScroll", value: Gesture.GestureEventType.Scroll.rawValue),
-            Rule(rule: "ignorePinch", value: Gesture.GestureEventType.Pinch.rawValue),
-            Rule(rule: "ignorePan", value: Gesture.GestureEventType.Pan.rawValue),
-            Rule(rule: "ignoreRefresh", value: Gesture.GestureEventType.Refresh.rawValue),
+                Rule(rule: "ignoreTap", value: Gesture.GestureEventType.tap.rawValue),
+            Rule(rule: "ignoreSwipe", value: Gesture.GestureEventType.swipe.rawValue),
+            Rule(rule: "ignoreScroll", value: Gesture.GestureEventType.scroll.rawValue),
+            Rule(rule: "ignorePinch", value: Gesture.GestureEventType.pinch.rawValue),
+            Rule(rule: "ignorePan", value: Gesture.GestureEventType.pan.rawValue),
+            Rule(rule: "ignoreRefresh", value: Gesture.GestureEventType.refresh.rawValue),
         ]
 
             for oKey in rules {

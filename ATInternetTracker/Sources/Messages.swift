@@ -11,11 +11,11 @@ import UIKit
 /// Device ask for a live
 class DeviceAskingForLive {
     var description: String {
-        let askForLive: [String : Any] = [
+        let askForLive: [String: Any] = [
             "event": "DeviceAskedForLive",
             "data": [
                 "token": ATInternet.sharedInstance.defaultTracker.token ?? "0",
-                "name" : UIDevice.currentDevice().name,
+                "name" : UIDevice.current.name,
                 "version": TechnicalContext.applicationVersion.isEmpty ? "" : TechnicalContext.applicationVersion
             ]
         ]
@@ -106,7 +106,7 @@ class ScreenshotUpdated {
 /// Device send its version
 class DeviceVersion {
     var description: String {
-        var deviceVersion: [String: Any] = [
+        let deviceVersion: [String: Any] = [
             "event": "DeviceVersion",
             "data": App().toJSONObject["data"]!
         ]

@@ -136,7 +136,7 @@ class DeviceRotationOperation: Operation {
                     self.value = Gesture.getEventTypeRawValue(value)
                 }
             }
-            let rule = Rule(rule: "ignoreRotate", value: Gesture.GestureEventType.Rotate.rawValue)
+            let rule = Rule(rule: "ignoreRotate", value: Gesture.GestureEventType.rotate.rawValue)
             if let shouldIgnore = mapping["configuration"]["rules"][rule.rule].bool {
                 if eventType == rule.value && shouldIgnore {
                     return false
@@ -151,7 +151,7 @@ class DeviceRotationOperation: Operation {
      */
     func waitForConfigurationLoaded() {
         while(!AutoTracker.isConfigurationLoaded) {
-            NSThread.sleepForTimeInterval(0.2)
+            Thread.sleep(forTimeInterval: 0.2)
         }
     }
 }
