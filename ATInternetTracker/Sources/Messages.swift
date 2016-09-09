@@ -13,11 +13,7 @@ class DeviceAskingForLive {
     var description: String {
         let askForLive: [String: Any] = [
             "event": "DeviceAskedForLive",
-            "data": [
-                "token": ATInternet.sharedInstance.defaultTracker.token ?? "0",
-                "name" : UIDevice.current.name,
-                "version": TechnicalContext.applicationVersion.isEmpty ? "" : TechnicalContext.applicationVersion
-            ]
+            "data": App().toJSONObject["data"]!
         ]
         return askForLive.toJSON()
     }
@@ -110,7 +106,6 @@ class DeviceVersion {
             "event": "DeviceVersion",
             "data": App().toJSONObject["data"]!
         ]
-
         return deviceVersion.toJSON()
     }
 }
