@@ -121,7 +121,7 @@ class S3NetworkService: SimpleNetworkService {
 /// Class handling the  loading of the LiveTagging configuration file
 class ApiS3Client {
     let S3URL = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}"
-    let S3URLCheck = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}/lastupdate"
+    let S3URLCheck = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}/lastUpdate"
     let store: SimpleStorageProtocol
     let network: SimpleNetworkService
     let token: String
