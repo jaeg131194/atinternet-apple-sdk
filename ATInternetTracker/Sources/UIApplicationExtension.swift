@@ -204,6 +204,15 @@ extension UIApplication {
                 
                 // get method from action
                 let (infoText, infoMethodName, infoClassName, position) = getTouchedViewInfo(appContext.currentTouchedView!)
+                let touchedView = getTouchedView(touches)
+                var tag: Int = (position != nil) ? position! : 0
+                
+                if let t = touchedView {
+                    if t.tag > 0 {
+                        tag = t.tag
+                    }
+                }
+                
                 methodName = infoMethodName
                 
                 /// Try to get a more precise event type by looking at target/action from gesturerecognizers attached to the current view
@@ -223,11 +232,15 @@ extension UIApplication {
                             }
                         }
                     }
+                    
+                    // Force currentTouchedView with the touched view detected by the OS
+                    appContext.currentTouchedView = touchedView
                 }
                 
                 if let segmentedControl = appContext.currentTouchedView as? UISegmentedControl {
                     let segs = segmentedControl.value(forKey: "segments") as! [UIView]
                     appContext.currentTouchedView = segs[position!]
+                    tag = (position != nil) ? position! : 0
                 }
                 
                 if UIViewControllerContext.sharedInstance.isPeekAndPoped {
@@ -264,9 +277,7 @@ extension UIApplication {
                     gestureEvent?.view.className = className
                 }
                 
-                if let pos = position {
-                    gestureEvent?.view.position = pos
-                }
+                gestureEvent?.view.position = tag
                 
                 clearContext()
                 return gestureEvent
