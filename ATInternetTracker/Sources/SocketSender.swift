@@ -94,8 +94,6 @@ public class SocketSender {
     }
     
     func sendBuffer() {
-        print("send buffer")
-        print(buffer.currentScreen)
         assert(isConnected())
         assert(self.liveManager.networkStatus == .Connected)
         socket?.send(buffer.currentApp)
@@ -120,7 +118,6 @@ public class SocketSender {
      */
     func sendMessage(_ json: String) {
         let eventName = JSON.parse(json)["event"].string
-        print(eventName)
         // keep a ref to the last screen
         if eventName == "viewDidAppear" {
             buffer.currentScreen = json

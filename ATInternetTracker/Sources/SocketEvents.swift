@@ -49,10 +49,7 @@ class SocketEvent {
         self.messageData = messageData
     }
     
-    func process() {
-        print("not handled")
-    }
-    
+    func process() {}
     
     /// delay
     ///

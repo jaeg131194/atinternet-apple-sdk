@@ -91,7 +91,6 @@ class S3NetworkService: SimpleNetworkService {
     }
     
     func getURL(_ request: MappingRequest, retryCount: Int) {
-        print(request.url.absoluteString)
         var urlRequest = URLRequest(url: request.url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 30)
         urlRequest.httpMethod = "GET"
         
@@ -179,8 +178,6 @@ class ApiS3Client {
     fileprivate func getSmartSDKMapping() -> JSON? {
         let jsonObj = store.getByName("at_smartsdk_config")
         if let obj = jsonObj {
-            let o = JSON(obj)
-            print(o)
             return JSON(obj)
         }
         return nil

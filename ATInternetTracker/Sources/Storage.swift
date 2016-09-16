@@ -81,7 +81,7 @@ class Storage {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
         }
         catch {
-            print("Error creating Document folder")
+            print("[warning] Error creating Document folder")
         }
         
         let dbURL = url.appendingPathComponent("Tracker.sqlite")
@@ -116,10 +116,10 @@ class Storage {
             do{
                 try FileManager.default.removeItem(at: db)
             } catch _ {
-                print("failure clean db")
+                print("[warning] failure clean db")
             }
         } else {
-            print("db does not exist")
+            print("[warning] db does not exist bu produce an error")
         }
     }
     

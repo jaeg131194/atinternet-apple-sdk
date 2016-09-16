@@ -169,7 +169,6 @@ extension UIApplication {
                         if #available(iOS 9.0, *) {
                             if touch.force/touch.maximumPossibleForce > 0.5 {
                                 appContext.eventType = Gesture.GestureEventType.tap
-                                print("P33K")
                             }
                         } else {
                             appContext.eventType = Gesture.GestureEventType.unknown

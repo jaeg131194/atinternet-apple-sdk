@@ -163,10 +163,7 @@ extension UIViewController {
         }
         
         context.viewAppearedTime = now
-        print("screen \(self.classLabel)")
         EventManager.sharedInstance.addEvent(operation)
-        
-        print(context.activeViewControllers)
         
         at_viewDidAppear(animated)
     }
