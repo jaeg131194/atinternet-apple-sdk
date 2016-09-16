@@ -83,9 +83,9 @@ internal class Debugger: NSObject {
         
         if !initialized {
             hourFormatter.dateFormat = "HH':'mm':'ss"
-            hourFormatter.locale = LifeCycle.locale as Locale!
+            hourFormatter.locale = LifeCycle.locale
             dateHourFormatter.dateFormat = "dd'/'MM'/'YYYY' 'HH':'mm':'ss"
-            dateHourFormatter.locale = LifeCycle.locale as Locale!
+            dateHourFormatter.locale = LifeCycle.locale
             self.initialized = true
             
             createDebugButton()

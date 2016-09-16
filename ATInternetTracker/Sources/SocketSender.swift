@@ -55,10 +55,7 @@ public class SocketSender {
      - returns: SocketSender (should be a single instance)
      */
     init(liveManager: LiveNetworkManager, token: String) {
-        //self.URL = "ws://172.20.23.137:5000/"+token
-        //self.URL = "ws://172.20.23.159:5000/"+token
-        //self.URL = "ws://tagsmartsdk.eu-west-1.elasticbeanstalk.com:5000/"+token
-        self.URL = "ws://172.20.23.145:5000/"+token
+        self.URL = "ws://localhost:5000/"+token
         //self.URL = "ws://tagsmartsdk.eu-west-1.elasticbeanstalk.com:5000/"+token
         self.liveManager = liveManager
         self.socketHandler = SocketDelegate(liveManager: liveManager)
@@ -98,6 +95,7 @@ public class SocketSender {
     
     func sendBuffer() {
         print("send buffer")
+        print(buffer.currentScreen)
         assert(isConnected())
         assert(self.liveManager.networkStatus == .Connected)
         socket?.send(buffer.currentApp)

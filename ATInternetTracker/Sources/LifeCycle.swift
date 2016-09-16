@@ -46,7 +46,7 @@ class LifeCycle: NSObject {
     static var isInitialized: Bool = false
     /// Calendar type
     //static var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-    static let locale = NSLocale(localeIdentifier: "en_US_POSIX")
+    static let locale = Locale(identifier: "en_US_POSIX")
     /// SessionId
     static var sessionId: String? = nil
     /// Time during the app is in background
@@ -71,13 +71,13 @@ class LifeCycle: NSObject {
     class func initLifeCycle() {
         let userDefaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = locale as Locale!
+        dateFormatter.locale = locale
         dateFormatter.dateFormat = "yyyyMMdd"
         let monthFormatter = DateFormatter()
-        monthFormatter.locale = locale as Locale!
+        monthFormatter.locale = locale
         monthFormatter.dateFormat = "yyyyMM"
         let weekFormatter = DateFormatter()
-        weekFormatter.locale = locale as Locale!
+        weekFormatter.locale = locale
         weekFormatter.dateFormat = "yyyyww"
         
         let now = Date()
@@ -133,11 +133,11 @@ class LifeCycle: NSObject {
         // If SDK V1 first launch exists
         if let optFirstLaunchDate = userDefaults.object(forKey: "firstLaunchDate") as? String {
             let dateFormatter = DateFormatter()
-            dateFormatter.locale = locale as Locale!
+            dateFormatter.locale = locale
             dateFormatter.dateFormat = "YYYYMMdd"
             let fld = dateFormatter.date(from: optFirstLaunchDate)
             
-            userDefaults.set(fld, forKey: LifeCycleKey.FirstSessionDate.rawValue)
+            userDefaults.set(fld ?? now, forKey: LifeCycleKey.FirstSessionDate.rawValue)
                     userDefaults.set(0, forKey: LifeCycleKey.FirstSession.rawValue)
             
             userDefaults.set(nil, forKey: "firstLaunchDate")
@@ -251,10 +251,16 @@ class LifeCycle: NSObject {
                 LifeCycle.firstLaunchInit()
             }
             
-            let firstSessionDate = userDefaults.object(forKey: LifeCycleKey.FirstSessionDate.rawValue) as! Date
+            var fsd = userDefaults.object(forKey: LifeCycleKey.FirstSessionDate.rawValue) as? Date
+            if fsd == nil {
+                fsd = Date()
+                userDefaults.set(fsd, forKey: LifeCycleKey.FirstSessionDate.rawValue)
+            }
+            
+            let firstSessionDate = fsd!
             let now = Date()
             let dateFormatter = DateFormatter()
-            dateFormatter.locale = locale as Locale!
+            dateFormatter.locale = locale
             dateFormatter.dateFormat = "yyyyMMdd"
 
             // First session: fs
@@ -272,14 +278,14 @@ class LifeCycle: NSObject {
             LifeCycle.parameters["sc"] = userDefaults.integer(forKey: LifeCycleKey.SessionCount.rawValue)
             
             // First session date: fsd
-            LifeCycle.parameters["fsd"] = Int(dateFormatter.string(from: firstSessionDate))!
+            LifeCycle.parameters["fsd"] = Int(dateFormatter.string(from: firstSessionDate))
             
             // Days since first session: dsfs
             LifeCycle.parameters["dsfs"] = Tool.daysBetweenDates(firstSessionDate, toDate: now)
             
             // first session date after update & days since update: usd / dsu
             if let applicationUpdate = userDefaults.object(forKey: LifeCycleKey.ApplicationUpdate.rawValue) as? Date {
-                LifeCycle.parameters["fsdau"] = Int(dateFormatter.string(from: applicationUpdate))!
+                LifeCycle.parameters["fsdau"] = Int(dateFormatter.string(from: applicationUpdate))
                 LifeCycle.parameters["dsu"] = Tool.daysBetweenDates(applicationUpdate, toDate: now)
             }
             

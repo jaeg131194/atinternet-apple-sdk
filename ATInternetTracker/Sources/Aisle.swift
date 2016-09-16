@@ -1,25 +1,25 @@
 /*
-This SDK is licensed under the MIT license (MIT)
-Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+ This SDK is licensed under the MIT license (MIT)
+ Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
 
 
 
@@ -30,7 +30,7 @@ SOFTWARE.
 //  Tracker
 //
 
-import Foundation
+import UIKit
 
 public class Aisle: ScreenInfo {
     
@@ -51,46 +51,6 @@ public class Aisle: ScreenInfo {
     
     /// Aisle level6 label
     public var level6: String?
-    
-    public init(level1: String) {
-        super.init()
-        
-        self.level1 = level1
-    }
-    
-    public convenience init(level1: String, level2: String) {
-        self.init(level1: level1)
-        
-        self.level2 = level2
-    }
-    
-    public convenience init(level1: String, level2: String, level3: String) {
-        self.init(level1: level1, level2: level2)
-        
-        self.level3 = level3
-    }
-
-    public convenience init(level1: String, level2: String, level3: String, level4: String) {
-        self.init(level1: level1, level2: level2, level3: level3)
-        
-        self.level4 = level4
-    }
-
-    public convenience init(level1: String, level2: String, level3: String, level4: String, level5: String) {
-        self.init(level1: level1, level2: level2, level3: level3, level4: level4)
-        
-        self.level5 = level5
-    }
-    
-    public convenience init(level1: String, level2: String, level3: String, level4: String, level5: String, level6: String) {
-        self.init(level1: level1, level2: level2, level3: level3, level4: level4, level5: level5)
-        
-        self.level6 = level6
-    }
-    
-    override init(tracker: Tracker) {
-        super.init(tracker: tracker)
-    }
     
     /// Set parameters in buffer
     override func setEvent() {
@@ -148,104 +108,98 @@ public class Aisle: ScreenInfo {
     }
 }
 
-public class Aisles: NSObject {
+public class Aisles {
     /// Tracker instance
     var tracker: Tracker
     
     /**
-    Aisle initializer
-    - parameter tracker: the tracker instance
-    - returns: Aisle instance
-    */
+     Aisle initializer
+     - parameter tracker: the tracker instance
+     - returns: Aisle instance
+     */
     init(tracker: Tracker) {
         self.tracker = tracker;
     }
     
     /**
-    Add tagging data for an aisle
-    - parameter level1: level1 label
-    - returns: Aisle instance
-    */
-    public func add(_ level1: String) -> Aisle {
+     Add tagging data for an aisle
+     - parameter level1: level1 label
+     - returns: Aisle instance
+     */
+    public func add(level1: String) -> Aisle {
+        return _add(level1: level1, level2: nil, level3: nil, level4: nil, level5: nil, level6: nil)
+    }
+    
+    /**
+     Add tagging data for an aisle
+     - parameter level1: level1 label
+     - parameter level2: level2 label
+     - returns: Aisle instance
+     */
+    public func add(level1: String, level2: String) -> Aisle {
+        return _add(level1: level1, level2: level2, level3: nil, level4: nil, level5: nil, level6: nil)
+    }
+    
+    /**
+     Add tagging data for an aisle
+     - parameter level1: level1 label
+     - parameter level2: level2 label
+     - parameter level3: level3 label
+     - returns: Aisle instance
+     */
+    public func add(level1: String, level2: String, level3: String) -> Aisle {
+        return _add(level1: level1, level2: level2, level3: level3, level4: nil, level5: nil, level6: nil)
+    }
+    
+    /**
+     Add tagging data for an aisle
+     - parameter level1: level1 label
+     - parameter level2: level2 label
+     - parameter level3: level3 label
+     - parameter level4: level4 label
+     - returns: Aisle instance
+     */
+    public func add(level1: String, level2: String, level3: String, level4: String) -> Aisle {
+        return _add(level1: level1, level2: level2, level3: level3, level4: level4, level5: nil, level6: nil)
+    }
+    
+    /**
+     Add tagging data for an aisle
+     - parameter level1: level1 label
+     - parameter level2: level2 label
+     - parameter level3: level3 label
+     - parameter level4: level4 label
+     - parameter level5: level5 label
+     - returns: Aisle instance
+     */
+    public func add(level1: String, level2: String, level3: String, level4: String, level5: String) -> Aisle {
+        return _add(level1: level1, level2: level2, level3: level3, level4: level4, level5: level5, level6: nil)
+    }
+    
+    /**
+     Add tagging data for an aisle
+     - parameter level1: level1 label
+     - parameter level2: level2 label
+     - parameter level3: level3 label
+     - parameter level4: level4 label
+     - parameter level5: level5 label
+     - parameter level6: level6 label
+     - returns: Aisle instance
+     */
+    public func add(level1: String, level2: String, level3: String, level4: String, level5: String, level6: String) -> Aisle {
+        return _add(level1: level1, level2: level2, level3: level3, level4: level4, level5: level5, level6: level6)
+    }
+    
+    private func _add(level1: String?, level2: String?, level3: String?, level4: String?, level5: String?, level6: String?) -> Aisle {
         let aisle = Aisle(tracker: tracker)
         aisle.level1 = level1
-        
-        tracker.businessObjects[aisle.id] = aisle
-        return aisle
-    }
-    
-    /**
-    Add tagging data for an aisle
-    - parameter level1: level1 label
-    - parameter level2: level2 label
-    - returns: Aisle instance
-    */
-    public func add(_ level1: String, level2: String) -> Aisle {
-        let aisle = add(level1)
         aisle.level2 = level2
-        
-        return aisle
-    }
-    
-    /**
-    Add tagging data for an aisle
-    - parameter level1: level1 label
-    - parameter level2: level2 label
-    - parameter level3: level3 label
-    - returns: Aisle instance
-    */
-    public func add(_ level1: String, level2: String, level3: String) -> Aisle {
-        let aisle = add(level1, level2: level2)
         aisle.level3 = level3
-        
-        return aisle
-    }
-    
-    /**
-    Add tagging data for an aisle
-    - parameter level1: level1 label
-    - parameter level2: level2 label
-    - parameter level3: level3 label
-    - parameter level4: level4 label
-    - returns: Aisle instance
-    */
-    public func add(_ level1: String, level2: String, level3: String, level4: String) -> Aisle {
-        let aisle = add(level1, level2: level1, level3: level3)
         aisle.level4 = level4
-        
-        return aisle
-    }
-    
-    /**
-    Add tagging data for an aisle
-    - parameter level1: level1 label
-    - parameter level2: level2 label
-    - parameter level3: level3 label
-    - parameter level4: level4 label
-    - parameter level5: level5 label
-    - returns: Aisle instance
-    */
-    public func add(_ level1: String, level2: String, level3: String, level4: String, level5: String) -> Aisle {
-        let aisle = add(level1, level2: level1, level3: level3, level4: level4)
         aisle.level5 = level5
-        
-        return aisle
-    }
-    
-    /**
-    Add tagging data for an aisle
-    - parameter level1: level1 label
-    - parameter level2: level2 label
-    - parameter level3: level3 label
-    - parameter level4: level4 label
-    - parameter level5: level5 label
-    - parameter level6: level6 label
-    - returns: Aisle instance
-    */
-    public func add(_ level1: String, level2: String, level3: String, level4: String, level5: String, level6: String) -> Aisle {
-        let aisle = add(level1, level2: level1, level3: level3, level4: level4, level5: level5)
         aisle.level6 = level6
         
+        tracker.businessObjects[aisle.id] = aisle
         return aisle
     }
 }

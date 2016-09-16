@@ -371,7 +371,7 @@ public class DynamicScreen: AbstractScreen {
         _ = tracker.setParam("pid", value: screenId)
         
         dateFormatter.dateFormat = "YYYYMMddHHmm"
-        dateFormatter.locale = LifeCycle.locale as Locale!
+        dateFormatter.locale = LifeCycle.locale
         
         _ = tracker.setParam("pidt", value: dateFormatter.string(from: update))
         _ = tracker.event.set("screen", action: getScreenActionRawValue(action.rawValue), label: name)

@@ -53,6 +53,11 @@ class SocketEvent {
         print("not handled")
     }
     
+    
+    /// delay
+    ///
+    /// - parameter delay:   a delay before executing the closure
+    /// - parameter closure: a closure to execute after a delay
     func delay(_ delay:Double, closure:@escaping ()->()) {
         DispatchQueue.main.asyncAfter(
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
@@ -67,6 +72,7 @@ class SEScreenshot: SocketEvent {
         }
         return []
     }
+    
     
     override func process() {
         delay(0.5) {
