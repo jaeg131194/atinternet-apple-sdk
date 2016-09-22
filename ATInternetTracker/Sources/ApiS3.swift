@@ -94,9 +94,8 @@ class S3NetworkService: SimpleNetworkService {
         var urlRequest = URLRequest(url: request.url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 30)
         urlRequest.httpMethod = "GET"
         
-
-        
-        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue()) { (r, data, err) in
+        let session = URLSession.shared
+        let task = session.dataTask(with: urlRequest) { (data, urlResponse, err) in
             if let _ = err {
                 self.retry(self.getURL, request: (url: request.url, onLoaded: request.onLoaded, onError: request.onError), retryCount: retryCount-1)
             }
@@ -113,14 +112,34 @@ class S3NetworkService: SimpleNetworkService {
                 }
             }
         }
+        task.resume()
+        
+        /*
+        NSURLConnection.sendAsynchronousRequest(urlRequest, queue: OperationQueue()) { (r, data, err) in
+            if let _ = err {
+                self.retry(self.getURL, request: (url: request.url, onLoaded: request.onLoaded, onError: request.onError), retryCount: retryCount-1)
+            }
+            if let jsonData = data {
+                let res = JSON(data: jsonData)
+                if res["type"] >= 500 {
+                    self.retry(self.getURL, request: (url: request.url, onLoaded: request.onLoaded, onError: request.onError), retryCount: retryCount-1)
+                }
+                else if res["type"] >= 400 {
+                    request.onError()
+                }
+                else {
+                    request.onLoaded(res)
+                }
+            }
+        }*/
         
     }
 }
 
 /// Class handling the  loading of the LiveTagging configuration file
 class ApiS3Client {
-    let S3URL = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}"
-    let S3URLCheck = "https://rtmofuf655.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}/lastUpdate"
+    let S3URL = "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}"
+    let S3URLCheck = "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}/lastUpdate"
     let store: SimpleStorageProtocol
     let network: SimpleNetworkService
     let token: String
@@ -189,7 +208,12 @@ class ApiS3Client {
      - parameter callback: the checksum
      */
     fileprivate func fetchCheckSum(_ callback: @escaping (JSON?) -> ()) {
-        network.getURL((getCheckURL(), onLoaded: callback, onError: {}), retryCount: 1)
+        
+        func err() -> () {
+            callback(nil)
+        }
+        
+        network.getURL((getCheckURL(), onLoaded: callback, onError: err), retryCount: 1)
     }
     
     /**
