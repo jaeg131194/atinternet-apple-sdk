@@ -55,7 +55,8 @@ public class SocketSender {
      - returns: SocketSender (should be a single instance)
      */
     init(liveManager: LiveNetworkManager, token: String) {
-        self.URL = "ws://localhost:5000/"+token
+        self.URL = "ws://tag-smartsdk-dev.eu-west-1.elasticbeanstalk.com:5000/"+token
+        //self.URL = "ws://localhost:5000/"+token
         //self.URL = "ws://tagsmartsdk.eu-west-1.elasticbeanstalk.com:5000/"+token
         self.liveManager = liveManager
         self.socketHandler = SocketDelegate(liveManager: liveManager)

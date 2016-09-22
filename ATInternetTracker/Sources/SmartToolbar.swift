@@ -492,7 +492,8 @@ class SmartToolBarController {
         screenshotClickSound()
         self.toolbar.onClickAnimation(toolbar.photo, onComplete:{})
         let base64 = UIApplication.shared
-            .keyWindow?.screenshot([self.toolbar])?
+            .keyWindow?
+            .screenshot([self.toolbar, Debugger.sharedInstance.debugButton])?
             .toBase64()!
             .replacingOccurrences(of: "\n", with: "")
             .replacingOccurrences(of: "\r", with: "")

@@ -85,6 +85,7 @@ class SEScreenshot: SocketEvent {
             if let popup = self.liveManager.currentPopupDisplayed {
                 toIgnore.append(popup)
             }
+            toIgnore.append(Debugger.sharedInstance.debugButton)
             
             var base64 = UIApplication.shared
                 .keyWindow?
@@ -146,6 +147,8 @@ class SEInterfaceAskedForScreenshot: SocketEvent {
             if let popup = self.liveManager.currentPopupDisplayed {
                 toIgnore.append(popup)
             }
+            toIgnore.append(Debugger.sharedInstance.debugButton)
+            
             let base64 = UIApplication.shared
                 .keyWindow?
                 .screenshot(toIgnore)?
