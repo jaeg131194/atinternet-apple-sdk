@@ -1,0 +1,22 @@
+/*
+ Localizable.strings
+ SmartTracker
+ 
+ Created by Théo Damaville on 02/03/2016.
+ Copyright © 2016 AT Internet. All rights reserved.
+ */
+
+DISCONNECTED = "Disconnected";
+CONNECTED = "Connected";
+PENDING = "Connecting ...";
+
+ASK_PAIRING_TEXT = "Do you want to start a live tagging session ?";
+ASK_PAIRING_TITLE = "PAIRING REQUEST";
+INFO_PAIRING_CANCELED_TITLE = "DISCONNECTION";
+INFO_PAIRING_CANCELED_TEXT = "Pairing request has been cancelled";
+INFO_PAIRING_STOPPED_TITLE = "Live session ended";
+INFO_PAIRING_STOPPED_TEXT = "UI has disconnected";
+INFO_PAIRING_REFUSED_TEXT = "UI has refused the pairing request";
+INFO_PAIRING_REFUSED_TITLE = "Information";
+CONFIRM = "OK";
+CANCEL = "REFUSE";
