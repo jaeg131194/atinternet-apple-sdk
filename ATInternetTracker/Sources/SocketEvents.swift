@@ -91,6 +91,7 @@ class SEScreenshot: SocketEvent {
     override func process() {
         
         var controls: [Any] = []
+        
         let requestedViewControllerName = messageData?["screen"]["className"].string
         
         // We check whether the uiviewcontroller is still available for screenshot or we try to find it in the navigation stack
