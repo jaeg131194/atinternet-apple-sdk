@@ -32,6 +32,7 @@ extension UIApplication {
         DispatchQueue.once(token: Static.token) {
             do {
                 try self.jr_swizzleMethod(#selector(UIApplication.sendEvent(_:)), withMethod: #selector(UIApplication.at_sendEvent(_:)))
+                
             } catch {
                 NSException(name: NSExceptionName(rawValue: "SwizzleException"), reason: "Impossible to find method to swizzle", userInfo: nil).raise()
             }

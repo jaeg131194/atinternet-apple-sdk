@@ -274,14 +274,6 @@ public class Screen: AbstractScreen {
         self.title = self.className
         self.scale = Float(uiScreen.scale)
         self.width = Int(size.width)
-        /*self.orientation = {() -> Int in
-            switch(UIDevice.currentDevice().orientation) {
-            case UIDeviceOrientation.LandscapeLeft, UIDeviceOrientation.LandscapeRight:
-                return UIDeviceOrientation.LandscapeRight.rawValue
-            default:
-                return UIDeviceOrientation.Portrait.rawValue
-            }
-        }()*/
         self.orientation = UIViewControllerContext.sharedInstance.currentOrientation.rawValue
 
         self.height = Int(size.height)
@@ -300,16 +292,10 @@ public class Screen: AbstractScreen {
         let size = uiScreen.bounds.size
         
         self.className = fromViewController.classLabel
+        self.title = self.className
         self.scale = Float(uiScreen.scale)
         self.width = Int(size.width)
-        self.orientation = {() -> Int in
-            switch(UIDevice.current.orientation) {
-            case UIDeviceOrientation.landscapeLeft, UIDeviceOrientation.landscapeRight:
-                return UIDeviceOrientation.landscapeRight.rawValue
-            default:
-                return UIDeviceOrientation.portrait.rawValue
-            }
-        }()
+        self.orientation = UIViewControllerContext.sharedInstance.currentOrientation.rawValue
         
         self.height = Int(size.height)
         super.init()

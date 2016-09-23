@@ -52,7 +52,8 @@ extension UISwitch {
             }
         }
     }
-        /**
+    
+    /**
      Catches the touchesEnded event
      
      - parameter touches: touches

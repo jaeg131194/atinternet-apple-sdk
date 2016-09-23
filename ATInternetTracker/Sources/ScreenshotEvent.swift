@@ -24,16 +24,18 @@ class ScreenshotEvent: CustomStringConvertible {
         var jsonObj: [String: Any] = [
             "event": self.methodName,
             "data":[
-                "screenshot":screenshot ?? "",
                 "siteID": ATInternet.sharedInstance.defaultTracker.configuration.parameters["site"]!
             ]
         ]
         
         var data = jsonObj["data"] as! [String: Any]
         data.append(self.screen.toJSONObject)
+        if screenshot != nil {
+            data["screenshot"] = screenshot!
+        }
         data["tree"] = self.suggestedEvents
         jsonObj.updateValue(data, forKey: "data")
-        
+    
         return jsonObj.toJSON()
     }
     
