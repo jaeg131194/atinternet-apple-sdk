@@ -72,12 +72,27 @@ class SEScreenshot: SocketEvent {
     
     
     override func process() {
-        delay(0.5) {
-            var controls: [Any] = []
+        
+        var controls: [Any] = []
+        let requestedViewController = messageData?["screen"]["className"].string
+        
+        // We check whether the uiviewcontroller is still available for screenshot or we try to find it in the navigation stack
+        if let rvc = requestedViewController {
             if let currentViewController = UIViewControllerContext.sharedInstance.currentViewController {
-                controls = self.makeJSONArray(currentViewController.getControls())
+                if currentViewController.classLabel == rvc {
+                    controls = self.makeJSONArray(currentViewController.getControls())
+                } else {
+                    for viewController in UIViewControllerContext.sharedInstance.activeViewControllers.reversed() {
+                        if viewController.classLabel == rvc {
+                            controls = self.makeJSONArray(viewController.getControls())
+                            break
+                        }
+                    }
+                }
             }
-            
+        }
+        
+        delay(0.5) {
             var toIgnore = [UIView]()
             if let toolbar = self.liveManager.toolbar?.toolbar {
                 toIgnore.append(toolbar)
@@ -85,6 +100,7 @@ class SEScreenshot: SocketEvent {
             if let popup = self.liveManager.currentPopupDisplayed {
                 toIgnore.append(popup)
             }
+            toIgnore.append(Debugger.sharedInstance.debugButton)
             
             var base64 = UIApplication.shared
                 .keyWindow?
@@ -95,15 +111,16 @@ class SEScreenshot: SocketEvent {
             
             assert(base64 != nil)
             let screen = Screen()
-            if self.messageData != nil && self.messageData!["screen"]["className"].string != nil && self.messageData!["screen"]["className"].string! != screen.className {
+            if self.messageData != nil && requestedViewController != nil && requestedViewController! != screen.className {
                 base64 = "R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs="  // 1x1 white pixel
-                screen.className = self.messageData!["screen"]["className"].string!
+                screen.className = requestedViewController!
                 controls = []
             }
+            
             let screenshotEvent = ScreenshotEvent(screen: screen,
                                                   screenshot: base64,
                                                   suggestedEvents: controls)
-            
+
             self.liveManager.sender?.sendMessage(screenshotEvent.description)
         }
     }
@@ -146,6 +163,8 @@ class SEInterfaceAskedForScreenshot: SocketEvent {
             if let popup = self.liveManager.currentPopupDisplayed {
                 toIgnore.append(popup)
             }
+            toIgnore.append(Debugger.sharedInstance.debugButton)
+            
             let base64 = UIApplication.shared
                 .keyWindow?
                 .screenshot(toIgnore)?

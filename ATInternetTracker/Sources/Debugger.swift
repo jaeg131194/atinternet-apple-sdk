@@ -29,6 +29,9 @@
 
 import UIKit
 
+class DebuggerButton: UIButton {}
+class DebuggerView: UIView {}
+
 internal class Debugger: NSObject {
     struct Static {
         static var instance: Debugger?
@@ -42,7 +45,7 @@ internal class Debugger: NSObject {
     /// Application window
     lazy var applicationWindow: UIWindow? = UIApplication.shared.keyWindow
     /// Debug button
-    lazy var debugButton: UIButton = UIButton()
+    lazy var debugButton: DebuggerButton = DebuggerButton()
     /// Debug button position
     var debugButtonPosition: String = "Right"
     /// List of all created windows
@@ -93,7 +96,6 @@ internal class Debugger: NSObject {
             
             gestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(Debugger.debugButtonWasDragged(_:)))
             debugButton.addGestureRecognizer(gestureRecogniser)
-            
             
             applicationWindow!.bringSubview(toFront: debugButton)
         }
@@ -190,7 +192,7 @@ internal class Debugger: NSObject {
      Debug button was dragged (change postion from left to right ...)
      */
     @objc func debugButtonWasDragged(_ recogniser: UIPanGestureRecognizer) {
-        let button = recogniser.view as! UIButton
+        let button = recogniser.view as! DebuggerButton
         let translation = recogniser.translation(in: button)
         
         let velocity = recogniser.velocity(in: button)
@@ -340,7 +342,7 @@ internal class Debugger: NSObject {
     func createEventViewer() {
         let eventViewer: (window: UIView, content: UIView, menu: UIView, windowTitle: String) = self.createWindow("Event viewer")
         
-        let offlineButton = UIButton()
+        let offlineButton = DebuggerButton()
         offlineButton.translatesAutoresizingMaskIntoConstraints = false
         offlineButton.setBackgroundImage(UIImage(named: "database64", in: Bundle(for: Tracker.self), compatibleWith: nil), for: UIControlState())
         offlineButton.addTarget(self, action: #selector(Debugger.createOfflineHitsViewer), for: UIControlEvents.touchUpInside)
@@ -386,7 +388,7 @@ internal class Debugger: NSObject {
             multiplier: 1.0,
             constant: 0))
         
-        let trashButton = UIButton()
+        let trashButton = DebuggerButton()
         
         eventViewer.menu.addSubview(trashButton)
         
@@ -531,7 +533,7 @@ internal class Debugger: NSObject {
                 constant: 0))
         } else {
             previousConstraintForEvents = nil
-            var previous: UIView?
+            var previous: DebuggerView?
             for (i,event) in receivedEvents.enumerated() {
                 previous = buildEventRow(event, tag: i, scrollView: scrollView, previousRow: previous)
             }
@@ -539,8 +541,8 @@ internal class Debugger: NSObject {
     }
     
     var previousConstraintForEvents: NSLayoutConstraint!
-    func buildEventRow(_ event: DebuggerEvent, tag: Int, scrollView: UIScrollView, previousRow: UIView?) -> UIView {
-        let rowView = UIView()
+    func buildEventRow(_ event: DebuggerEvent, tag: Int, scrollView: UIScrollView, previousRow: DebuggerView?) -> DebuggerView {
+        let rowView = DebuggerView()
         rowView.translatesAutoresizingMaskIntoConstraints = false
         rowView.isUserInteractionEnabled = true
         rowView.tag = tag
@@ -747,7 +749,7 @@ internal class Debugger: NSObject {
         
         let scrollview = window.content.viewWithTag(-100) as! UIScrollView
         
-        _ = buildEventRow(self.receivedEvents[0], tag: self.receivedEvents.count - 1, scrollView: scrollview, previousRow: scrollview.viewWithTag(self.receivedEvents.count - 2))
+        _ = buildEventRow(self.receivedEvents[0], tag: self.receivedEvents.count - 1, scrollView: scrollview, previousRow: scrollview.viewWithTag(self.receivedEvents.count - 2) as! DebuggerView?)
     }
     
     /**
@@ -785,7 +787,7 @@ internal class Debugger: NSObject {
         eventDetail.content.alpha = 1.0
         eventDetail.menu.alpha = 1.0
         
-        let backButton = UIButton()
+        let backButton = DebuggerButton()
         
         eventDetail.menu.addSubview(backButton)
         
@@ -1078,7 +1080,7 @@ internal class Debugger: NSObject {
         
         windowTitleLabel.text = offlineHits.windowTitle
         
-        let backButton = UIButton()
+        let backButton = DebuggerButton()
         
         offlineHits.menu.addSubview(backButton)
         
@@ -1131,7 +1133,7 @@ internal class Debugger: NSObject {
             multiplier: 1.0,
             constant: 0))
         
-        let refreshButton = UIButton()
+        let refreshButton = DebuggerButton()
         
         offlineHits.menu.addSubview(refreshButton)
         
@@ -1290,7 +1292,7 @@ internal class Debugger: NSObject {
                 constant: 0))
         } else {
             for(i, hit) in hits.enumerated() {
-                let rowView = UIView()
+                let rowView = DebuggerView()
                 rowView.translatesAutoresizingMaskIntoConstraints = false
                 rowView.isUserInteractionEnabled = true
                 rowView.tag = i
@@ -1345,7 +1347,7 @@ internal class Debugger: NSObject {
                 let dateLabel = UILabel()
                 let messageLabel = UILabel()
                 let hitTypeView = UIImageView()
-                let deleteButton = UIButton()
+                let deleteButton = DebuggerButton()
                 
                 dateLabel.translatesAutoresizingMaskIntoConstraints = false
                 messageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -1634,9 +1636,9 @@ internal class Debugger: NSObject {
     /**
      Back button pressed
      */
-    @objc func backButtonWasTouched(_ sender:UIButton) {
+    @objc func backButtonWasTouched(_ sender:DebuggerButton) {
         for(_, view) in self.windows[sender.tag - 1].menu.subviews.enumerated() {
-            if let button = view as? UIButton {
+            if let button = view as? DebuggerButton {
                 button.isHidden = false
             }
         }

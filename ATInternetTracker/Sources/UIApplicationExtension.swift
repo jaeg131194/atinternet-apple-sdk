@@ -427,7 +427,7 @@ extension UIApplication {
             return true
         }
         
-        if view is SmartButtonIgnored || view is KLCPopup || view is SmartToolbar || view is SmartImageViewIgnored || view is SmartViewIgnored {
+        if view is SmartButtonIgnored || view is KLCPopup || view is SmartToolbar || view is SmartImageViewIgnored || view is SmartViewIgnored || view is DebuggerButton || view is DebuggerView {
             return true
         }
         return false

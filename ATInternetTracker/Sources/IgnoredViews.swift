@@ -13,3 +13,5 @@ import UIKit
 class SmartButtonIgnored: UIButton{}
 class SmartImageViewIgnored: UIImageView{}
 class SmartViewIgnored: UIView{}
+
+//DebugButton

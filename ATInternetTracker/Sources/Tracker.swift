@@ -190,13 +190,10 @@ public class AutoTracker: Tracker {
         get {
             return _enableLiveTagging
         } set {
-            
-            if !Thread.isMainThread {
-                print("[warning] you should set enableLiveTagging in the main thread to ensure the framework stability")
-            }
+            assert(Thread.isMainThread,"You should set enableLiveTagging in the main thread to ensure the framework stability")
+            assert(token != nil && token != "", "you must provide a token before enabling live tagging")
             
             _enableLiveTagging = newValue
-            assert(token != nil && token != "", "you must provide a token before enabling live tagging")
             enableEventDetection(_enableLiveTagging)
             _enableLiveTagging == true ? socketSender?.open() : socketSender?.close()
         }
@@ -209,8 +206,14 @@ public class AutoTracker: Tracker {
         } set {
             _enableAutoTracking = newValue
             
-            if _enableAutoTracking && (_token != nil && token! != "") {
-                fetchMappingConfig()
+            if _enableAutoTracking {
+                if token == "" {
+                    self.delegate?.warningDidOccur?("No token provided")
+                    Configuration.smartSDKMapping = nil
+                    AutoTracker.isConfigurationLoaded = true
+                } else {
+                    fetchMappingConfig()
+                }
             }
             
             enableEventDetection(_enableAutoTracking)
@@ -221,9 +224,11 @@ public class AutoTracker: Tracker {
         let version = TechnicalContext.applicationVersion
         let s3Client = ApiS3Client(token: token!, version: version, store: UserDefaultSimpleStorage(), networkService: S3NetworkService())
         s3Client.fetchMapping { (mapping: JSON?) in
+            Configuration.smartSDKMapping = mapping
             if let _ = mapping {
-                Configuration.smartSDKMapping = mapping!
                 s3Client.saveSmartSDKMapping(mapping!)
+            } else {
+                self.delegate?.warningDidOccur?("No livetagging configuration loaded")
             }
             AutoTracker.isConfigurationLoaded = true
         }
