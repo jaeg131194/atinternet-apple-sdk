@@ -27,7 +27,8 @@ class App {
                 "height": s.height,
                 "scale": s.scale,
                 "screenOrientation": s.orientation,
-                "siteID": ATInternet.sharedInstance.defaultTracker.configuration.parameters["site"]!
+                "siteID": ATInternet.sharedInstance.defaultTracker.configuration.parameters["site"]!,
+                "name": UIDevice.current.name
             ]
         ]
         return jsonObj

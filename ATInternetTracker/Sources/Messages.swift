@@ -15,6 +15,7 @@ class DeviceAskingForLive {
             "event": "DeviceAskedForLive",
             "data": App().toJSONObject["data"]!
         ]
+        
         return askForLive.toJSON()
     }
 }
