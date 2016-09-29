@@ -11,22 +11,22 @@ import Foundation
 class SmartTrackerConfiguration {
     
     private let ebs = [
-        "dev"       : "ws://tag-smartsdk-dev.eu-west-1.elasticbeanstalk.com:5000/",
-        "preprod"   : "-",
-        "prod"       : "-"
+        "dev"       : "wss://tag-smartsdk-dev.atinternet-solutions.com/",
+        "preprod"   : "wss://tag-smartsdk-preprod.atinternet-solutions.com/",
+        "prod"       : "wss://tag-smartsdk.atinternet-solutions.com/"
     ]
 
     
     private let apiConf = [
         "dev"       : "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}",
-        "preprod"       : "-",
-        "prod"           : "-",
+        "preprod"       : "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/preprod/token/{token}/version/{version}",
+        "prod"           : "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/{token}/version/{version}",
     ]
     
     private let apiCheck = [
         "dev"          : "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/{token}/version/{version}/lastUpdate",
-        "preprod"       : "-",
-        "prod"           : "-",
+        "preprod"       : "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/preprod/token/{token}/version/{version}/lastUpdate",
+        "prod"           : "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/{token}/version/{version}/lastUpdate",
     ]
 
     static let sharedInstance = SmartTrackerConfiguration()
