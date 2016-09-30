@@ -40,7 +40,7 @@ class GestureOperation: Operation {
     override func main() {
         autoreleasepool {
             
-            let tracker = ATInternet.sharedInstance.defaultTracker
+            let tracker: AutoTracker = ATInternet.sharedInstance.defaultTracker
             
             Thread.sleep(forTimeInterval: 0.2)
             if self.isCancelled {
