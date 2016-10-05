@@ -55,10 +55,10 @@ public class SocketSender {
      - returns: SocketSender (should be a single instance)
      */
     init(liveManager: LiveNetworkManager, token: String) {
-        //self.URL = "ws://localhost:5000/"+token
-        //self.URL = "ws://172.20.23.156:5000/"+token
-        //self.URL = "ws://tagsmartsdk.eu-west-1.elasticbeanstalk.com:5000/"+token
-        self.URL = SmartTrackerConfiguration.sharedInstance.ebsEndpoint+token
+        self.URL = "ws://localhost:5000/"+token
+        //self.URL = "ws://172.20.23.156:5000/" + token
+        //self.URL = "ws://tag-smartsdk-dev.atinternet-solutions.com/" + token
+        //self.URL = SmartTrackerConfiguration.sharedInstance.ebsEndpoint + token
         self.liveManager = liveManager
         self.socketHandler = SocketDelegate(liveManager: liveManager)
     }

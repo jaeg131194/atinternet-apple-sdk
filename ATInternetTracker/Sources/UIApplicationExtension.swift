@@ -217,12 +217,14 @@ extension UIApplication {
                 
                 /// Try to get a more precise event type by looking at target/action from gesturerecognizers attached to the current view
                 if let info = ATGestureRecognizer.getInfo(touches, eventType: Gesture.getEventTypeRawValue(appContext.eventType.rawValue)) {
+                    
                     if((info["eventType"]) != nil) {
                         eventType = Gesture.GestureEventType(rawValue: Gesture.getEventTypeIntValue(info["eventType"] as! String))!
                     }
                     
                     if (methodName == nil) || (methodName != nil && methodName!.isEmpty) {
                         methodName = info["action"] as? String
+                        
                         if (methodName == nil) || (methodName != nil && methodName!.isEmpty) {
                             methodName = UIApplicationContext.sharedInstance.getDefaultViewMethod(appContext.currentTouchedView)
                             // the object does not respond to anything
@@ -230,11 +232,11 @@ extension UIApplication {
                                 //clearContext()
                                 return nil
                             }
+                        } else {
+                            // Force currentTouchedView with the touched view detected by the OS
+                            appContext.currentTouchedView = appContext.initialTouchedView
                         }
                     }
-                    
-                    // Force currentTouchedView with the touched view detected by the OS
-                    appContext.currentTouchedView = touchedView
                 }
                 
                 if let segmentedControl = appContext.currentTouchedView as? UISegmentedControl {
@@ -405,8 +407,9 @@ extension UIApplication {
             appContext.initialTouchPosition = touch.location(in: nil)
             appContext.initalTouchTime = touch.timestamp
             appContext.initialPinchDistance = 0
-            let touchedView = getTouchedView(touches);
-            let accurateTouchedView = UIApplicationContext.findMostAccurateTouchedView(touchedView);
+            let touchedView = getTouchedView(touches)
+            appContext.initialTouchedView = touchedView
+            let accurateTouchedView = UIApplicationContext.findMostAccurateTouchedView(touchedView)
             if shouldIgnoreView(touchedView) {
                 appContext.currentTouchedView = touchedView
             } else {
@@ -445,6 +448,7 @@ extension UIApplication {
         appContext.initalTouchTime = Date().timeIntervalSinceNow
         appContext.initialPinchDistance = 0
         appContext.rotationObject = nil
+        appContext.initialTouchedView = nil
     }
     
     /**
@@ -762,7 +766,11 @@ extension UIApplication {
             if let title = barButton.title {
                 text = title
             }
-            method = NSStringFromSelector(barButton.action!)
+            
+            if let action = barButton.action {
+                method = NSStringFromSelector(action)
+            }
+            
             if barButtonContainer is UIToolbar {
                 position = getPositionFromUIToolbarButton(barButton)
             }

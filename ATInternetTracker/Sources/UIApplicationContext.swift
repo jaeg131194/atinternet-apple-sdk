@@ -69,8 +69,11 @@ class UIApplicationContext {
     /// Property to keep event type
     lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.unknown
     
-    /// Property to keep current touched view in app
-    lazy var currentTouchedView : UIView? = nil
+    /// Property to keep current touched view in app. This touched view can be more accurate than the initial touched view
+    weak var currentTouchedView : UIView? = nil
+    
+    /// View that was touched when the gesture begin
+    weak var initialTouchedView: UIView? = nil
     
     /// Touch position
     lazy var initialTouchPosition: CGPoint = CGPoint.zero
