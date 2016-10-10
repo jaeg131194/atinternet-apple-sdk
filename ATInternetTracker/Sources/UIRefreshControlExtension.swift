@@ -81,6 +81,7 @@ extension UIRefreshControl {
                 operation.cancel()
                 gesture.view.className = self.classLabel
                 gesture.view.path = self.path
+                gesture.view.position = -1
                 gesture.direction = "down"
                 gesture.eventType = Gesture.GestureEventType.refresh
                 

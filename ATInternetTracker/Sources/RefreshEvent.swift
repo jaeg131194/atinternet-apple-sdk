@@ -46,5 +46,6 @@ class RefreshEvent : GestureEvent {
     init(method: String?, view: View, currentScreen: Screen) {
         super.init(type: Gesture.GestureEventType.refresh, methodName: method, view: view, direction: "down", currentScreen: currentScreen)
         self.defaultMethodName = "handleRefresh:"
+        self.view.position = -1
     }
 }

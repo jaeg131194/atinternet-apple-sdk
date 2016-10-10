@@ -33,18 +33,16 @@ class SmartTrackerConfiguration {
     let env: String
     
     private init() {
-        guard let environment = Bundle(for: SmartTrackerConfiguration.self).object(forInfoDictionaryKey: "AT-env") as? String else {
-            assert(false, "something went wrong, AT-env is not set")
-        }
-        env = environment
+        let plist = Bundle(for: Tracker.self).path(forResource: "Info-iOS-SmartTracker", ofType: "plist")
+        let environment = NSDictionary(contentsOfFile: plist!)?.object(forKey: "AT-env") as? String
+        assert(environment != nil, "something went wrong, AT-env is not set")
+        env = environment!
     }
     
     func getEndPoint(zone: [String: String]) -> String {
-        guard let endPoint = zone[env] else {
-            assert(false, "no AT-env set in plist")
-        }
-        
-        return endPoint
+        let endPoint = zone[env]
+        assert(endPoint != nil, "no AT-env set in plist")
+        return endPoint!
     }
     
     var ebsEndpoint: String {

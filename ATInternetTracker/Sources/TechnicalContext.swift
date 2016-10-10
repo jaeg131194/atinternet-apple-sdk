@@ -182,11 +182,13 @@ class TechnicalContext: NSObject {
         }
     }
     
+    #if os(iOS) && AT_SMART_TRACKER
     /// Application icon
     class var applicationIcon: String? {
         let iconImg = UIImage(named: "AppIcon60x60")
         return iconImg?.toBase64()?.replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\r", with: "")
     }
+    #endif
     
     /// Application identifier (eg. com.atinternet.testapp)
     class var applicationIdentifier: String {
