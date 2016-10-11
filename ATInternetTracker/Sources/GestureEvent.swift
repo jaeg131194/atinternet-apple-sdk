@@ -19,11 +19,20 @@ class GestureEvent {
     var defaultMethodName: String
     
     /// Method called by the touched UIView
-    var methodName: String? {
-        didSet {
-            self.title = self.methodName
+    var _methodName: String?
+    var methodName: String {
+        get {
+            return _methodName ?? defaultMethodName
+        }
+        set {
+            self.title = newValue
+            _methodName = newValue
         }
     }
+    
+    // Alias
+    var title: String?
+    
     
     /// A description of the gesture
     var direction: String
@@ -34,8 +43,6 @@ class GestureEvent {
     /// Event Type
     lazy var eventType: Gesture.GestureEventType = Gesture.GestureEventType.unknown
     
-    // Alias
-    var title: String?
     
     /// View controller of the screen
     weak var viewController: UIViewController?
@@ -58,11 +65,11 @@ class GestureEvent {
      */
     init(type: Gesture.GestureEventType, methodName: String?, view: View, direction: String, currentScreen: Screen) {
         self.defaultMethodName = ""
-        self.methodName = methodName
+        self._methodName = methodName
+        self.title = methodName
         self.direction = direction
         self.currentScreen = currentScreen
         self.view = view
         self.eventType = type
-        self.title = methodName
     }
 }

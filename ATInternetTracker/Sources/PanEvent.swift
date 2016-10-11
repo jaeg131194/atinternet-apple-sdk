@@ -34,9 +34,9 @@ class PanEvent : GestureEvent {
                 "x":-1,
                 "y":-1,
                 "type": Gesture.getEventTypeRawValue(self.eventType.rawValue),
-                "methodName": self.methodName ?? defaultMethodName,
+                "methodName": self.methodName,
                 "direction": self.direction,
-                "isDefaultMethod": self.methodName == nil,
+                "isDefaultMethod": self._methodName == nil,
                 "title": self.title ?? defaultMethodName
             ]
         ]

@@ -65,13 +65,13 @@ class GestureOperation: Operation {
      */
     func sendGestureHit(_ tracker: AutoTracker) -> Bool {
         let gesture = tracker.gestures.add()
-        if let method = gestureEvent.methodName {
-            gesture.name = method
-            
-            if method == "handleBack:" {
-                gesture.action = .navigate
-            }
+        let methodName:String = gestureEvent.methodName
+        gesture.name = methodName
+        
+        if methodName == "handleBack:" {
+            gesture.action = .navigate
         }
+        
         
         gesture.screen = gestureEvent.currentScreen
         gesture.type = gestureEvent.eventType
@@ -151,13 +151,9 @@ class GestureOperation: Operation {
         waitForConfigurationLoaded()
         
         if let mapping = Configuration.smartSDKMapping {
-            if gestureEvent.methodName == nil {
-                gestureEvent.methodName = gestureEvent.defaultMethodName
-            }
-            assert(gestureEvent.methodName != nil)
 
             let eventType = Gesture.getEventTypeRawValue(gestureEvent.eventType.rawValue)
-            let eventKeyBase = eventType+"."+gestureEvent.direction+"."+gestureEvent.methodName!
+            let eventKeyBase = eventType+"."+gestureEvent.direction+"."+gestureEvent.methodName
                 let position = gesture.view != nil ? "."+String(gesture.view!.position) : ""
             let view = gesture.view != nil ? "."+gesture.view!.className : ""
             let screen = gesture.screen != nil ? "."+gesture.screen!.className : ""

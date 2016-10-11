@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
 	s.name = "ATInternet-SmartSDK"
-	s.version = '0.993'
+	s.version = '0.999'
 	s.summary = "AT Internet mobile analytics solution for iOS"
 	s.homepage = "https://github.com/at-internet/atinternet-ios-swift-sdk"
 	s.documentation_url	= 'http://developers.atinternet-solutions.com/apple-en/getting-started-apple-en/operating-principle-apple-en/'
 	s.license = "MIT"
 	s.author = "AT Internet"
 	s.requires_arc = true
-	s.source = { :git => "http://gitblit.intraxiti.com:8090/r/Tag/iOS/Swift/UniversalTracker.git", :branch => 'cocoapods'}
+	s.source = { :git => "http://gitblit.intraxiti.com:8090/r/Tag/iOS/Swift/UniversalTracker.git", :branch => 's12_swift3_devices_versions_global'}
 	s.module_name = 'Tracker'
 	s.ios.deployment_target	= '8.0'
 	s.tvos.deployment_target = '9.0'
