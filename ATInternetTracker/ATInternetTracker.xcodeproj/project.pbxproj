@@ -683,6 +683,7 @@
 		4FF594701D3FB80A0004D336 /* tvOSTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FF594721D3FB8690004D336 /* watchOSTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FF594711D3FB8690004D336 /* watchOSTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FFB609D1D3E7FD900586F9E /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
+		8E3D7B731DAE36C300A3D882 /* Info-iOS-SmartTracker.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F47A5541D35465200702747 /* Info-iOS-SmartTracker.plist */; };
 		8E5339831D3F82A80081445B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		8E5339841D3F845F0081445B /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
 		8E9398B51D9583810065D58D /* SmartTrackerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */; };
@@ -1687,6 +1688,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E3D7B731DAE36C300A3D882 /* Info-iOS-SmartTracker.plist in Resources */,
 				4F47A6521D36264300702747 /* Montserrat-Regular.ttf in Resources */,
 				4F47A5AE1D36214200702747 /* core.manifest.json in Resources */,
 				4F47A5B31D36214200702747 /* nuggad.manifest.json in Resources */,
