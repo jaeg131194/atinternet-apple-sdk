@@ -184,17 +184,17 @@ extension UIApplication {
                 }
             }
             else if touch.phase == UITouchPhase.ended {
-                assert(appContext.currentTouchedView != nil)
+                if appContext.currentTouchedView == nil {
+                    return nil
+                }
                 
                 // sometimes we have unwanted taps or double taps moves after pinch/rotation
                 if((appContext.previousEventType == Gesture.GestureEventType.pinch || appContext.previousEventType == Gesture.GestureEventType.rotate) && appContext.initalTouchTime! - appContext.previousTouchTime! < 0.1) {
-                    //clearContext()
                     return nil
                 }
                 
                 // Remove noise from the toolbar or any SmartTracker events (pairing...)
                 if shouldIgnoreView(appContext.currentTouchedView!) {
-                    //clearContext()
                     return nil
                 }
                 
@@ -285,7 +285,6 @@ extension UIApplication {
                 return gestureEvent
             }
         }
-        //clearContext()
         return nil
     }
     

@@ -283,9 +283,9 @@ public class AutoTracker: Tracker {
     
     init() {
         super.init(configuration: Configuration().parameters)
-        self.registerFont("OpenSans-Regular")
-        self.registerFont("Montserrat-Bold")
-        self.registerFont("Montserrat-Regular")
+        //self.registerFont("OpenSans-Regular")
+        //self.registerFont("Montserrat-Bold")
+        //self.registerFont("Montserrat-Regular")
         
         if let autoTrack = self.configuration.parameters[TrackerConfigurationKeys.AutoTracking] {
             if autoTrack == "true" {
