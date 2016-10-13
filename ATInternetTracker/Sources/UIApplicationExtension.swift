@@ -814,6 +814,19 @@ extension UIApplication {
                             method = action
                         }
                     }
+                    // default buttons methods
+                    if method == nil {
+                        func getMethodFromControlEvents (target: Any?, controlEvent: UIControlEvents) -> String? {
+                            if let action = control.actions(forTarget: target, forControlEvent: controlEvent) {
+                                if !action.isEmpty {
+                                    return action[0]
+                                }
+                            }
+                            return nil
+                        }
+                        method = getMethodFromControlEvents(target: target, controlEvent: UIControlEvents.touchUpInside) ?? getMethodFromControlEvents(target: target, controlEvent: UIControlEvents.touchDown)
+                        
+                    }
                 }
             }
         }
@@ -891,12 +904,13 @@ extension UIApplication {
     func getPositionFromNavigationBar(_ view: UIView) -> Int {
         let classType:AnyClass? = NSClassFromString("UINavigationButton")
         if view.isKind(of: classType!) {
-            let navBar = view.superview as! UINavigationBar
-            var navButtons = navBar.subviews.filter({ $0.isKind(of: classType!) })
-            navButtons.sort(by: { (button1: UIView, button2: UIView) -> Bool in
-                button1.frame.origin.x < button2.frame.origin.x
-            })
-            return navButtons.index(of: view) ?? -1
+            if let navBar = view.superview as? UINavigationBar {
+                var navButtons = navBar.subviews.filter({ $0.isKind(of: classType!) })
+                navButtons.sort(by: { (button1: UIView, button2: UIView) -> Bool in
+                    button1.frame.origin.x < button2.frame.origin.x
+                })
+                return navButtons.index(of: view) ?? -1
+            }
         }
         return -1
     }

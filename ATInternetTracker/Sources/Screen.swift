@@ -274,9 +274,10 @@ public class Screen: AbstractScreen {
         self.title = self.className
         self.scale = Float(uiScreen.scale)
         self.width = Int(size.width)
-        self.orientation = UIViewControllerContext.sharedInstance.currentOrientation.rawValue
-
+        //self.orientation = UIViewControllerContext.sharedInstance.currentOrientation.rawValue
         self.height = Int(size.height)
+        
+        self.orientation = (self.height > self.width) ? 1 : 2
         super.init()
         self.name = UIViewControllerContext.sharedInstance.currentViewController?.screenTitle ?? ""
        
