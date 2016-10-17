@@ -685,6 +685,7 @@
 		4FFB609D1D3E7FD900586F9E /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		8E5339831D3F82A80081445B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		8E5339841D3F845F0081445B /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
+		8E88418C1DB5358D003BB11D /* SmartTrackerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */; };
 		8E9398B51D9583810065D58D /* SmartTrackerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */; };
 		8EC97ED31D5A2CC1007360F3 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC97ED21D5A2CC1007360F3 /* APITests.swift */; };
 		8EDC3CF61D3E225100A14458 /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
@@ -2370,6 +2371,7 @@
 				4F47A9631D3E2FE100702747 /* CartTests.swift in Sources */,
 				4F47A9B41D3E319900702747 /* UIViewControllerExtensionTests.swift in Sources */,
 				4F47A9C01D3E346C00702747 /* UIRefreshControlExtension.swift in Sources */,
+				8E88418C1DB5358D003BB11D /* SmartTrackerConfiguration.swift in Sources */,
 				4F47A9641D3E2FE100702747 /* CustomObject.swift in Sources */,
 				4F47A9B21D3E319900702747 /* TestGenerator.swift in Sources */,
 				4F8BD3361D3E57C100137C1B /* Maths.swift in Sources */,
