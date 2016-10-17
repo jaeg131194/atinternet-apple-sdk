@@ -197,7 +197,7 @@ public class Screen: AbstractScreen {
     #if os(iOS) && AT_SMART_TRACKER
     
     public var className: String = ""
-    public var title: String = ""
+    fileprivate(set) var title: String = ""
     
     /// Scale value
     public var scale: Float = 1
