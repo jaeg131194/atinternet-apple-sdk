@@ -33,7 +33,7 @@ class SmartTrackerConfiguration {
     let env: String
     
     private init() {
-        let plist = Bundle(for: Tracker.self).path(forResource: "Info-iOS-SmartTracker", ofType: "plist")
+        let plist = Bundle(for: Tracker.self).path(forResource: "DefaultConfiguration", ofType: "plist")
         let environment = NSDictionary(contentsOfFile: plist!)?.object(forKey: "AT-env") as? String
         assert(environment != nil, "something went wrong, AT-env is not set")
         env = environment!

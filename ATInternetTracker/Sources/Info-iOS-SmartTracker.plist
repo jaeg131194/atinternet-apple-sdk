@@ -22,7 +22,5 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
-	<key>AT-env</key>
-	<string>dev</string>
 </dict>
 </plist>
