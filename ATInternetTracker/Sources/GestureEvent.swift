@@ -33,7 +33,6 @@ class GestureEvent {
     // Alias
     var title: String?
     
-    
     /// A description of the gesture
     var direction: String
     
