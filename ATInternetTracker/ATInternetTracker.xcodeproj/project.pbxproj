@@ -911,6 +911,7 @@
 		4FF5946D1D3FB6890004D336 /* SmartTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTracker.h; sourceTree = "<group>"; };
 		4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tvOSTracker.h; sourceTree = "<group>"; };
 		4FF594711D3FB8690004D336 /* watchOSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watchOSTracker.h; sourceTree = "<group>"; };
+		8E2E9AB11DAF861D00ED4D98 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartTrackerConfiguration.swift; sourceTree = "<group>"; };
 		8EC97ED21D5A2CC1007360F3 /* APITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APITests.swift; path = Tests/APITests.swift; sourceTree = "<group>"; };
 		8EDC3CF51D3E225100A14458 /* ApiS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiS3.swift; sourceTree = "<group>"; };
@@ -955,6 +956,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E2E9AB21DAF861D00ED4D98 /* SystemConfiguration.framework in Frameworks */,
 				4F47A65D1D362C5000702747 /* libicucore.tbd in Frameworks */,
 				4F47A65C1D362C4800702747 /* Security.framework in Frameworks */,
 				4F47A65B1D362C4400702747 /* AVFoundation.framework in Frameworks */,
@@ -996,6 +998,7 @@
 				4F47A4021D351F2800702747 /* Sources */,
 				4F47A3DF1D351E8100702747 /* Products */,
 				4F47A6E71D3D119A00702747 /* Tests */,
+				8E2E9AB01DAF861D00ED4D98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1340,6 +1343,14 @@
 				4F47A8601D3D230600702747 /* TrackerTests-Bridging-Header.h */,
 			);
 			name = Header;
+			sourceTree = "<group>";
+		};
+		8E2E9AB01DAF861D00ED4D98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8E2E9AB11DAF861D00ED4D98 /* SystemConfiguration.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1727,6 +1738,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E3858E41DB10A1D005C8DED /* Info-iOS-SmartTracker.plist in Resources */,
 				4F47A99F1D3E318900702747 /* Montserrat-Regular.ttf in Resources */,
 				4F47A9731D3E2FE100702747 /* DefaultConfiguration~ipod.plist in Resources */,
 				4F47A9741D3E2FE100702747 /* DefaultConfiguration~iphone.plist in Resources */,
