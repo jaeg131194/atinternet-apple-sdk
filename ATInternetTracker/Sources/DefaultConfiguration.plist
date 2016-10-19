@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AT-env</key>
-	<string>dev</string>
+	<string>prod</string>
 	<key>autoTrackerToken</key>
 	<string></string>
 	<key>enableAutoTracking</key>

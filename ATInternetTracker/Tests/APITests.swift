@@ -36,7 +36,7 @@ class APITests: XCTestCase {
                               store: MockStore(),
                               networkService: MockNetwork())
         let url = api.getMappingURL()
-        XCTAssertEqual(url, URL(string: "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/dev/token/6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f/version/1.1"))
+        XCTAssertEqual(url, URL(string: "https://8me4zn67yd.execute-api.eu-west-1.amazonaws.com/prod/token/6aed0903eda8c21f79febd5dc06a530cb3ef9c132414124afbd76e50f7074f9f/version/1.1"))
     }
 
     func testFetchMappingIfNoMappingInMemory() {
