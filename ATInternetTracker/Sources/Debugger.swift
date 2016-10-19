@@ -49,7 +49,7 @@ internal class Debugger: NSObject {
     /// Debug button position
     var debugButtonPosition: String = "Right"
     /// List of all created windows
-    lazy var windows: [(window:UIView, content:UIView, menu: UIView, windowTitle: String)] = []
+    lazy var windows: [(window:DebuggerView, content:DebuggerView, menu: DebuggerTopBar, windowTitle: String)] = []
     /// Window title
     lazy var windowTitleLabel = UILabel()
     /// List of offline hits
@@ -340,7 +340,7 @@ internal class Debugger: NSObject {
      Create event viewer window
      */
     func createEventViewer() {
-        let eventViewer: (window: UIView, content: UIView, menu: UIView, windowTitle: String) = self.createWindow("Event viewer")
+        let eventViewer: (window: DebuggerView, content: DebuggerView, menu: DebuggerTopBar, windowTitle: String) = self.createWindow("Event viewer")
         
         let offlineButton = DebuggerButton()
         offlineButton.translatesAutoresizingMaskIntoConstraints = false
@@ -420,7 +420,7 @@ internal class Debugger: NSObject {
     /**
      Builds offline hits list rows
      */
-    func getEventsList(_ eventViewer: (window:UIView, content:UIView, menu: UIView, windowTitle: String)) {
+    func getEventsList(_ eventViewer: (window:DebuggerView, content:DebuggerView, menu: DebuggerTopBar, windowTitle: String)) {
         
         let scrollViews = eventViewer.content.subviews.filter({ return $0 is UIScrollView }) as! [UIScrollView]
         let emptyEventList = eventViewer.content.subviews.filter() {
@@ -780,8 +780,8 @@ internal class Debugger: NSObject {
      
      - parameter hit: or message to display
      */
-    func createEventDetailView(_ hit: String) -> UIView {
-        var eventDetail: (window: UIView, content: UIView, menu: UIView, windowTitle: String) = self.createWindow("Hit Detail")
+    func createEventDetailView(_ hit: String) -> DebuggerView {
+        var eventDetail: (window: DebuggerView, content: DebuggerView, menu: DebuggerTopBar, windowTitle: String) = self.createWindow("Hit Detail")
         eventDetail.window.alpha = 0.0;
         eventDetail.window.isHidden = false
         eventDetail.content.alpha = 1.0
@@ -1072,7 +1072,7 @@ internal class Debugger: NSObject {
      Create offline hits window
      */
     @objc func createOfflineHitsViewer() {
-        let offlineHits: (window: UIView, content: UIView, menu: UIView, windowTitle: String) = self.createWindow("Offline Hits")
+        let offlineHits: (window: DebuggerView, content: DebuggerView, menu: DebuggerTopBar, windowTitle: String) = self.createWindow("Offline Hits")
         offlineHits.window.alpha = 0.0;
         offlineHits.window.isHidden = false
         offlineHits.content.alpha = 1.0
@@ -1181,7 +1181,7 @@ internal class Debugger: NSObject {
     /**
      Builds offline hits list rows
      */
-    func getOfflineHitsList(_ offlineHits: (window:UIView, content:UIView, menu: UIView, windowTitle: String)) {
+    func getOfflineHitsList(_ offlineHits: (window:DebuggerView, content:DebuggerView, menu: DebuggerTopBar, windowTitle: String)) {
         
         let scrollViews = offlineHits.content.subviews.filter({ return $0 is UIScrollView }) as! [UIScrollView]
         let emptyOfflineHitsView = offlineHits.content.subviews.filter() {
@@ -1509,8 +1509,8 @@ internal class Debugger: NSObject {
     /**
      Create a new window
      */
-    func createWindow(_ windowTitle: String) -> (window:UIView, content:UIView, menu: UIView, windowTitle: String) {
-        let window = UIView()
+    func createWindow(_ windowTitle: String) -> (window:DebuggerView, content:DebuggerView, menu: DebuggerTopBar, windowTitle: String) {
+        let window = DebuggerView()
         if(windows.count == 0) {
             window.backgroundColor = UIColor.white
             window.layer.shadowOffset = CGSize(width: 1, height: 1)
@@ -1605,7 +1605,7 @@ internal class Debugger: NSObject {
         
         let contentId = "content" + String(self.windows.count)
         
-        let content = UIView()
+        let content = DebuggerView()
         content.frame = window.frame;
         content.backgroundColor = UIColor.white
         content.alpha = 0.0;
@@ -1626,7 +1626,7 @@ internal class Debugger: NSObject {
             multiplier: 1.0,
             constant: 0.0))
         
-        let tuple: (window: UIView, content: UIView, menu: UIView, windowTitle: String) = (window: window, content: content, menu: menu, windowTitle: windowTitle)
+        let tuple: (window: DebuggerView, content: DebuggerView, menu: DebuggerTopBar, windowTitle: String) = (window: window, content: content, menu: menu, windowTitle: windowTitle)
         
         windows.append(tuple)
         

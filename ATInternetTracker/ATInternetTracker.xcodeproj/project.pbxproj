@@ -685,6 +685,7 @@
 		4FFB609D1D3E7FD900586F9E /* ATInternet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A4461D3541C500702747 /* ATInternet.swift */; };
 		8E5339831D3F82A80081445B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F47A7121D3D126500702747 /* SwiftyJSON.swift */; };
 		8E5339841D3F845F0081445B /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
+		8E88418C1DB5358D003BB11D /* SmartTrackerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */; };
 		8E9398B51D9583810065D58D /* SmartTrackerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */; };
 		8EC97ED31D5A2CC1007360F3 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC97ED21D5A2CC1007360F3 /* APITests.swift */; };
 		8EDC3CF61D3E225100A14458 /* ApiS3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EDC3CF51D3E225100A14458 /* ApiS3.swift */; };
@@ -910,6 +911,7 @@
 		4FF5946D1D3FB6890004D336 /* SmartTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartTracker.h; sourceTree = "<group>"; };
 		4FF5946F1D3FB7FB0004D336 /* tvOSTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tvOSTracker.h; sourceTree = "<group>"; };
 		4FF594711D3FB8690004D336 /* watchOSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = watchOSTracker.h; sourceTree = "<group>"; };
+		8E2E9AB11DAF861D00ED4D98 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8E9398B41D9583810065D58D /* SmartTrackerConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartTrackerConfiguration.swift; sourceTree = "<group>"; };
 		8EC97ED21D5A2CC1007360F3 /* APITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APITests.swift; path = Tests/APITests.swift; sourceTree = "<group>"; };
 		8EDC3CF51D3E225100A14458 /* ApiS3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiS3.swift; sourceTree = "<group>"; };
@@ -954,6 +956,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E2E9AB21DAF861D00ED4D98 /* SystemConfiguration.framework in Frameworks */,
 				4F47A65D1D362C5000702747 /* libicucore.tbd in Frameworks */,
 				4F47A65C1D362C4800702747 /* Security.framework in Frameworks */,
 				4F47A65B1D362C4400702747 /* AVFoundation.framework in Frameworks */,
@@ -995,6 +998,7 @@
 				4F47A4021D351F2800702747 /* Sources */,
 				4F47A3DF1D351E8100702747 /* Products */,
 				4F47A6E71D3D119A00702747 /* Tests */,
+				8E2E9AB01DAF861D00ED4D98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1339,6 +1343,14 @@
 				4F47A8601D3D230600702747 /* TrackerTests-Bridging-Header.h */,
 			);
 			name = Header;
+			sourceTree = "<group>";
+		};
+		8E2E9AB01DAF861D00ED4D98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8E2E9AB11DAF861D00ED4D98 /* SystemConfiguration.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1726,6 +1738,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E3858E41DB10A1D005C8DED /* Info-iOS-SmartTracker.plist in Resources */,
 				4F47A99F1D3E318900702747 /* Montserrat-Regular.ttf in Resources */,
 				4F47A9731D3E2FE100702747 /* DefaultConfiguration~ipod.plist in Resources */,
 				4F47A9741D3E2FE100702747 /* DefaultConfiguration~iphone.plist in Resources */,
@@ -2370,6 +2383,7 @@
 				4F47A9631D3E2FE100702747 /* CartTests.swift in Sources */,
 				4F47A9B41D3E319900702747 /* UIViewControllerExtensionTests.swift in Sources */,
 				4F47A9C01D3E346C00702747 /* UIRefreshControlExtension.swift in Sources */,
+				8E88418C1DB5358D003BB11D /* SmartTrackerConfiguration.swift in Sources */,
 				4F47A9641D3E2FE100702747 /* CustomObject.swift in Sources */,
 				4F47A9B21D3E319900702747 /* TestGenerator.swift in Sources */,
 				4F8BD3361D3E57C100137C1B /* Maths.swift in Sources */,
