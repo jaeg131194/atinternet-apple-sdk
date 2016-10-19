@@ -486,7 +486,7 @@ internal class Debugger: NSObject {
             constant: 0))
         
         if(receivedEvents.count == 0) {
-            let emptyContentView = UIView()
+            let emptyContentView = DebuggerView()
             emptyContentView.tag = -2
             emptyContentView.translatesAutoresizingMaskIntoConstraints = false
             emptyContentView.layer.cornerRadius = 4.0
@@ -877,10 +877,10 @@ internal class Debugger: NSObject {
             }
             
             var i: Int = 0
-            var previousRow: UIView!
+            var previousRow: DebuggerView!
             
             for(key, value) in urlComponents {
-                let rowView = UIView()
+                let rowView = DebuggerView()
                 rowView.translatesAutoresizingMaskIntoConstraints = false
                 
                 scrollView.addSubview(rowView)
@@ -963,7 +963,7 @@ internal class Debugger: NSObject {
                     multiplier: 1.0,
                     constant: 0))
                 
-                let columnSeparator = UIView()
+                let columnSeparator = DebuggerView()
                 columnSeparator.translatesAutoresizingMaskIntoConstraints = false
                 columnSeparator.backgroundColor = UIColor(red: 80/255, green: 80/255, blue: 80/255, alpha: 1)
                 
@@ -1240,12 +1240,12 @@ internal class Debugger: NSObject {
             multiplier: 1.0,
             constant: 0))
         
-        var previousRow: UIView!
+        var previousRow: DebuggerView!
         hits = storage.get()
         hits = hits.sorted(by: sortOfflineHits)
         
         if(hits.count == 0) {
-            let noOfflineHitsView = UIView()
+            let noOfflineHitsView = DebuggerView()
             noOfflineHitsView.tag = -2
             noOfflineHitsView.translatesAutoresizingMaskIntoConstraints = false
             noOfflineHitsView.layer.cornerRadius = 4.0
@@ -1655,7 +1655,7 @@ internal class Debugger: NSObject {
      
      - parameter window: where buttons need to be hidden
      */
-    fileprivate func hidePreviousWindowMenuButtons(_ window: UIView) {
+    fileprivate func hidePreviousWindowMenuButtons(_ window: DebuggerView) {
         UIView.animate(
             withDuration: 0.2,
             delay: 0.0,

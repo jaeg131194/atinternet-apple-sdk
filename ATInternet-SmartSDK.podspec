@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
-	s.name = "ATInternet-SmartSDK"
-	s.version = '0.999'
+	s.name = "ATInternet-SDK"
+	s.version = '1.0.1'
 	s.summary = "AT Internet mobile analytics solution for iOS"
 	s.homepage = "https://github.com/at-internet/atinternet-ios-swift-sdk"
 	s.documentation_url	= 'http://developers.atinternet-solutions.com/apple-en/getting-started-apple-en/operating-principle-apple-en/'
@@ -107,7 +107,7 @@ Pod::Spec.new do |s|
 	end
 
 
-	s.subspec 'WatchTracker' do |wos|
+	s.subspec 'watchOSTracker' do |wos|
 		wos.source_files           = "ATInternetTracker/Sources/*.{h,m,swift}"
 		wos.exclude_files          = ["ATInternetTracker/Sources/BackgroundTask.swift","ATInternetTracker/Sources/Reachability.swift","ATInternetTracker/Sources/Debugger.swift"] + $not_smartsdk
 		wos.frameworks             = "CoreData", "CoreFoundation", "WatchKit", "UIKit", "CoreTelephony", "SystemConfiguration"
