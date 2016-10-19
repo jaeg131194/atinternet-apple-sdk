@@ -74,6 +74,7 @@ extension UIRefreshControl {
     
     func at_refresh () {
         let lastOperation = EventManager.sharedInstance.lastEvent() as? GestureOperation
+        let appContext = UIApplicationContext.sharedInstance
         
         if let operation = lastOperation {
             if operation.gestureEvent.eventType == Gesture.GestureEventType.scroll  {
@@ -84,6 +85,9 @@ extension UIRefreshControl {
                 gesture.view.position = -1
                 gesture.direction = "down"
                 gesture.eventType = Gesture.GestureEventType.refresh
+                
+                appContext.eventType = Gesture.GestureEventType.refresh
+                appContext.initalTouchTime = Date().timeIntervalSinceNow
                 
                 if let screenshot = self.screenshot() {
                     if let b64 = screenshot.toBase64() {
@@ -99,13 +103,30 @@ extension UIRefreshControl {
             }
         }
         else {
+            appContext.eventType = Gesture.GestureEventType.refresh
+            appContext.initalTouchTime = Date().timeIntervalSinceNow
+            
             let (_,methodName,_,_) = UIApplication.shared.getTouchedViewInfo(self)
             let selfView = View(view: self)
             let currentScreen = Screen()
             let refreshEvent = RefreshEvent(method: methodName, view: selfView, currentScreen: currentScreen)
             EventManager.sharedInstance.addEvent(GestureOperation(gestureEvent: refreshEvent))
         }
+        
+        clearContext();
     }
+    
+    func clearContext() {
+        let appContext = UIApplicationContext.sharedInstance
+        appContext.previousTouchTime = appContext.initalTouchTime
+        appContext.previousEventType = appContext.eventType
+        appContext.initialTouchPosition = CGPoint.zero
+        appContext.initalTouchTime = Date().timeIntervalSinceNow
+        appContext.initialPinchDistance = 0
+        appContext.rotationObject = nil
+        appContext.initialTouchedView = nil
+    }
+
     
     func at_initWithFrame(_ frame: CGRect) {
         self.at_initWithFrame(frame)

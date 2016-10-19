@@ -187,7 +187,7 @@ extension UIApplication {
                 assert(appContext.currentTouchedView != nil)
                 
                 // sometimes we have unwanted taps or double taps moves after pinch/rotation
-                if((appContext.previousEventType == Gesture.GestureEventType.pinch || appContext.previousEventType == Gesture.GestureEventType.rotate) && appContext.initalTouchTime! - appContext.previousTouchTime! < 0.1) {
+                if((appContext.previousEventType == Gesture.GestureEventType.pinch || appContext.previousEventType == Gesture.GestureEventType.rotate || appContext.previousEventType == Gesture.GestureEventType.refresh) && appContext.initalTouchTime! - appContext.previousTouchTime! < 0.1) {
                     //clearContext()
                     return nil
                 }
