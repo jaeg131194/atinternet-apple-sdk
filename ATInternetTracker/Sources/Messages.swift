@@ -97,7 +97,7 @@ class ScreenshotUpdated {
     let currentScreen: Screen
     
     init(screenshot: String?, screen: Screen) {
-        assert(screenshot != nil)
+        //assert(screenshot != nil)
         self.screenshot = screenshot ?? ""
         self.currentScreen = screen
     }

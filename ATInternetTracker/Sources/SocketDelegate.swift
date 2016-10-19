@@ -84,12 +84,12 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      - parameter webSocket: the ws
      */
     func webSocketDidOpen(_ webSocket: SRWebSocket!) {
-        print("connected")
+        print("livetagging connected")
         timer?.invalidate()
     }
     
     func webSocket(_ webSocket: SRWebSocket!, didFailWithError error: Error!) {
-        print("failed with message \(error)")
+        print("livetagging failed with message \(error)")
         autoReconnect()
     }
     
@@ -103,7 +103,7 @@ class SocketDelegate: NSObject, SRWebSocketDelegate {
      - parameter wasClean:  ?
      */
     func webSocket(_ webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
-        print("closed with message \(reason) code \(code)")
+        print("livetagging closed with message \(reason) code \(code)")
         autoReconnect()
     }
     

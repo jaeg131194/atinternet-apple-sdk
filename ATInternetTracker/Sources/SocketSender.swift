@@ -86,7 +86,7 @@ public class SocketSender {
         if isConnected() || ATInternet.sharedInstance.defaultTracker.enableLiveTagging == false || socket?.readyState == SRReadyState.CONNECTING {
             return
         }
-        print(URL)
+        //print(URL)
         let url = Foundation.URL(string: URL)
         socket = SRWebSocket(url:url)
         socket?.delegate = socketHandler
@@ -112,8 +112,8 @@ public class SocketSender {
     }
     
     func sendBuffer() {
-        assert(isConnected())
-        assert(self.liveManager.networkStatus == .Connected)
+        //assert(isConnected())
+        //assert(self.liveManager.networkStatus == .Connected)
         socket?.send(buffer.currentApp)
         socket?.send(buffer.currentScreen)
     }
@@ -122,8 +122,8 @@ public class SocketSender {
      send all events in the buffer list
      */
     func sendAll() {
-        assert(isConnected())
-        assert(self.liveManager.networkStatus == .Connected)
+        //assert(isConnected())
+        //assert(self.liveManager.networkStatus == .Connected)
         while queue.count > 0 {
             self.sendFirst()
         }

@@ -956,7 +956,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E2E9AB21DAF861D00ED4D98 /* SystemConfiguration.framework in Frameworks */,
 				4F47A65D1D362C5000702747 /* libicucore.tbd in Frameworks */,
 				4F47A65C1D362C4800702747 /* Security.framework in Frameworks */,
 				4F47A65B1D362C4400702747 /* AVFoundation.framework in Frameworks */,
@@ -1738,7 +1737,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E3858E41DB10A1D005C8DED /* Info-iOS-SmartTracker.plist in Resources */,
 				4F47A99F1D3E318900702747 /* Montserrat-Regular.ttf in Resources */,
 				4F47A9731D3E2FE100702747 /* DefaultConfiguration~ipod.plist in Resources */,
 				4F47A9741D3E2FE100702747 /* DefaultConfiguration~iphone.plist in Resources */,
@@ -2557,6 +2555,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

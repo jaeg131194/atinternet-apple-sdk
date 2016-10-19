@@ -141,7 +141,7 @@ class SEScreenshot: SocketEvent {
                     .replacingOccurrences(of: "\n", with: "")
                     .replacingOccurrences(of: "\r", with: "")
                 
-                assert(base64 != nil)
+                //assert(base64 != nil)
                 
                 let screenshotEvent = ScreenshotEvent(screen: screen,
                                                       screenshot: base64,

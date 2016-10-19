@@ -57,7 +57,6 @@ class SmartTrackerConfiguration {
     
     func getEndPoint(zone: [String: String]) -> String {
         let endPoint = zone[env]
-        assert(endPoint != nil, "no AT-env set in plist")
         return endPoint!
     }
     
