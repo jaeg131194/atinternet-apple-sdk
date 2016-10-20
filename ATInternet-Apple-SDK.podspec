@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
 	s.license = "MIT"
 	s.author = "AT Internet"
 	s.requires_arc = true
-	s.source = { :git => "http://gitblit.intraxiti.com:8090/r/Tag/iOS/Swift/UniversalTracker.git", :branch => 's12_swift3_devices_versions_global'}
+	s.source = { :git => "https://github.com/at-internet/atinternet-apple-sdk.git", :tag => s.version}
 	s.module_name = 'Tracker'
 	s.ios.deployment_target	= '8.0'
 	s.tvos.deployment_target = '9.0'
