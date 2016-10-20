@@ -36,9 +36,9 @@ import XCTest
 class ConfigurationTests: XCTestCase {
     
     // Configuration définie
-    let myConf = ["log":"customlog", "logSSL":"customlogs", "domain":"customdomain", "pixelPath":"custompixelpath","site":"customsite", "secure":"customsecure", "identifier":"customidentifier", "plugins":"", "enableBackgroundTask":"false", "storage":"never", "hashUserId":"false", "persistIdentifiedVisitor":"true", "tvtURL": "", "tvtVisitDuration":"10","sessionBackgroundDuration":"60", "campaignLastPersistence": "true", "campaignLifetime": "30","downloadSource":"ext", "tvtSpotValidityTime":"5", "autoTrackerToken": "", "enableAutoTracking": "false", "AT-env":"dev"]
+    let myConf = ["log":"customlog", "logSSL":"customlogs", "domain":"customdomain", "pixelPath":"custompixelpath","site":"customsite", "secure":"customsecure", "identifier":"customidentifier", "plugins":"", "enableBackgroundTask":"false", "storage":"never", "hashUserId":"false", "persistIdentifiedVisitor":"true", "tvtURL": "", "tvtVisitDuration":"10","sessionBackgroundDuration":"60", "campaignLastPersistence": "true", "campaignLifetime": "30","downloadSource":"ext", "tvtSpotValidityTime":"5", "autoTrackerToken": "", "enableAutoTracking": "false", "AT-env":"prod"]
     // Configuration par défaut
-    let defaultConf = ["log":"", "logSSL":"", "domain":"xiti.com", "pixelPath":"/hit.xiti", "site":"", "secure":"false", "identifier":"uuid", "plugins":"", "enableBackgroundTask":"false", "storage":"never", "hashUserId":"false", "persistIdentifiedVisitor":"true", "tvtURL": "", "tvtVisitDuration":"10","sessionBackgroundDuration":"60", "campaignLastPersistence": "true", "campaignLifetime": "30","downloadSource":"ext", "tvtSpotValidityTime":"5", "autoTrackerToken": "", "enableAutoTracking": "false","AT-env":"dev"]
+    let defaultConf = ["log":"", "logSSL":"", "domain":"xiti.com", "pixelPath":"/hit.xiti", "site":"", "secure":"false", "identifier":"uuid", "plugins":"", "enableBackgroundTask":"false", "storage":"never", "hashUserId":"false", "persistIdentifiedVisitor":"true", "tvtURL": "", "tvtVisitDuration":"10","sessionBackgroundDuration":"60", "campaignLastPersistence": "true", "campaignLifetime": "30","downloadSource":"ext", "tvtSpotValidityTime":"5", "autoTrackerToken": "", "enableAutoTracking": "false","AT-env":"prod"]
 
     override func setUp() {
         super.setUp()
