@@ -51,7 +51,10 @@ class SmartTrackerConfiguration {
     private init() {
         let plist = Bundle(for: Tracker.self).path(forResource: "DefaultConfiguration", ofType: "plist")
         let environment = NSDictionary(contentsOfFile: plist!)?.object(forKey: "AT-env") as? String
-        assert(environment != nil, "something went wrong, AT-env is not set")
+        //assert(environment != nil, "something went wrong, AT-env is not set")
+        if environment == nil {
+            environment = "prod"
+        }
         env = environment!
     }
     
